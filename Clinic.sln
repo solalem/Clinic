@@ -5,6 +5,10 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinic.Web", "Clinic.Web\Clinic.Web.csproj", "{57AE0B47-7627-4702-9361-1A185AEB01F5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinic.Core", "Clinic.Core\Clinic.Core.csproj", "{075949CF-6827-4230-A337-58CD9A1585DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.SharedKernel", "Clinic.SharedKernel\Clinic.SharedKernel.csproj", "{3470E504-A6CB-42FE-8398-0F70120FCD6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{57AE0B47-7627-4702-9361-1A185AEB01F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57AE0B47-7627-4702-9361-1A185AEB01F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57AE0B47-7627-4702-9361-1A185AEB01F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{075949CF-6827-4230-A337-58CD9A1585DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{075949CF-6827-4230-A337-58CD9A1585DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{075949CF-6827-4230-A337-58CD9A1585DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{075949CF-6827-4230-A337-58CD9A1585DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3470E504-A6CB-42FE-8398-0F70120FCD6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3470E504-A6CB-42FE-8398-0F70120FCD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3470E504-A6CB-42FE-8398-0F70120FCD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3470E504-A6CB-42FE-8398-0F70120FCD6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

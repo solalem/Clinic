@@ -1,19 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Clinic.Core.Appointments.Application.Commands.PatientCommands;
-using Clinic.Core.Appointments.Application.Queries.PatientQueries;
-using Clinic.Core.Appointments.Domain.AggregatesModel;
-using Clinic.Application.Abstractions.Services;
-using Clinic.Application.Abstractions.Query.Models;
-using Clinic.ViewModels.Appointments;
-using Clinic.ViewModels;
-using Clinic.Controllers;
 
 namespace Clinic.Web.Appointments.Services
 {
