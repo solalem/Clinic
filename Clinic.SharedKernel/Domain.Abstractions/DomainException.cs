@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace Clinic.SharedKernel.Domain.Abstractions.Exceptions
+namespace Clinic.SharedKernel.Domain.Abstractions
 {
     public interface IExceptionSource
     {
@@ -54,10 +54,10 @@ namespace Clinic.SharedKernel.Domain.Abstractions.Exceptions
             params object[] values)
             : base("Domain Exception")
         {
-            this.Code = code;
-            this.SourceMethod = sourceMethod;
-            this.SourceModule = sourceModule;
-            this.Parameters = values;
+            Code = code;
+            SourceMethod = sourceMethod;
+            SourceModule = sourceModule;
+            Parameters = values;
 
         }
 
@@ -69,10 +69,10 @@ namespace Clinic.SharedKernel.Domain.Abstractions.Exceptions
             params object[] values)
             : base("Domain Exception", innerException)
         {
-            this.Code = code;
-            this.SourceMethod = sourceMethod;
-            this.SourceModule = sourceModule;
-            this.Parameters = values;
+            Code = code;
+            SourceMethod = sourceMethod;
+            SourceModule = sourceModule;
+            Parameters = values;
         }
 
 

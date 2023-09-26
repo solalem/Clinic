@@ -1,6 +1,6 @@
-using Clinic.SharedKernel.Domain.Abstractions.Exceptions;
+using Clinic.SharedKernel.Domain.Abstractions;
 
-namespace Clinic.Core.Appointments.Domain.Exceptions
+namespace Clinic.Core.Appointments.Domain
 {
     /// <summary>
     /// Exception type for domain exceptions
@@ -15,7 +15,7 @@ namespace Clinic.Core.Appointments.Domain.Exceptions
 
         public AppointmentsDomainException(string code,
             string sourceModule,
-            string sourceMethod, 
+            string sourceMethod,
             Exception innerException,
             params object[] values)
             : base(innerException, code, sourceModule, sourceMethod, values)
