@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Clinic.Web.Appointments.Services
+namespace Clinic.Web.Shared
 {
     public class FileUploadService
     {

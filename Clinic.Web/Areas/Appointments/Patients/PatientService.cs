@@ -2,25 +2,18 @@ using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Clinic.Web.Appointments.Services
+namespace Clinic.Web.Areas.Appointments.Patients
 {
     public class PatientService
     {
         private readonly IMediator _mediator;
-        private readonly IPatientQuery _patientQueries;
-        private readonly IIdentityService _identityService;
 
-        public PatientService(IMediator mediator, IPatientQuery patientQueries, IIdentityService identityService)
+        public PatientService(IMediator mediator)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _patientQueries = patientQueries ?? throw new ArgumentNullException(nameof(patientQueries));
-            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> CreatePatient([FromBody] CreatePatient request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreatePatient request)
         {
             try
             {
@@ -34,10 +27,7 @@ namespace Clinic.Web.Appointments.Services
             }
         }
 
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> UpdatePatient([FromBody] UpdatePatient request)
+        public async Task<IActionResult> UpdateAync([FromBody] UpdatePatient request)
         {
             try
             {
@@ -51,11 +41,7 @@ namespace Clinic.Web.Appointments.Services
             }
         }
 
-        [Route("{id}")]
-        [HttpDelete]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> ArchivePatient(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
             try
             {
@@ -69,11 +55,7 @@ namespace Clinic.Web.Appointments.Services
             }
         }
 
-        [Route("{id}")]
-        [HttpGet]
-        [ProducesResponseType(typeof(PatientDetail), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetPatient(Guid id)
+        public async Task<IActionResult> GetAsync(Guid id)
         {
             try
             {
@@ -90,9 +72,7 @@ namespace Clinic.Web.Appointments.Services
             }
         }
 
-        [HttpGet]
-        [ProducesResponseType(typeof(ModelCollection<PatientSummary>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetPatients([FromQuery()] PaginationInfo pagination)
+        public async Task<IActionResult> ListAsync([FromQuery()] PaginationInfo pagination)
         {
             try
             {

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Clinic.Core.Appointments.Persistence;
 
-namespace Clinic.Web.Appointments
+namespace Clinic.Web.Areas.Appointments
 {
     public class AppointmentsTransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
@@ -23,12 +23,12 @@ namespace Clinic.Web.Appointments
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            TResponse response = default(TResponse);
+            TResponse response = default;
 
             try
             {
                 var strategy = _dbContext.Database.CreateExecutionStrategy();
-                await strategy.ExecuteAsync(async () => 
+                await strategy.ExecuteAsync(async () =>
                 {
                     _logger.LogInformation($"Begin transaction {typeof(TRequest).Name}");
 

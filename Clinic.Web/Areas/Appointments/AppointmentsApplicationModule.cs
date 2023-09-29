@@ -6,7 +6,7 @@ using Clinic.Core.Appointments.Persistence;
 using Clinic.Application.Abstractions.Requests;
 using Microsoft.EntityFrameworkCore;
 
-namespace Clinic.Web.Appointments
+namespace Clinic.Web.Areas.Appointments
 {
     public static class AppointmentsApplicationModule
     {
@@ -32,7 +32,7 @@ namespace Clinic.Web.Appointments
 
             builder.Services.AddScoped<IRequestManager, AppointmentsRequestManager>();
         }
-        
+
         private static void RegisterTypes(WebApplicationBuilder builder)
         {
             builder.RegisterType<PatientRepository>()

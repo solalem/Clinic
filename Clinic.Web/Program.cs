@@ -1,4 +1,4 @@
-using Clinic.Web.Appointments;
+using Clinic.Web.Areas.Appointments;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 

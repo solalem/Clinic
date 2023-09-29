@@ -1,0 +1,61 @@
+@page "/Appointments/Patients/index"
+@*@attribute [Authorize(Roles = Solo.Shared.Authorization.Constants.Roles.ADMINISTRATORS)]*@
+@inherits Solo.Shared.Helpers.BlazorPage
+@inject NavigationManager navigationManager
+
+@namespace Solo.Appointments.Pages.Patients
+@using Solo.Shared.Models
+@using Solo.Appointments.Components
+
+<Row Class="no-gutters h-100">
+    <Column Class="@(showPreview? "bg-light" : "")" ColumnSize="showPreview ? ColumnSize.Is3 : ColumnSize.Is12">
+        <div class="sticky-top">
+            <Bar Breakpoint="Breakpoint.Desktop" Background="Background.Light" ThemeContrast="ThemeContrast.Light" Shadow="Shadow.Remove">
+                <BarToggler />
+                <BarMenu>
+                    <BarStart>
+                        <BarItem>
+                            <Addons>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit @bind-Text="@Patients.PaginationInfo.SearchString" @onkeydown="(x) => Search(x)" Placeholder="Search..." />
+                                </Addon>
+                                <Addon AddonType="AddonType.End">
+                                    <AddonLabel>
+                                        <Icon Name="@IconName.Search"></Icon>
+                                    </AddonLabel>
+                                </Addon>
+                            </Addons>
+                        </BarItem>
+                    </BarStart>
+                </BarMenu>
+            </Bar>
+
+            @if (Patients == null)
+            {
+                <Spinner></Spinner>
+            }
+            else
+            {
+                <PatientsComponent IsList="showPreview" Patients="Patients" OnSelectClick="x => DetailClick(x)" OnRemoveClick="x => DeleteClick(x)">
+                    <Paginator Title="Patients" PaginationInfo="Patients.PaginationInfo" Spread="5" PageSelected="(p)=> ReloadPatients(p)">
+                        <Button Clicked="() => CreateClick()">
+                            <Icon Name="IconName.Add"></Icon>
+                        </Button>
+                    </Paginator>
+                </PatientsComponent>
+
+                <DialogBoxComponent OnDialogResultClick="(context) => DialogResultReceive(context)" @ref="DialogBox" />
+            }
+
+        </div>
+    </Column>
+
+    @if (showPreview)
+    {
+        <Column ColumnSize="ColumnSize.Is9">
+            <Container>
+                <Solo.Appointments.Pages.Patients.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadPatients(patients.PaginationInfo)" />
+            </Container>
+        </Column>
+    }
+</Row>
