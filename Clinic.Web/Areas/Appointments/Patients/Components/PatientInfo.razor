@@ -1,1 +1,56 @@
+@using Clinic.Web.Areas.Appointments.Patients.Components
+@using Clinic.ViewModels
+@using Clinic.ViewModels.Appointments
 
+@namespace Clinic.Web.Areas.Appointments.Patients.Components
+@inject ILogger<PatientInfo> Logger
+@inject IJSRuntime JSRuntime
+@inherits Clinic.Web.Helpers.BlazorComponent
+
+@if (Item != null)
+{
+    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="updateForm">
+        <DataAnnotationsValidator />
+        <div class="container">
+            <br />
+
+            <Field>
+                <FieldLabel>Card Number:</FieldLabel>
+                <TextEdit @bind-Text="@Item.CardNumber" />
+                <ValidationMessage For="(() => Item.CardNumber)" />
+            </Field>
+
+            <Field>
+                <FieldLabel>Full Name:</FieldLabel>
+                <TextEdit @bind-Text="@Item.FullName" />
+                <ValidationMessage For="(() => Item.FullName)" />
+            </Field>
+
+            <Field>
+                <FieldLabel>Gender:</FieldLabel>
+                <TextEdit @bind-Text="@Item.Gender" />
+                <ValidationMessage For="(() => Item.Gender)" />
+            </Field>
+
+            <Field>
+                <FieldLabel>Phone Number:</FieldLabel>
+                <TextEdit @bind-Text="@Item.PhoneNumber" />
+                <ValidationMessage For="(() => Item.PhoneNumber)" />
+            </Field>
+
+            <Field>
+                <FieldLabel>Date Of Birth:</FieldLabel>
+                <DatePicker DateChanged="((x) => Item.DateOfBirth = x)" TValue="DateTimeOffset?" Date="Item.DateOfBirth" />
+                <ValidationMessage For="(() => Item.DateOfBirth)" />
+            </Field>
+
+            <Field>
+                <FieldLabel>Email:</FieldLabel>
+                <TextEdit @bind-Text="@Item.Email" />
+                <ValidationMessage For="(() => Item.Email)" />
+            </Field>
+            <Button Type="ButtonType.Submit" form="updateForm">Save</Button>
+
+        </div>
+    </EditForm>
+}

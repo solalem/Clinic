@@ -1,0 +1,53 @@
+@namespace Clinic.Shared
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IJSRuntime JSRuntime
+
+@inherits Clinic.Shared.Helpers.BlazorLayoutComponent
+
+
+<Bar Breakpoint="Breakpoint.Desktop" Background="Background.Light" ThemeContrast="ThemeContrast.Light" >
+    <BarToggler />
+    <BarMenu>
+        <BarStart>
+            <BarItem>
+                <Addons>
+                    <Addon AddonType="AddonType.Body">
+                        <BarLink Color="Color.Primary" To="/new">+</BarLink>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <BarDropdown>
+                            <BarDropdownToggle />
+                            <BarDropdownMenu>
+                                <BarDropdownItem To="#">
+                                    Create New
+                                </BarDropdownItem>
+                            </BarDropdownMenu>
+                        </BarDropdown>
+                    </Addon>
+                </Addons>
+            </BarItem>
+            <BarBrand>Title</BarBrand>
+        </BarStart>
+        <BarEnd>
+            <BarItem>
+                <TextEdit Placeholder="Search..." />
+            </BarItem>
+            <BarItem>
+                <BarDropdown>
+                    <BarDropdownToggle>More</BarDropdownToggle>
+                    <BarDropdownMenu>
+                        <BarDropdownItem To="#">
+                            Profile
+                        </BarDropdownItem>
+                        <BarDropdownItem To="#">
+                            Settings
+                        </BarDropdownItem>
+                    </BarDropdownMenu>
+                </BarDropdown>
+            </BarItem>
+            <BarItem>
+                <BarLink To="/login">Login</BarLink>
+            </BarItem>
+        </BarEnd>
+    </BarMenu>
+</Bar>

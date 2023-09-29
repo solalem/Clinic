@@ -1,49 +1,38 @@
-using System.Linq;
-using System.Reflection;
-using Autofac;
-using FluentValidation;
-using MediatR;
-using Clinic.Infrastructure.Behaviors;
-
 namespace Clinic.Web.Infrastructure
 {
-    public class MediatorModule : Autofac.Module
+    public class MediatorModule 
     {
-        protected override void Load(ContainerBuilder builder)
+        public static void Load(WebApplicationBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
-                .AsImplementedInterfaces();
+            //builder.Services.AddScoped((typeof(IMediator).GetTypeInfo().Assembly)
+            //    .AsImplementedInterfaces();
 
-            // Register all the Command classes (they implement IRequestHandler) in assembly holding the Commands
-            // TODO: this loads only from given assembly
-            var coreAssembly = typeof(Clinic.Core.Appointments.Application.Commands.CategoryCommands.CreateCategoryCommand).GetTypeInfo().Assembly;
-            builder.RegisterAssemblyTypes(coreAssembly)
-                .AsClosedTypesOf(typeof(IRequestHandler<,>));
+            //// Register all the Command classes (they implement IRequestHandler) in assembly holding the Commands
+            //// TODO: this loads only from given assembly
+            //var coreAssembly = typeof(Clinic.Core.Appointments.Application.Commands.CategoryCommands.CreateCategoryCommand).GetTypeInfo().Assembly;
+            //builder.RegisterAssemblyTypes(coreAssembly)
+            //    .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
-            // Register the DomainEventHandler classes (they implement INotificationHandler<>) in assembly holding the Domain Events
-            builder.RegisterAssemblyTypes(coreAssembly)
-                .AsClosedTypesOf(typeof(INotificationHandler<>));
+            //// Register the DomainEventHandler classes (they implement INotificationHandler<>) in assembly holding the Domain Events
+            //builder.RegisterAssemblyTypes(coreAssembly)
+            //    .AsClosedTypesOf(typeof(INotificationHandler<>));
 
-            // Register the Command's Validators (Validators based on FluentValidation library)
-            builder
-                .RegisterAssemblyTypes(coreAssembly)
-                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
-                .AsImplementedInterfaces();
+            //// Register the Command's Validators (Validators based on FluentValidation library)
+            //builder
+            //    .RegisterAssemblyTypes(coreAssembly)
+            //    .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+            //    .AsImplementedInterfaces();
 
-            builder.Register<ServiceFactory>(context =>
-            {
-                var componentContext = context.Resolve<IComponentContext>();
-                return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
-            });
+            //builder.Register<ServiceFactory>(context =>
+            //{
+            //    var componentContext = context.Resolve<IComponentContext>();
+            //    return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
+            //});
 
-            builder.RegisterGeneric(typeof(LoggingBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-            // TODO: Add every context's validator and transaction behaviours 
-            builder.RegisterGeneric(typeof(Appointment.AppointmentValidatorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-            builder.RegisterGeneric(typeof(Appointment.AppointmentTransactionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
-            builder.RegisterGeneric(typeof(Patient.PatientValidatorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-            builder.RegisterGeneric(typeof(Patient.PatientTransactionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
-            builder.RegisterGeneric(typeof(Attendance.AttendanceValidatorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-            builder.RegisterGeneric(typeof(Attendance.AttendanceTransactionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
+            //builder.RegisterGeneric(typeof(LoggingBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            //// TODO: Add every context's validator and transaction behaviours 
+            //builder.RegisterGeneric(typeof(Patient.PatientValidatorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            //builder.RegisterGeneric(typeof(Patient.PatientTransactionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
     
 
         }

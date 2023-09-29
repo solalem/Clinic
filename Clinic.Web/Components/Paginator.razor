@@ -1,0 +1,24 @@
+@inherits Clinic.Shared.Helpers.BlazorComponent
+
+@namespace Clinic.Shared.Components
+
+<Div Flex="Flex.Row">
+    <Div Flex="Flex.Grow.Is1" Class="m-2 pl-5">
+        <b>@Title</b>
+    </Div>
+    <Div Class="pr-3">
+        <Pagination>
+            @foreach (var link in _links)
+            {
+                <PaginationItem>
+                    <PaginationLink Clicked="() => OnPageSelected(link)">
+                        @link.Text
+                    </PaginationLink>
+                </PaginationItem>
+            }
+        </Pagination>
+    </Div>
+    <Div Class="m-2">
+        @ChildContent
+    </Div>
+</Div>

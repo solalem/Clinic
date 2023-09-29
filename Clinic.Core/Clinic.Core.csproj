@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Clinic.SharedKernel\Clinic.SharedKernel.csproj" />
+    <ProjectReference Include="..\Clinic.ViewModels\Clinic.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

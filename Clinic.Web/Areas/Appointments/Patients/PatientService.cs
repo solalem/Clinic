@@ -1,10 +1,10 @@
-using System.Net;
+using Clinic.ViewModels;
+using Clinic.ViewModels.Appointments.Patients;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.Web.Areas.Appointments.Patients
 {
-    public class PatientService
+    public class PatientService: IPatientService
     {
         private readonly IMediator _mediator;
 
@@ -13,83 +13,30 @@ namespace Clinic.Web.Areas.Appointments.Patients
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        public async Task<IActionResult> CreateAsync([FromBody] CreatePatient request)
+        public async Task<PatientSummary> CreateAsync(CreatePatient request)
         {
-            try
-            {
-                var commandResult = await _mediator.Send(new CreatePatientCommand(request));
-
-                return commandResult != null ? Ok(commandResult) : (IActionResult)NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _mediator.Send(new CreatePatientCommand(request));
         }
 
-        public async Task<IActionResult> UpdateAync([FromBody] UpdatePatient request)
+        public async Task<PatientSummary> UpdateAsync(UpdatePatient request)
         {
-            try
-            {
-                var commandResult = await _mediator.Send(new UpdatePatientCommand(request));
-
-                return commandResult != null ? Ok(commandResult) : (IActionResult)NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _mediator.Send(new UpdatePatientCommand(request));
         }
 
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<PatientSummary> DeleteAsync(Guid id)
         {
-            try
-            {
-                var commandResult = await _mediator.Send(new ArchivePatientCommand { Id = id });
-
-                return commandResult > 0 ? Ok() : (IActionResult)NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _mediator.Send(new ArchivePatientCommand { Id = id });
         }
 
-        public async Task<IActionResult> GetAsync(Guid id)
+        public async Task<PatientDetail> GetAsync(Guid id)
         {
-            try
-            {
-                var result = await _patientQueries.GetPatientAsync(id);
-                return Ok(result);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _mediator.Send(new ArchivePatientCommand { Id = id });
         }
 
-        public async Task<IActionResult> ListAsync([FromQuery()] PaginationInfo pagination)
+        public async Task<PatientList> ListAsync(PaginationInfo pagination)
         {
-            try
-            {
-                QueryParameters query = new QueryParameters { Skip = pagination.Index, Top = pagination.PageSize, SearchString = pagination.SearchString };
-                var result = await _patientQueries.GetPatientsAsync(query);
-                return Ok(result);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _mediator.Send(new GetPatientsCommand { Pagination = pagination });
         }
-
 
     }
 }

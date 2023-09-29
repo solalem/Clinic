@@ -1,9 +1,10 @@
-@*@attribute [Authorize(Roles = Solo.Shared.Authorization.Constants.Roles.ADMINISTRATORS)]*@
-@inherits Solo.UI.Shared.Helpers.BlazorComponent
-@namespace Solo.Appointments.Components
-@using Solo.ViewModels
-@using Solo.ViewModels.Appointments
+@*@attribute [Authorize(Roles = Clinic.Shared.Authorization.Constants.Roles.ADMINISTRATORS)]*@
+@inherits Clinic.Web.Helpers.BlazorComponent
+@namespace Clinic.Web.Areas.Appointments.Patients.Components
+@using Clinic.ViewModels
+@using Clinic.ViewModels.Appointments
 @using Blazorise;
+@using Clinic.ViewModels.Appointments.Patients;
 
 @ChildContent
 

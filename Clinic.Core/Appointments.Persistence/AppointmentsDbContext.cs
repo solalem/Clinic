@@ -21,21 +21,14 @@ namespace Clinic.Core.Appointments.Persistence
         private IDbContextTransaction _currentTransaction;
         public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
 
-        private AppointmentsDbContext(DbContextOptions<AppointmentsDbContext> options) : base (options) { }
-
-        public AppointmentsDbContext(DbContextOptions<AppointmentsDbContext> options, IMediator mediator) : base(options)
+        public AppointmentsDbContext(DbContextOptions options) : base(options)
         {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-
-            System.Diagnostics.Debug.WriteLine("AppointmentsDbContext::ctor ->" + this.GetHashCode());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // TODO: This is to suppress complaining about DomainEvents in Entities during creating migrations 
-            //modelBuilder.Ignore<SharedKernel.Domain.Abstractions.Events.DomainEvent>();
-
-            modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
+            modelBuilder.Ignore<SharedKernel.Domain.Abstractions.Events.DomainEvent>();
 
             //modelBuilder.ApplyConfiguration(new AppointmentEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());
@@ -46,15 +39,15 @@ namespace Clinic.Core.Appointments.Persistence
         public async Task<int> SaveEntitiesAsync(string userId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Dispatch Pre Commit Domain Events collection. 
-            await _mediator.DispatchPreCommitDomainEventsAsync(this);
+            //await _mediator.DispatchPreCommitDomainEventsAsync(this);
 
             AddAuditInfo(userId);
-            var result = await base.SaveChangesAsync();
+            var result = await base.SaveChangesAsync(cancellationToken);
 
             // Dispatch Post Commit Domain Events collection. 
-            await _mediator.DispatchPreCommitDomainEventsAsync(this);
+            //await _mediator.DispatchPreCommitDomainEventsAsync(this);
 
-            result += await base.SaveChangesAsync();
+            result += await base.SaveChangesAsync(cancellationToken);
 
             return result;
         }
@@ -62,7 +55,7 @@ namespace Clinic.Core.Appointments.Persistence
         public async Task<int> SaveChangesAsync(string userId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             AddAuditInfo(userId);
-            return await base.SaveChangesAsync();
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         public int SaveChanges(string userId = null)

@@ -1,12 +1,7 @@
 using System.Net;
+using Clinic.SharedKernel.Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
-using Clinic.Infrastructure.ActionResults;
-using Clinic.Domain.Abstractions.Exceptions;
 
 namespace Clinic.Web.Infrastructure
 {
@@ -55,7 +50,7 @@ namespace Clinic.Web.Infrastructure
 
                 // Result asigned to a result object but in destiny the response is empty. This is a known bug of .net core 1.1
                 // It will be fixed in .net core 1.1.2. See https://github.com/aspnet/Mvc/issues/5594 for more information
-                context.Result = new InternalServerErrorObjectResult(json);
+                //context.Result = new InternalServerErrorObjectResult(json);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
             context.ExceptionHandled = true;

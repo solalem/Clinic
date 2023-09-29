@@ -1,17 +1,10 @@
-using Solo.Shared.Helpers;
-using Solo.Shared.Components;
-using Solo.ViewModels.Appointments;
-using Solo.ViewModels;
-using Solo.Appointments.Services;
+using Clinic.Shared.Components;
+using Clinic.ViewModels.Appointments.Patients;
+using Clinic.Web.Helpers;
+using Clinic.Web.Shared.Components;
 using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Blazorise;
-using Solo.Shared.Models;
 
-namespace Solo.Appointments.Components
+namespace Clinic.Web.Areas.Appointments.Patients.Components
 {
     public partial class PatientInfo : BlazorComponent
     {

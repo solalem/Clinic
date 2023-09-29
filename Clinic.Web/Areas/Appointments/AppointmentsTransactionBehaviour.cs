@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Clinic.Core.Appointments.Persistence;
 
 namespace Clinic.Web.Areas.Appointments
@@ -21,7 +15,7 @@ namespace Clinic.Web.Areas.Appointments
             _logger = logger ?? throw new ArgumentException(nameof(ILogger));
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             TResponse response = default;
 

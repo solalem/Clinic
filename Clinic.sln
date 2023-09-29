@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinic.Web", "Clinic.Web\Cl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinic.Core", "Clinic.Core\Clinic.Core.csproj", "{075949CF-6827-4230-A337-58CD9A1585DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.SharedKernel", "Clinic.SharedKernel\Clinic.SharedKernel.csproj", "{3470E504-A6CB-42FE-8398-0F70120FCD6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinic.SharedKernel", "Clinic.SharedKernel\Clinic.SharedKernel.csproj", "{3470E504-A6CB-42FE-8398-0F70120FCD6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.ViewModels", "Clinic.ViewModels\Clinic.ViewModels.csproj", "{6108BFF9-4172-4B37-AE56-A9490362B838}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{3470E504-A6CB-42FE-8398-0F70120FCD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3470E504-A6CB-42FE-8398-0F70120FCD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3470E504-A6CB-42FE-8398-0F70120FCD6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6108BFF9-4172-4B37-AE56-A9490362B838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6108BFF9-4172-4B37-AE56-A9490362B838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6108BFF9-4172-4B37-AE56-A9490362B838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6108BFF9-4172-4B37-AE56-A9490362B838}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

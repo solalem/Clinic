@@ -4,9 +4,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blazorise;
-using Solo.Shared;
+using Clinic.Web.Shared;
 
-namespace Solo.Appointments
+namespace Clinic.Web.Areas.Appointments
 {
     public class AppointmentsModuleSettings
     {

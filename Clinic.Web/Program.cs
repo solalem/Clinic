@@ -1,13 +1,24 @@
+using Clinic.Shared;
+using Blazorise;
 using Clinic.Web.Areas.Appointments;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services
+    .AddBlazorise(options =>
+    {
+        //options.ChangeTextOnKeyPress = true;
+    })
+    .AddBootstrapProviders()
+    .AddFontAwesomeIcons();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Program>());
+
+//builder.Services.AddSingleton<PageHistoryState>();
 
 AppointmentsApplicationModule.Load(builder);
 

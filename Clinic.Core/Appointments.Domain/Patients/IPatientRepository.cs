@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Clinic.Domain.Abstractions.Model;
+using Clinic.SharedKernel.Domain.Abstractions.Model;
 using Clinic.Core.Appointments.Domain.AggregatesModel;
 
 namespace Clinic.Core.Appointments.Domain.Patients

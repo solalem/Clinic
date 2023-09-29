@@ -1,15 +1,11 @@
-using Solo.Appointments.Services;
-using Solo.Shared.Components;
-using Solo.Shared.Helpers;
-using Solo.Shared.Models;
-using Solo.ViewModels;
-using Solo.ViewModels.Appointments;
+using Clinic.Shared.Models;
+using Clinic.ViewModels;
+using Clinic.ViewModels.Appointments.Patients;
+using Clinic.Web.Helpers;
+using Clinic.Web.Shared.Components;
 using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Solo.Appointments.Pages.Patients
+namespace Clinic.Web.Areas.Appointments.Patients.Pages
 {
     public partial class Index : BlazorPage
     {

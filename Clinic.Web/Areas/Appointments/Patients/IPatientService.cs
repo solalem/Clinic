@@ -1,10 +1,7 @@
-using Solo.ViewModels;
-using Solo.ViewModels.Appointments;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Clinic.ViewModels;
+using Clinic.ViewModels.Appointments.Patients;
 
-namespace Solo.Appointments.Services
+namespace Clinic.Web.Areas.Appointments.Patients
 {
     public interface IPatientService
     {

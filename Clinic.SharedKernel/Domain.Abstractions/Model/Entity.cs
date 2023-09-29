@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Clinic.Domain.Abstractions.Events;
+using Clinic.SharedKernel.Domain.Abstractions.Events;
 
 namespace Clinic.SharedKernel.Domain.Abstractions.Model
 {

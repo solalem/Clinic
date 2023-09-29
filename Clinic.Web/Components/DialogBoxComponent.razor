@@ -1,0 +1,74 @@
+@using Clinic.Shared.JavaScript
+@using Clinic.Shared.Models;
+
+@inject IJSRuntime JSRuntime
+
+@inherits Clinic.Web.Helpers.BlazorComponent
+
+@namespace Clinic.Web.Shared.Components
+
+<div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="exampleModalLabel">@_context.Title</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>@_context.Message</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Cancel</button>
+                <button class="btn btn-primary" @onclick="() => YesClick(_context)">
+                    Yes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (_showDialogModal)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+
+    private string _messages = "";
+    private string _modalDisplay = "none;";
+    private string _modalClass = "";
+    private bool _showDialogModal = false;
+    private DialogContext _context = new DialogContext();
+
+    [Parameter]
+    public EventCallback<DialogContext> OnDialogResultClick { get; set; }
+
+    private async Task YesClick(DialogContext context)
+    {
+        context.Result = DialogResult.Accept;
+        await OnDialogResultClick.InvokeAsync(context);
+        await Close();
+    }
+
+    public async Task Open(DialogContext context)
+    {
+        await new Css(JSRuntime).HideBodyOverflow();
+
+        _context = context;
+        _modalDisplay = "block;";
+        _modalClass = "Show";
+        _showDialogModal = true;
+
+        StateHasChanged();
+    }
+
+    private async Task Close()
+    {
+        await new Css(JSRuntime).ShowBodyOverflow();
+        _modalDisplay = "none";
+        _modalClass = "";
+        _showDialogModal = false;
+    }
+}
