@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Clinic.SharedKernel.Domain.Abstractions.Model;
-using Clinic.Core.Appointments.Domain.AggregatesModel;
 
 namespace Clinic.Core.Appointments.Domain.Patients
 {
@@ -15,5 +14,7 @@ namespace Clinic.Core.Appointments.Domain.Patients
         void Delete(Guid id);
 
         Task<Patient> GetAsync(Guid id);
+
+        Task<IEnumerable<Patient>> GetManyAsync(int skip, int take);
     }
 }

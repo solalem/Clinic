@@ -43,8 +43,8 @@ namespace Clinic.Core.Appointments.Domain.Patients
         /// <summary>
         /// 
         /// </summary>
-        public DateTime? DateOfBirth { get; private set; }
-        public void SetDateOfBirth(DateTime? dateOfBirth)
+        public DateTimeOffset? DateOfBirth { get; private set; }
+        public void SetDateOfBirth(DateTimeOffset? dateOfBirth)
         {
             this.DateOfBirth = dateOfBirth;
         }
@@ -63,7 +63,7 @@ namespace Clinic.Core.Appointments.Domain.Patients
         {
         }
 
-        public Patient(String cardNumber, String fullName, String gender, String phoneNumber, DateTime? dateOfBirth, String email) : this()
+        public Patient(String cardNumber, String fullName, String gender, String phoneNumber, DateTimeOffset? dateOfBirth, String email) : this()
         {
             this.SetCardNumber(cardNumber);
 			this.SetFullName(fullName);

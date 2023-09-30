@@ -32,4 +32,14 @@ namespace Clinic.ViewModels.Appointments.Patients
         public String Email { get; set; }
     }
 
+
+    public class GetPatient
+    {
+        public Guid Id { get; set; }
+    }
+
+    public class GetPatients
+    {
+        public PaginationInfo PaginationInfo { get; set; } = new PaginationInfo();
+    }
 }

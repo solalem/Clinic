@@ -1,4 +1,4 @@
-using Clinic.ViewModels;
+using Clinic.Core.Appointments.Application.Patients;
 using Clinic.ViewModels.Appointments.Patients;
 using MediatR;
 
@@ -23,19 +23,19 @@ namespace Clinic.Web.Areas.Appointments.Patients
             return await _mediator.Send(new UpdatePatientCommand(request));
         }
 
-        public async Task<PatientSummary> DeleteAsync(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             return await _mediator.Send(new ArchivePatientCommand { Id = id });
         }
 
-        public async Task<PatientDetail> GetAsync(Guid id)
+        public async Task<PatientDetail> GetAsync(GetPatient request)
         {
-            return await _mediator.Send(new ArchivePatientCommand { Id = id });
+            return await _mediator.Send(new GetPatientCommand(request));
         }
 
-        public async Task<PatientList> ListAsync(PaginationInfo pagination)
+        public async Task<PatientList> ListAsync(GetPatients request)
         {
-            return await _mediator.Send(new GetPatientsCommand { Pagination = pagination });
+            return await _mediator.Send(new GetPatientsCommand(request));
         }
 
     }

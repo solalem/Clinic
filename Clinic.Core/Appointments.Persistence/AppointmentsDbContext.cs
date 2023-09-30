@@ -136,7 +136,7 @@ namespace Clinic.Core.Appointments.Persistence
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppointmentsDbContext>()
                 .UseSqlite("data source=;Initial Catalog=Clinic;Integrated Security=true");
-            return new AppointmentsDbContext(optionsBuilder.Options,new NoMediator());
+            return new AppointmentsDbContext(optionsBuilder.Options);
         }
 
         class NoMediator : IMediator

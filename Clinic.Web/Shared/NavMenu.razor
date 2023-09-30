@@ -1,5 +1,6 @@
-@namespace Clinic.Shared
-@inherits Clinic.Shared.Helpers.BlazorComponent
+@namespace Clinic.Web.Shared
+@using Clinic.Web.Areas.Appointments;
+@inherits Clinic.Web.Helpers.BlazorComponent
 
 <Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet" ThemeContrast="ThemeContrast.Dark"
      Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small">
@@ -89,17 +90,11 @@
         if (user == null)
             return vm;
 
-        var Appointment = new Clinic.Appointment.AppointmentModuleSettings(user.User);
+        var Appointment = new AppointmentsModuleSettings(user.User);
         vm.Items.AddRange(Appointment.GetMenu());
-        var Patient = new Clinic.Patient.PatientModuleSettings(user.User);
-        vm.Items.AddRange(Patient.GetMenu());
-        var Attendance = new Clinic.Attendance.AttendanceModuleSettings(user.User);
-        vm.Items.AddRange(Attendance.GetMenu());
 
         //var reporting = new Clinic.Reporting.ReportingModuleSettings(user.User);
         //vm.Items.AddRange(reporting.GetMenu());
-
-        vm.Items.Add(reportingMenu);
 
         return vm;
     }

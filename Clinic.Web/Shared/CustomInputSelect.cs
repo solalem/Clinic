@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace Clinic.Shared
+namespace Clinic.Web.Shared
 {
     /// <summary>
     /// This is needed until 5.0 ships with native support

@@ -2,7 +2,7 @@ using Clinic.ViewModels;
 using Clinic.Web.Helpers;
 using Microsoft.AspNetCore.Components;
 
-namespace Clinic.Shared.Components
+namespace Clinic.Web.Shared.Components
 {
     public partial class Paginator : BlazorComponent
     {

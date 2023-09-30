@@ -40,5 +40,9 @@ namespace Clinic.Core.Appointments.Persistence.Patients
             _context.Remove(_context.Patients.FirstOrDefault(x => x.Id == id));
         }
 
+        public async Task<IEnumerable<Patient>> GetManyAsync(int skip, int take)
+        {
+            return await _context.Patients.Skip(skip).Take(take).ToListAsync();
+        }
     }
 }

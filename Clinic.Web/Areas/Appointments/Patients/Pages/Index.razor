@@ -1,10 +1,11 @@
 @page "/Appointments/Patients/index"
-@*@attribute [Authorize(Roles = Clinic.Shared.Authorization.Constants.Roles.ADMINISTRATORS)]*@
+@*@attribute [Authorize(Roles = Clinic.Web.Shared.Authorization.Constants.Roles.ADMINISTRATORS)]*@
 @inherits Clinic.Web.Helpers.BlazorPage
 @inject NavigationManager navigationManager
 
 @namespace Clinic.Web.Areas.Appointments.Patients.Pages
-@using Clinic.Shared.Models
+@using Clinic.Web.Shared.Components
+@using Clinic.Web.Shared.Models
 @using Clinic.Web.Areas.Appointments.Patients.Components
 
 <Row Class="no-gutters h-100">
@@ -54,7 +55,7 @@
     {
         <Column ColumnSize="ColumnSize.Is9">
             <Container>
-                <Clinic.Appointments.Pages.Patients.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadPatients(patients.PaginationInfo)" />
+                <Clinic.Web.Areas.Appointments.Patients.Pages.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadPatients(patients.PaginationInfo)" />
             </Container>
         </Column>
     }

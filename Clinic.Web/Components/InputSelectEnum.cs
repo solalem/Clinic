@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 
-namespace Clinic.Shared.Components
+namespace Clinic.Web.Shared.Components
 {
     // Inherit from InputBase so the hard work is already implemented 😊
     // Note that adding a constraint on TEnum (where T : Enum) doesn't work when used in the view, Razor raises an error at build time. Also, this would prevent using nullable types...

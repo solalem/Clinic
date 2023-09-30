@@ -1,4 +1,3 @@
-using Clinic.Shared;
 using Blazorise;
 using Clinic.Web.Areas.Appointments;
 using Blazorise.Bootstrap;

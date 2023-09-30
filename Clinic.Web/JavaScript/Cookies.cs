@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
-namespace Clinic.Shared.JavaScript
+namespace Clinic.Web.Shared.JavaScript
 {
     public class Cookies
     {

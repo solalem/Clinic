@@ -1,4 +1,4 @@
-namespace Clinic.Shared.JavaScript
+namespace Clinic.Web.Shared.JavaScript
 {
     public static class JSInteropConstants
     {

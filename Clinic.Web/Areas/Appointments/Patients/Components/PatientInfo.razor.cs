@@ -1,4 +1,4 @@
-using Clinic.Shared.Components;
+using Clinic.Web.Shared.Components;
 using Clinic.ViewModels.Appointments.Patients;
 using Clinic.Web.Helpers;
 using Clinic.Web.Shared.Components;

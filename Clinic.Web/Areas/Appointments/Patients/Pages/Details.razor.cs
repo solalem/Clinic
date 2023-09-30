@@ -1,4 +1,4 @@
-using Clinic.Shared.Models;
+using Clinic.Web.Shared.Models;
 using Clinic.ViewModels.Appointments.Patients;
 using Clinic.Web.Areas.Appointments.Patients.Components;
 using Clinic.Web.Helpers;
@@ -71,7 +71,7 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
 
             Logger.LogInformation("Now loading Patient... {Id}", Id);
 
-            Item = await AppointmentsServices.PatientService.GetAsync(Id);
+            Item = await AppointmentsServices.PatientService.GetAsync(new GetPatient { Id = Id });
             await info.Open(Item);
 
             StateHasChanged();

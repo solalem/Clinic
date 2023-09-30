@@ -1,6 +1,6 @@
 using System;
 
-namespace Clinic.Shared.Models
+namespace Clinic.Web.Shared.Models
 {
     public class CacheEntry<T>
     {

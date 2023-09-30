@@ -1,4 +1,4 @@
-using Clinic.Shared.Models;
+using Clinic.Web.Shared.Models;
 using Clinic.ViewModels;
 using Clinic.ViewModels.Appointments.Patients;
 using Clinic.Web.Helpers;
@@ -85,7 +85,7 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
         }
         public async Task ReloadPatients(PaginationInfo pagination)
         {
-            patients = await AppointmentsServices.PatientService.ListAsync(pagination);
+            patients = await AppointmentsServices.PatientService.ListAsync(new GetPatients { PaginationInfo = pagination });
             showPreview = false;
             CallRequestRefresh();
         }
