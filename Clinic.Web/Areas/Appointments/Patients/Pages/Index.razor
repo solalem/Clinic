@@ -1,9 +1,9 @@
 @page "/Appointments/Patients/index"
-@*@attribute [Authorize(Roles = Clinic.Web.Shared.Authorization.Constants.Roles.ADMINISTRATORS)]*@
-@inherits Clinic.Web.Helpers.BlazorPage
+@inherits BlazorPage
 @inject NavigationManager navigationManager
 
 @namespace Clinic.Web.Areas.Appointments.Patients.Pages
+@using Clinic.Web.Components;
 @using Clinic.Web.Shared.Components
 @using Clinic.Web.Shared.Models
 @using Clinic.Web.Areas.Appointments.Patients.Components

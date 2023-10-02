@@ -1,10 +1,11 @@
 @*@attribute [Authorize(Roles = Clinic.Web.Shared.Authorization.Constants.Roles.ADMINISTRATORS)]*@
-@inherits Clinic.Web.Helpers.BlazorComponent
+@inherits BlazorComponent
 @namespace Clinic.Web.Areas.Appointments.Patients.Components
 @using Clinic.ViewModels
 @using Clinic.ViewModels.Appointments
 @using Blazorise;
 @using Clinic.ViewModels.Appointments.Patients;
+@using Clinic.Web.Components;
 
 @ChildContent
 

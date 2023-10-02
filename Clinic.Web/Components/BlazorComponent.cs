@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Clinic.Web.Helpers
+namespace Clinic.Web.Components
 {
     public class BlazorComponent : ComponentBase
     {
@@ -23,7 +23,7 @@ namespace Clinic.Web.Helpers
         {
             StateHasChanged();
         }
-        
+
     }
 
     public class BlazorPage : BlazorComponent

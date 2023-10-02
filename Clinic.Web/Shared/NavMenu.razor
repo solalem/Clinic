@@ -1,6 +1,8 @@
 @namespace Clinic.Web.Shared
 @using Clinic.Web.Areas.Appointments;
-@inherits Clinic.Web.Helpers.BlazorComponent
+@using Clinic.Web.Components;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inherits BlazorComponent
 
 <Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet" ThemeContrast="ThemeContrast.Dark"
      Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small">
@@ -14,8 +16,6 @@
         </BarItem>
     </BarBrand>
     <BarMenu>
-        <AuthorizeView>
-            <Authorized>
                 <BarStart>
                     <BarLabel>Admin</BarLabel>
                     <BarItem>
@@ -25,7 +25,7 @@
                         </BarLink>
                     </BarItem>
                     <BarLabel>Transactions</BarLabel>
-                    @foreach (var item in GetMenu(context).Items)
+                    @foreach (var item in GetMenu().Items)
                     {
                         if (item.SubMenus.Count == 0)
                         {
@@ -60,16 +60,7 @@
                     }
                 </BarStart>
                 <BarEnd>
-                    <LoginDisplay />
                 </BarEnd>
-            </Authorized>
-            <NotAuthorized>
-                <BarStart></BarStart>
-                <BarEnd>
-                    <LoginDisplay />
-                </BarEnd>
-            </NotAuthorized>
-        </AuthorizeView>
     </BarMenu>
 </Bar>
 
@@ -84,13 +75,13 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
-    private NavigationMenu GetMenu(AuthenticationState user)
+    private NavigationMenu GetMenu()
     {
         var vm = new NavigationMenu();
-        if (user == null)
-            return vm;
+        //if (user == null)
+        //    return vm;
 
-        var Appointment = new AppointmentsModuleSettings(user.User);
+        var Appointment = new AppointmentsModuleSettings(null); // user.User);
         vm.Items.AddRange(Appointment.GetMenu());
 
         //var reporting = new Clinic.Reporting.ReportingModuleSettings(user.User);

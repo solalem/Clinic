@@ -1,5 +1,5 @@
 using Clinic.ViewModels;
-using Clinic.Web.Helpers;
+using Clinic.Web.Components;
 using Microsoft.AspNetCore.Components;
 
 namespace Clinic.Web.Shared.Components

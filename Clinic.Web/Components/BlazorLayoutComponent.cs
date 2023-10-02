@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace Clinic.Web.Helpers
+namespace Clinic.Web.Components
 {
     public class BlazorLayoutComponent : LayoutComponentBase
     {

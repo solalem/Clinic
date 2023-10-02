@@ -1,9 +1,9 @@
 using Clinic.Web.Shared.Models;
 using Clinic.ViewModels.Appointments.Patients;
 using Clinic.Web.Areas.Appointments.Patients.Components;
-using Clinic.Web.Helpers;
 using Clinic.Web.Shared.Components;
 using Microsoft.AspNetCore.Components;
+using Clinic.Web.Components;
 
 namespace Clinic.Web.Areas.Appointments.Patients.Pages
 {

@@ -1,1 +1,45 @@
+@inject IJSRuntime JSRuntime
+@namespace Clinic.Web.Shared
+@using Clinic.Web.Components;
 
+@inherits BlazorLayoutComponent
+
+<Layout Sider="true">
+    <LayoutSider>
+        <LayoutSiderContent>
+            <NavMenu />
+        </LayoutSiderContent>
+    </LayoutSider>
+
+    <Layout>
+        <LayoutHeader Fixed="true">
+        </LayoutHeader>
+        <Layout>
+            <LayoutContent>
+                @Body
+            </LayoutContent>
+        </Layout>
+        <LayoutFooter>
+            ...
+        </LayoutFooter>
+    </Layout>
+</Layout>
+
+@code
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+
+            //if (authState.User == null)
+            //{
+            //    await new Route(JSRuntime).RouteOutside("/Identity/Account/Login");
+            //}
+            CallRequestRefresh();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
