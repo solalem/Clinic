@@ -15,13 +15,7 @@ namespace Clinic.Web.Areas.Appointments
         {
             builder.Services.AddDbContext<AppointmentsDbContext>(c =>
             {
-                //var mediator = c.Resolve<IMediator>();
-
-                c.UseSqlite(options =>
-                    {
-                        options.MigrationsAssembly(typeof(AppointmentsDbContext).GetTypeInfo().Assembly.GetName().Name);
-                    });
-
+                c.UseSqlite(builder.Configuration.GetConnectionString("Default"));
             });
 
             builder.Services.AddScoped<IPatientRepository, PatientRepository>();

@@ -3,6 +3,8 @@ using Clinic.Web.Areas.Appointments;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Clinic.Web.Components;
+using Clinic.Core.Appointments.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
@@ -16,7 +18,7 @@ builder.Services
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Program>());
+builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Clinic.Core.Appointments.Application.Patients.CreatePatientCommand>());
 
 builder.Services.AddSingleton<PageHistoryState>();
 
@@ -25,7 +27,15 @@ AppointmentsApplicationModule.Load(builder);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetService<AppointmentsDbContext>();
+        context.Database.Migrate();
+    }
+}
+else
 {
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.

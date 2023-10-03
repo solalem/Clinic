@@ -17,7 +17,6 @@ namespace Clinic.Core.Appointments.Persistence
         public DbSet<Patient> Patients { get; set; }
         //public DbSet<Attendance> Attendances { get; set; }
 
-        private readonly IMediator _mediator;
         private IDbContextTransaction _currentTransaction;
         public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
 
@@ -38,18 +37,8 @@ namespace Clinic.Core.Appointments.Persistence
 
         public async Task<int> SaveEntitiesAsync(string userId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            // Dispatch Pre Commit Domain Events collection. 
-            //await _mediator.DispatchPreCommitDomainEventsAsync(this);
-
             AddAuditInfo(userId);
-            var result = await base.SaveChangesAsync(cancellationToken);
-
-            // Dispatch Post Commit Domain Events collection. 
-            //await _mediator.DispatchPreCommitDomainEventsAsync(this);
-
-            result += await base.SaveChangesAsync(cancellationToken);
-
-            return result;
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<int> SaveChangesAsync(string userId = null, CancellationToken cancellationToken = default(CancellationToken))
@@ -129,56 +118,7 @@ namespace Clinic.Core.Appointments.Persistence
             }
         }
     }
-
-    public class AppointmentsContextDesignFactory : IDesignTimeDbContextFactory<AppointmentsDbContext>
-    {
-        public AppointmentsDbContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<AppointmentsDbContext>()
-                .UseSqlite("data source=;Initial Catalog=Clinic;Integrated Security=true");
-            return new AppointmentsDbContext(optionsBuilder.Options);
-        }
-
-        class NoMediator : IMediator
-        {
-            public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IAsyncEnumerable<object> CreateStream(object request, CancellationToken cancellationToken = default)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task Publish(object notification, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                return Task.CompletedTask;
-            }
-            
-            public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default(CancellationToken)) where TNotification : INotification
-            {
-                return Task.CompletedTask;
-            }
-
-            public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                return Task.FromResult<TResponse>(default(TResponse));
-            }
-
-            public Task<object> Send(object request, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                return null;// Task.CompletedTask;
-            }
-
-            public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IRequest
-            {
-                return null;
-            }
-        }
-    }
-    
-    public static class StringExtensions
+        public static class StringExtensions
     {
         public static string ToSnakeCase(this string input)
         {

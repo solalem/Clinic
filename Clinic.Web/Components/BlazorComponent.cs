@@ -21,7 +21,7 @@ namespace Clinic.Web.Components
 
         private void DoRefresh()
         {
-            StateHasChanged();
+            //StateHasChanged();
         }
 
     }
