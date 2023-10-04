@@ -2,7 +2,7 @@ using Clinic.Web.Shared.Components;
 using Clinic.ViewModels.Appointments.Patients;
 using Clinic.Web.Shared.Components;
 using Microsoft.AspNetCore.Components;
-using Clinic.Web.Components;
+using Clinic.Web.Models;
 
 namespace Clinic.Web.Areas.Appointments.Patients.Components
 {

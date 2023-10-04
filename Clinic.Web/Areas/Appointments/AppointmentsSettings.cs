@@ -8,10 +8,10 @@ using Clinic.Web.Shared;
 
 namespace Clinic.Web.Areas.Appointments
 {
-    public class AppointmentsModuleSettings
+    public class AppointmentsSettings
     {
         ClaimsPrincipal _user; 
-        public AppointmentsModuleSettings(ClaimsPrincipal user)
+        public AppointmentsSettings(ClaimsPrincipal user)
         {
             _user = user;
         }

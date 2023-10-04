@@ -1,5 +1,5 @@
 using Clinic.ViewModels.Appointments.Patients;
-using Clinic.Web.Components;
+using Clinic.Web.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace Clinic.Web.Areas.Appointments.Pages.Patients

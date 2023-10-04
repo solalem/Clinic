@@ -2,9 +2,9 @@ using Blazorise;
 using Clinic.Web.Areas.Appointments;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-using Clinic.Web.Components;
 using Clinic.Core.Appointments.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Clinic.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
@@ -22,7 +22,7 @@ builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Clinic
 
 builder.Services.AddSingleton<PageHistoryState>();
 
-AppointmentsApplicationModule.Load(builder);
+AppointmentsModule.Load(builder);
 
 var app = builder.Build();
 

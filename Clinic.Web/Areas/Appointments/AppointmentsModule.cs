@@ -9,7 +9,7 @@ using Clinic.Web.Areas.Appointments.Patients;
 
 namespace Clinic.Web.Areas.Appointments
 {
-    public static class AppointmentsApplicationModule
+    public static class AppointmentsModule
     {
         public static void Load(WebApplicationBuilder builder)
         {

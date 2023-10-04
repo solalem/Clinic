@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Clinic.Web.Shared.Models
+namespace Clinic.Web.Models
 {
     public class HttpService
     {

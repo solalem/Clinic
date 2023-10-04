@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Clinic.Web.Components
+namespace Clinic.Web.Models
 {
-    public class BlazorLayoutComponent : LayoutComponentBase
+    public class BlazorComponent : ComponentBase
     {
         private readonly RefreshBroadcast _refresh = RefreshBroadcast.Instance;
 
@@ -12,14 +14,20 @@ namespace Clinic.Web.Components
             base.OnInitialized();
         }
 
+        public void Dispose()
+        {
+            _refresh.RefreshRequested -= DoRefresh;
+        }
+
         public void CallRequestRefresh()
         {
             _refresh.CallRequestRefresh();
         }
 
-        private void DoRefresh()
+        private async void DoRefresh()
         {
-            //StateHasChanged();
+            await InvokeAsync(() => StateHasChanged());
         }
+
     }
 }

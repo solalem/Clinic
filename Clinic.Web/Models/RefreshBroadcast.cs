@@ -1,6 +1,6 @@
 using System;
 
-namespace Clinic.Web.Components
+namespace Clinic.Web.Models
 {
     internal sealed class RefreshBroadcast
     {

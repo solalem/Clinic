@@ -1,9 +1,8 @@
-using Clinic.Web.Shared.Models;
 using Clinic.ViewModels;
 using Clinic.ViewModels.Appointments.Patients;
 using Clinic.Web.Shared.Components;
 using Microsoft.AspNetCore.Components;
-using Clinic.Web.Components;
+using Clinic.Web.Models;
 
 namespace Clinic.Web.Areas.Appointments.Patients.Pages
 {
@@ -21,7 +20,8 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
 
         public DialogBoxComponent DialogBox;
         
-        public Details Details { get; set; }
+        public Details Details { get; set; } //= new Details();
+
         [Parameter]
         [SupplyParameterFromQuery]
         public Guid HighlightId { get; set; }
@@ -29,7 +29,7 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
         protected override async Task OnParametersSetAsync()
         {
             await ReloadPatients(patients.PaginationInfo);
-            if (HighlightId != Guid.Empty)
+            if (HighlightId != Guid.Empty && Details != null)
             {
                 showPreview = true;
                 await Details.Open(HighlightId);
@@ -53,6 +53,7 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
                 return;
 
             showPreview = true;
+
             await Details.Open(item.Id);
         }
 

@@ -3,9 +3,9 @@
 @inject NavigationManager navigationManager
 
 @namespace Clinic.Web.Areas.Appointments.Patients.Pages
-@using Clinic.Web.Components;
+@using Clinic.Web.Models
 @using Clinic.Web.Shared.Components
-@using Clinic.Web.Shared.Models
+
 @using Clinic.Web.Areas.Appointments.Patients.Components
 
 <Row Class="no-gutters h-100">
@@ -51,12 +51,10 @@
         </div>
     </Column>
 
-    @if (showPreview)
-    {
-        <Column ColumnSize="ColumnSize.Is9">
-            <Container>
-                <Clinic.Web.Areas.Appointments.Patients.Pages.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadPatients(patients.PaginationInfo)" />
-            </Container>
-        </Column>
-    }
+    <Column hidden="@(!showPreview)" ColumnSize="ColumnSize.Is9">
+        <Container>
+            <Clinic.Web.Areas.Appointments.Patients.Pages.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadPatients(patients.PaginationInfo)" />
+        </Container>
+    </Column>
+
 </Row>

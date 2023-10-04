@@ -1,7 +1,7 @@
 @namespace Clinic.Web.Shared
 @using Clinic.Web.Areas.Appointments;
-@using Clinic.Web.Components;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using Clinic.Web.Models;
 @inherits BlazorComponent
 
 <Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet" ThemeContrast="ThemeContrast.Dark"
@@ -81,7 +81,7 @@
         //if (user == null)
         //    return vm;
 
-        var Appointment = new AppointmentsModuleSettings(null); // user.User);
+        var Appointment = new AppointmentsSettings(null); // user.User);
         vm.Items.AddRange(Appointment.GetMenu());
 
         //var reporting = new Clinic.Reporting.ReportingModuleSettings(user.User);
