@@ -22,7 +22,7 @@ namespace Clinic.Web.Areas.Appointments
 
             mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Appointments/index", IconId = IconName.Circle, Title = "Appointments" });
             mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Patients/index", IconId = IconName.Circle, Title = "Patients" });
-            mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Attendances/index", IconId = IconName.Circle, Title = "Attendances" });
+            mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Visits/index", IconId = IconName.Circle, Title = "Visits" });
             var roles = new List<Claim>();
             if (_user != null)
             {

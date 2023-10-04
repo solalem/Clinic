@@ -15,7 +15,7 @@ namespace Clinic.Core.Appointments.Persistence
 
         //public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Patient> Patients { get; set; }
-        //public DbSet<Attendance> Attendances { get; set; }
+        //public DbSet<Visit> Visits { get; set; }
 
         private IDbContextTransaction _currentTransaction;
         public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
@@ -31,7 +31,7 @@ namespace Clinic.Core.Appointments.Persistence
 
             //modelBuilder.ApplyConfiguration(new AppointmentEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new AttendanceEntityTypeConfiguration());
+            //modelBuilder.ApplyConfiguration(new VisitEntityTypeConfiguration());
 
         }
 
