@@ -14,9 +14,9 @@
         <BarToggler />
         <BarMenu>
             <BarStart>
-                <BarItem>
+             @*   <BarItem>
                     <Button Type="ButtonType.Button" Class="shadow-none text-danger" PreventDefaultOnSubmit="true" @onclick="() => DeleteClick(Item.Id)">Delete</Button>
-                </BarItem>
+                </BarItem>*@
             </BarStart>
             <BarEnd>
                 <BarItem>
@@ -30,6 +30,7 @@
 </div>
 
 <PatientInfo @ref="info" Item="Item" />
+<br/>
 
 <Container>
     <Tabs SelectedTab="@selectedTab">

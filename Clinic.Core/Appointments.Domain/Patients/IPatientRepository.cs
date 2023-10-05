@@ -15,6 +15,6 @@ namespace Clinic.Core.Appointments.Domain.Patients
 
         Task<Patient> GetAsync(Guid id);
 
-        Task<IEnumerable<Patient>> GetManyAsync(int skip, int take);
+        Task<IEnumerable<Patient>> GetManyAsync(int skip, int take, string? searchString = null);
     }
 }

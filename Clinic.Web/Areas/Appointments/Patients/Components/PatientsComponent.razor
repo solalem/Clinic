@@ -34,9 +34,9 @@
                 <small class="text-muted">@item.DisplayDescription</small>
                 @if (Editable) 
                 {
-                    <button type="button" class="close" aria-label="Close" @onclick="() => RemoveClick(item)" @onclick:stopPropagation="true">
+                  @*  <button type="button" class="close" aria-label="Close" @onclick="() => RemoveClick(item)" @onclick:stopPropagation="true">
                         <span aria-hidden="true">&times;</span>
-                    </button>
+                    </button>*@
                 }
             </li>
         }
@@ -72,11 +72,11 @@ else
                     <td>@item.Email</td>
                     @if (Editable) 
                     {
-                        <td>
+                       @* <td>
                             <button type="button" class="close" aria-label="Close" @onclick="() => RemoveClick(item)" @onclick:stopPropagation="true">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                        </td>
+                        </td>*@
                     }
                 </tr>
             }

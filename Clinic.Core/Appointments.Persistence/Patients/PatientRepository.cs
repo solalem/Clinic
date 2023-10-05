@@ -40,9 +40,15 @@ namespace Clinic.Core.Appointments.Persistence.Patients
             _context.Remove(_context.Patients.FirstOrDefault(x => x.Id == id));
         }
 
-        public async Task<IEnumerable<Patient>> GetManyAsync(int skip, int take)
+        public async Task<IEnumerable<Patient>> GetManyAsync(int skip, int take, string? searchString = null)
         {
-            return await _context.Patients.Skip(skip).Take(take).ToListAsync();
+            var query = _context.Patients.AsQueryable();
+            if (!string.IsNullOrEmpty(searchString))
+                query = query.Where(x => x.CardNumber.Contains(searchString) ||
+                    x.FullName.Contains(searchString) ||
+                    x.PhoneNumber.Contains(searchString));
+
+            return await query.Skip(skip).Take(take).ToListAsync();
         }
     }
 }

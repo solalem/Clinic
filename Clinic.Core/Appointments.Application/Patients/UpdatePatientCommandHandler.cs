@@ -27,7 +27,7 @@ namespace Clinic.Core.Appointments.Application.Patients
             model.SetPhoneNumber(message.Request.PhoneNumber);
             model.SetDateOfBirth(message.Request.DateOfBirth);
             model.SetEmail(message.Request.Email);
-            _patientRepository.Add(model);
+            _patientRepository.Update(model);
 
             var result = await _patientRepository.UnitOfWork.SaveEntitiesAsync();
             if (result == 0) return null;

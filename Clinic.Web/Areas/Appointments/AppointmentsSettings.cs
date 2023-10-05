@@ -20,9 +20,9 @@ namespace Clinic.Web.Areas.Appointments
         {
             var mainMenu = new NavigationMenuItem() { Link = "#", IconId = IconName.Circle, Title = "Appointments" };
 
-            mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Appointments/index", IconId = IconName.Circle, Title = "Appointments" });
-            mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Patients/index", IconId = IconName.Circle, Title = "Patients" });
-            mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Visits/index", IconId = IconName.Circle, Title = "Visits" });
+            mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Patients/index", IconId = IconName.Users, Title = "Patients" });
+            mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Appointments/index", IconId = IconName.CalendarWeek, Title = "Appointments" });
+            mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Visits/index", IconId = IconName.CalendarCheck, Title = "Visits" });
             var roles = new List<Claim>();
             if (_user != null)
             {

@@ -17,7 +17,7 @@ namespace Clinic.Core.Appointments.Application.Patients
         public async Task<PatientList> Handle(GetPatientsCommand message, CancellationToken cancellationToken)
         {
             // TODO: Add Integration events to notify others
-            var models = await _patientRepository.GetManyAsync(message.Request.PaginationInfo.Index, message.Request.PaginationInfo.PageSize);
+            var models = await _patientRepository.GetManyAsync(message.Request.PaginationInfo.Index, message.Request.PaginationInfo.PageSize, message.Request.PaginationInfo.SearchString);
 
             return GetPatientsCommand.ToResponse(message.Request, models);
         }
