@@ -1,0 +1,79 @@
+@page "/Appointments/Visits/details/{id:guid}"
+@using Clinic.Core.Appointments.Services
+@using Clinic.Core.Appointments.Components
+@using Clinic.ViewModels
+@using Clinic.ViewModels.Appointments
+@using Clinic.ViewModels.Appointments.Visits;
+
+@namespace Clinic.Core.Appointments.Pages.Visits
+@inject ILogger<Details> Logger
+@inject IJSRuntime JSRuntime
+@inherits Clinic.Web.Models.BlazorPage
+
+<div class="sticky-top">
+    <Bar Breakpoint="Breakpoint.Desktop" Background="Background.White" ThemeContrast="ThemeContrast.Light" Shadow="Shadow.Remove">
+        <BarToggler />
+        <BarMenu>
+            <BarStart>
+                <BarItem>
+                    <Button Type="ButtonType.Button" Class="shadow-none text-danger" PreventDefaultOnSubmit="true" @onclick="() => DeleteClick(Item.Id)">Delete</Button>
+                </BarItem>
+            </BarStart>
+            <BarEnd>
+                <BarItem>
+                    <Button Type="ButtonType.Submit" Shadow="Shadow.Remove" Clicked="() => CloseClick()">
+                        <Icon Name="IconName.Times"></Icon>
+                    </Button>
+                </BarItem>
+            </BarEnd>
+        </BarMenu>
+    </Bar>
+</div>
+
+<VisitInfo @ref="info" Item="Item" />
+
+<Container>
+    <Tabs SelectedTab="@selectedTab">
+        <Items>
+            <Tab Name="More">More</Tab>
+        </Items>
+        <Content>
+            <TabPanel Name="More">
+                <Accordion>
+                    <Collapse>
+                        <CollapseHeader>
+                            Procedures
+                        </CollapseHeader>
+                        <CollapseBody>
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>@nameof(ProcedureSummary.Name)</th>
+                                        <th>@nameof(ProcedureSummary.Description)</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="cursor-pointer">
+                                    @foreach (var item in Item.Procedures)
+                                    {
+                                        if (item == null) continue;
+                                        <tr @onclick="@(() => {})">
+                                            <td>@item.Name</td>
+                                            <td>@item.Description</td>
+                                            <td>
+                                                <button type="button" class="close" aria-label="Close" @onclick="() => {}" @onclick:stopPropagation="true">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </CollapseBody>
+                    </Collapse>
+
+                </Accordion>
+            </TabPanel>
+        </Content>
+    </Tabs>
+</Container>

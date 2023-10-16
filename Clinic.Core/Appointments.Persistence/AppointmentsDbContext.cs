@@ -6,6 +6,7 @@ using MediatR;
 using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.Core.Appointments.Persistence.Patients;
 using Clinic.SharedKernel.Domain.Abstractions.Model;
+using Clinic.Core.Appointments.Domain.Visits;
 
 namespace Clinic.Core.Appointments.Persistence
 {
@@ -15,7 +16,7 @@ namespace Clinic.Core.Appointments.Persistence
 
         //public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Patient> Patients { get; set; }
-        //public DbSet<Visit> Visits { get; set; }
+        public DbSet<Visit> Visits { get; set; }
 
         private IDbContextTransaction _currentTransaction;
         public IDbContextTransaction GetCurrentTransaction => _currentTransaction;

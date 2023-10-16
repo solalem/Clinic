@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Clinic.Core.Appointments.Persistence.Patients;
 using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.Web.Areas.Appointments.Patients;
+using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Core.Appointments.Services;
 
 namespace Clinic.Web.Areas.Appointments
 {
@@ -19,9 +21,11 @@ namespace Clinic.Web.Areas.Appointments
             });
 
             builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+            builder.Services.AddScoped<IVisitRepository, VisitRepository>();
 
             // UI
             builder.Services.AddScoped<IPatientService, PatientService>();
+            builder.Services.AddScoped<IVisitService, VisitService>();
             builder.Services.AddScoped<IAppointmentsServices, AppointmentsServices>();
         }
     }

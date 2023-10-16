@@ -1,0 +1,59 @@
+@page "/Appointments/Visits/index"
+@*@attribute [Authorize(Roles = Clinic.Shared.Authorization.Constants.Roles.ADMINISTRATORS)]*@
+@inherits Clinic.Web.Models.BlazorPage
+@inject NavigationManager navigationManager
+
+@namespace Clinic.Core.Appointments.Pages.Visits
+@using Clinic.Core.Appointments.Components
+@using Clinic.Web.Shared.Components
+
+<Row Class="no-gutters h-100">
+    <Column Class="@(showPreview? "bg-light" : "")" ColumnSize="showPreview ? ColumnSize.Is3 : ColumnSize.Is12">
+        <div class="sticky-top">
+            <Bar Breakpoint="Breakpoint.Desktop" Background="Background.Light" ThemeContrast="ThemeContrast.Light" Shadow="Shadow.Remove">
+                <BarToggler />
+                <BarMenu>
+                    <BarStart>
+                        <BarItem>
+                            <Addons>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit @bind-Text="@Visits.PaginationInfo.SearchString" @onkeydown="(x) => Search(x)" Placeholder="Search..." />
+                                </Addon>
+                                <Addon AddonType="AddonType.End">
+                                    <AddonLabel>
+                                        <Icon Name="@IconName.Search"></Icon>
+                                    </AddonLabel>
+                                </Addon>
+                            </Addons>
+                        </BarItem>
+                    </BarStart>
+                </BarMenu>
+            </Bar>
+
+            @if (Visits == null)
+            {
+                <Spinner></Spinner>
+            }
+            else
+            {
+                <VisitsComponent IsList="showPreview" Visits="Visits" OnSelectClick="x => DetailClick(x)" OnRemoveClick="x => DeleteClick(x)">
+                    <Paginator Title="Visits" PaginationInfo="Visits.PaginationInfo" Spread="5" PageSelected="(p)=> ReloadVisits(p)">
+                        <Button Clicked="() => CreateClick()">
+                            <Icon Name="IconName.Add"></Icon>
+                        </Button>
+                    </Paginator>
+                </VisitsComponent>
+
+                <DialogBoxComponent OnDialogResultClick="(context) => DialogResultReceive(context)" @ref="DialogBox" />
+            }
+
+        </div>
+    </Column>
+
+    <Column hidden="@(!showPreview)" ColumnSize="ColumnSize.Is9">
+        <Container>
+            <Clinic.Core.Appointments.Pages.Visits.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadVisits(visits.PaginationInfo)" />
+        </Container>
+    </Column>
+
+</Row>

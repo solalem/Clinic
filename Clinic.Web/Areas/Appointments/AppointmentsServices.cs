@@ -1,3 +1,4 @@
+using Clinic.Core.Appointments.Services;
 using Clinic.Web.Areas.Appointments.Patients;
 using System;
 
@@ -9,14 +10,16 @@ namespace Clinic.Web.Areas.Appointments
 
         
         public IPatientService PatientService { get; set; }
+        public IVisitService VisitService { get; set; }
         
         public AppointmentsServices(
             IPatientService PatientsService, 
+            IVisitService visitService,
             String name = null)
         {
         
             PatientService = PatientsService;
-        
+            VisitService = visitService;
             Name = name;
         }
 
@@ -26,6 +29,7 @@ namespace Clinic.Web.Areas.Appointments
     public interface IAppointmentsServices
     {
         public IPatientService PatientService { get; set; }
+        public IVisitService VisitService { get; set; }
 
     }
 }

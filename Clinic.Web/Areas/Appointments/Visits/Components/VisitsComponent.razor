@@ -1,0 +1,118 @@
+@*@attribute [Authorize(Roles = Clinic.Shared.Authorization.Constants.Roles.ADMINISTRATORS)]*@
+@inherits Clinic.Web.Models.BlazorComponent
+@namespace Clinic.Core.Appointments.Components
+@using Clinic.ViewModels
+@using Clinic.ViewModels.Appointments
+@using Blazorise;
+@using Clinic.ViewModels.Appointments.Visits;
+
+@ChildContent
+
+@if (Visits.Items == null || Visits.Items.Count() == 0)
+{
+    <br />
+    <div class="offset-md-2 col-md-8 card">
+        <p class="card-header">No Visits</p>
+    </div>
+    return;
+}
+
+@if (IsList)
+{
+    <ul class="pl-1 list-unstyled">
+        @foreach (var item in Visits.Items)
+        {
+            if (item == null) continue;
+            var highlight = (selectedItem == item) ? "bg-white": "";
+            <li @key="item.Id" class="p-2 list-group-item-action @highlight" @onclick="@(() => SelectClick(item))">
+                <div class="d-flex w-100 justify-content-between">
+                    <span>@item.DisplayName</span>
+                    <small class="text-info">@item.More</small>
+                </div>
+                <small class="text-muted">@item.DisplayDescription</small>
+                @if (Editable) 
+                {
+                    <button type="button" class="close" aria-label="Close" @onclick="() => RemoveClick(item)" @onclick:stopPropagation="true">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>@nameof(VisitSummary.Date)</th>
+                <th>@nameof(VisitSummary.PatientName)</th>
+                <th>@nameof(VisitSummary.Physician)</th>
+                <th>@nameof(VisitSummary.Description)</th>
+                @if (Editable) 
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody class="cursor-pointer">
+            @foreach (var item in Visits.Items)
+            {
+                if (item == null) continue;
+                <tr @key="item.Id" @onclick="@(() => SelectClick(item))">
+                    <td>@item.Date</td>
+                    <td>@item.PatientName</td>
+                    <td>@item.Physician</td>
+                    <td>@item.Description</td>
+                    @if (Editable) 
+                    {
+                        <td>
+                            <button type="button" class="close" aria-label="Close" @onclick="() => RemoveClick(item)" @onclick:stopPropagation="true">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code{
+    VisitSummary selectedItem;
+    [Parameter]
+    public Guid ParentId { get; set; }
+    [Parameter]
+    public VisitList Visits { get; set; }
+    [Parameter]
+    public bool Editable { get; set; } = true;
+    [Parameter]
+    public bool IsList { get; set; } = true;
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback<VisitSummary> OnSelectClick { get; set; }
+    [Parameter]
+    public EventCallback<VisitSummary> OnRemoveClick { get; set; }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            CallRequestRefresh();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    async Task SelectClick(VisitSummary item)
+    {
+        selectedItem = item;
+        await OnSelectClick.InvokeAsync(item);
+    }
+    void RemoveClick(VisitSummary item)
+    {
+        OnRemoveClick.InvokeAsync(item);
+    }
+
+}
