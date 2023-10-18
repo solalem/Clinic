@@ -42,7 +42,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Components
             StateHasChanged();
         }
 
-        PatientList PatientOptions;
+        PatientList PatientOptions = PatientList.Empty();
         private async Task LoadPatientOptions(PaginationInfo paginationInfo)
         {
             if (paginationInfo.IsSearch && string.IsNullOrEmpty(paginationInfo.SearchString))

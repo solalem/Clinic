@@ -361,6 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# sqlite
 *.db
 /Clinic.Web/clinic.db-shm
 /Clinic.Web/clinic.db-wal
