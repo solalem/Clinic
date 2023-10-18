@@ -1,11 +1,10 @@
 using Clinic.ViewModels;
 using Clinic.ViewModels.Appointments.Visits;
-using Clinic.Web.Areas.Appointments;
 using Clinic.Web.Models;
 using Clinic.Web.Shared.Components;
 using Microsoft.AspNetCore.Components;
 
-namespace Clinic.Core.Appointments.Pages.Visits
+namespace Clinic.Web.Areas.Appointments.Visits.Pages
 {
     public partial class Index : BlazorPage
     {
@@ -22,6 +21,7 @@ namespace Clinic.Core.Appointments.Pages.Visits
         public DialogBoxComponent DialogBox;
         
         public Details Details { get; set; }
+
         [Parameter]
         [SupplyParameterFromQuery]
         public Guid HighlightId { get; set; }
@@ -29,7 +29,7 @@ namespace Clinic.Core.Appointments.Pages.Visits
         protected override async Task OnParametersSetAsync()
         {
             await ReloadVisits(visits.PaginationInfo);
-            if (HighlightId != Guid.Empty)
+            if (HighlightId != Guid.Empty && Details != null)
             {
                 showPreview = true;
                 await Details.Open(HighlightId);

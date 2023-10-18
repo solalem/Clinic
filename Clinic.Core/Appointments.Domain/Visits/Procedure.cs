@@ -2,7 +2,8 @@
 {
     public class Procedure
     {
-        public string Name { get; internal set; }
-        public string Description { get; internal set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

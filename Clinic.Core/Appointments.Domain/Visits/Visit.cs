@@ -46,7 +46,6 @@ namespace Clinic.Core.Appointments.Domain.Visits
         /// </summary>
         public IReadOnlyCollection<Procedure> Procedures => _procedures;
 
-
         protected Visit() : base(Guid.NewGuid())
         {
             _procedures = new List<Procedure>();

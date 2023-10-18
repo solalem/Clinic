@@ -6,7 +6,7 @@ using Clinic.Web.Models;
 using Clinic.Web.Shared.Components;
 using Microsoft.AspNetCore.Components;
 
-namespace Clinic.Core.Appointments.Components
+namespace Clinic.Web.Areas.Appointments.Visits.Components
 {
     public partial class VisitInfo : BlazorComponent
     {

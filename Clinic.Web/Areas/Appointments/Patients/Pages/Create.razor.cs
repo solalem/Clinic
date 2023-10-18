@@ -2,7 +2,7 @@ using Clinic.ViewModels.Appointments.Patients;
 using Clinic.Web.Models;
 using Microsoft.AspNetCore.Components;
 
-namespace Clinic.Web.Areas.Appointments.Pages.Patients
+namespace Clinic.Web.Areas.Appointments.Patients.Pages
 {
     public partial class Create: BlazorPage
     {

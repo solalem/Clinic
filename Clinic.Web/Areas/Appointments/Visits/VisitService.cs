@@ -9,7 +9,7 @@ using Clinic.ViewModels.Appointments.Visits;
 using Clinic.Web.Models;
 using MediatR;
 
-namespace Clinic.Core.Appointments.Services
+namespace Clinic.Web.Areas.Appointments.Visits
 {
     public class VisitService : IVisitService
     {
@@ -34,9 +34,9 @@ namespace Clinic.Core.Appointments.Services
             return await _mediator.Send(new UpdateVisitCommand(request));
         }
 
-        public async Task<VisitSummary> DeleteAsync(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            return await _mediator.Send(new ArchiveVisitCommand(request));
+            return await _mediator.Send(new ArchiveVisitCommand { Id = id });
         }
 
         public async Task<VisitDetail> GetAsync(Guid id)

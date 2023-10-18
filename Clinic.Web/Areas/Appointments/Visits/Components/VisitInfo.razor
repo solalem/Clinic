@@ -1,10 +1,9 @@
-@using Clinic.Core.Appointments.Services
-@using Clinic.Core.Appointments.Components
+@using Clinic.Web.Areas.Appointments.Visits
 @using Clinic.ViewModels
 @using Clinic.ViewModels.Appointments
 @using Clinic.ViewModels.Appointments.Patients;
 
-@namespace Clinic.Core.Appointments.Components
+@namespace Clinic.Web.Areas.Appointments.Visits.Components
 @inject ILogger<VisitInfo> Logger
 @inject IJSRuntime JSRuntime
 @inherits Clinic.Web.Models.BlazorComponent
@@ -13,40 +12,40 @@
 {
     <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="updateForm">
         <DataAnnotationsValidator />
-            <div class="container">
-                <br />
+        <div class="container">
+            <br />
 
-                    <Field>
-                        <FieldLabel>Date:</FieldLabel>
-                        <DatePicker DateChanged="((x) => Item.Date = x)" TValue="DateTimeOffset" Date="Item.Date" />
-                        <ValidationMessage For="(() => Item.Date)" />
-                    </Field>
-                    <Field>
-                        <FieldLabel>Patient:</FieldLabel>
-                        <Autocomplete TItem="PatientSummary"
-                            TValue="Guid"                        
-                            Data="@PatientOptions.Items"
-                            TextField="@((i)=>i.FullName)"
-                            ValueField="@((i)=>i.Id)"
-                            @bind-SelectedValue="@Item.PatientId"
-                            SearchChanged="(s) => LoadPatientOptions(new PaginationInfo { IsSearch = true, SearchString = s })"
-                            Placeholder="Search Patient..." />
-                        <ValidationMessage For="(() => Item.PatientId)" />
-                    </Field>
+            <Field>
+                <FieldLabel>Date:</FieldLabel>
+                <DatePicker DateChanged="((x) => Item.Date = x)" TValue="DateTimeOffset" Date="Item.Date" />
+                <ValidationMessage For="(() => Item.Date)" />
+            </Field>
+            <Field>
+                <FieldLabel>Patient:</FieldLabel>
+                <Autocomplete TItem="PatientSummary"
+                    TValue="Guid"                        
+                    Data="@PatientOptions.Items"
+                    TextField="@((i)=>i.FullName)"
+                    ValueField="@((i)=>i.Id)"
+                    @bind-SelectedValue="@Item.PatientId"
+                    SearchChanged="(s) => LoadPatientOptions(new PaginationInfo { IsSearch = true, SearchString = s })"
+                    Placeholder="Search Patient..." />
+                <ValidationMessage For="(() => Item.PatientId)" />
+            </Field>
 
-                    <Field>
-                        <FieldLabel>Physician:</FieldLabel>
-                        <TextEdit @bind-Text="@Item.Physician" />
-                        <ValidationMessage For="(() => Item.Physician)" />
-                    </Field>
+            <Field>
+                <FieldLabel>Physician:</FieldLabel>
+                <TextEdit @bind-Text="@Item.Physician" />
+                <ValidationMessage For="(() => Item.Physician)" />
+            </Field>
 
-                    <Field>
-                        <FieldLabel>Description:</FieldLabel>
-                        <TextEdit @bind-Text="@Item.Description" />
-                        <ValidationMessage For="(() => Item.Description)" />
-                    </Field>
-                    <Button Type="ButtonType.Submit" form="updateForm">Save</Button>
+            <Field>
+                <FieldLabel>Description:</FieldLabel>
+                <TextEdit @bind-Text="@Item.Description" />
+                <ValidationMessage For="(() => Item.Description)" />
+            </Field>
+            <Button Type="ButtonType.Submit" form="updateForm">Save</Button>
 
-                </div>
-            </EditForm>
+        </div>
+    </EditForm>
 }

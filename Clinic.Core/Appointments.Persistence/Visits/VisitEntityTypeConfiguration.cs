@@ -11,7 +11,6 @@ namespace Clinic.Core.Appointments.Persistence
         {
             config.ToTable("visits", AppointmentsDbContext.DEFAULT_SCHEMA);
             config.HasKey(o => o.Id);
-            //config.Ignore(b => b.DomainEvents);
 
             config.Property(o => o.Id)
                 .HasColumnName("Id")
@@ -40,7 +39,7 @@ namespace Clinic.Core.Appointments.Persistence
                 .IsRequired();
             config.Property(o => o.Procedures)
                 .HasColumnName("Procedures")
-                .HasColumnType("jsonb").IsRequired();
+                .HasColumnType("blob").IsRequired();
 
         }
     }

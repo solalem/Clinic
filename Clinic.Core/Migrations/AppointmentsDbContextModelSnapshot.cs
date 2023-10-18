@@ -56,6 +56,67 @@ namespace Clinic.Core.Migrations
 
                     b.ToTable("patients", "Appointments");
                 });
+
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Procedure", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("VisitId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VisitId");
+
+                    b.ToTable("Procedure");
+                });
+
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Visit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Physician")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Visits");
+                });
+
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Procedure", b =>
+                {
+                    b.HasOne("Clinic.Core.Appointments.Domain.Visits.Visit", null)
+                        .WithMany("Procedures")
+                        .HasForeignKey("VisitId");
+                });
+
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Visit", b =>
+                {
+                    b.Navigation("Procedures");
+                });
 #pragma warning restore 612, 618
         }
     }

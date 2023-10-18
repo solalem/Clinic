@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Components;
-using Clinic.Core.Appointments.Components;
 using Clinic.Web.Models;
 using Clinic.ViewModels.Appointments.Visits;
 using Clinic.Web.Shared.Components;
-using Clinic.Web.Areas.Appointments;
+using Clinic.Web.Areas.Appointments.Visits.Components;
 
-namespace Clinic.Core.Appointments.Pages.Visits
+namespace Clinic.Web.Areas.Appointments.Visits.Pages
 {
     public partial class Details : BlazorPage
     {

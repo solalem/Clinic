@@ -1,19 +1,10 @@
-using Clinic.Web.Shared;
 using Clinic.ViewModels;
-using Clinic.ViewModels.Appointments;
-using Clinic.Core.Appointments.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
-using Blazorise;
-using System;
 using Clinic.Web.Models;
-using Clinic.Web.Areas.Appointments;
 using Clinic.ViewModels.Appointments.Visits;
 using Clinic.ViewModels.Appointments.Patients;
 
-namespace Clinic.Core.Appointments.Pages.Visits
+namespace Clinic.Web.Areas.Appointments.Visits.Pages
 {
     public partial class Create: BlazorPage
     {

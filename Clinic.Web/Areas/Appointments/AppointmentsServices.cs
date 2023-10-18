@@ -1,6 +1,5 @@
-using Clinic.Core.Appointments.Services;
 using Clinic.Web.Areas.Appointments.Patients;
-using System;
+using Clinic.Web.Areas.Appointments.Visits;
 
 namespace Clinic.Web.Areas.Appointments
 {

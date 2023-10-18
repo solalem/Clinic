@@ -25,6 +25,8 @@ namespace Clinic.Core.Appointments.Application.Commands.CreateVisitCommands
 				message.Request.Description);
             _visitRepository.Add(model);
 
+            // TODO: Add procedures
+
             var result = await _visitRepository.UnitOfWork.SaveEntitiesAsync();
             if (result == 0) return null;
 
