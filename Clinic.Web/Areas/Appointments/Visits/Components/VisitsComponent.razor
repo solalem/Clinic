@@ -48,7 +48,6 @@ else
                 <th>@nameof(VisitSummary.Date)</th>
                 <th>@nameof(VisitSummary.PatientName)</th>
                 <th>@nameof(VisitSummary.Physician)</th>
-                <th>@nameof(VisitSummary.Description)</th>
                 @if (Editable) 
                 {
                     <th></th>
@@ -60,10 +59,9 @@ else
             {
                 if (item == null) continue;
                 <tr @key="item.Id" @onclick="@(() => SelectClick(item))">
-                    <td>@item.Date</td>
+                    <td>@item.Date.ToString("MMM dd, yy")</td>
                     <td>@item.PatientName</td>
                     <td>@item.Physician</td>
-                    <td>@item.Description</td>
                     @if (Editable) 
                     {
                         <td>

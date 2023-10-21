@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.SharedKernel.Domain.Abstractions.Model;
+using Clinic.ViewModels.Appointments.Patients;
+using Clinic.ViewModels;
+using System.Linq;
 
 namespace Clinic.Core.Appointments.Persistence.Patients
 {
@@ -40,15 +43,29 @@ namespace Clinic.Core.Appointments.Persistence.Patients
             _context.Remove(_context.Patients.FirstOrDefault(x => x.Id == id));
         }
 
-        public async Task<IEnumerable<Patient>> GetManyAsync(int skip, int take, string? searchString = null)
+        public async Task<PatientList> GetManyAsync(PaginationInfo pagination)
         {
-            var query = _context.Patients.AsQueryable();
-            if (!string.IsNullOrEmpty(searchString))
-                query = query.Where(x => x.CardNumber.Contains(searchString) ||
-                    x.FullName.Contains(searchString) ||
-                    x.PhoneNumber.Contains(searchString));
+            var summaries = _context.PatientSummaries.FromSqlInterpolated(@$"
+                select p.*, vd.lastvisit from patients p
+                left join (
+                  select patientid, max(date) AS lastvisit
+                  from visits v
+                  group by v.patientid
+                ) vd on vd.patientid = p.id
+                where 
+                    {pagination.SearchString} = '' or
+                    ({pagination.SearchString} <> '' and
+                        (p.fullname like '%{pagination.SearchString}%' or
+                        p.fullname like '%{pagination.SearchString}%' or
+                        p.phonenumber like '%{pagination.SearchString}%' or
+                        p.cardnumber like '%{pagination.SearchString}%' ))
+                ");
 
-            return await query.Skip(skip).Take(take).ToListAsync();
+            return new PatientList
+            {
+                Items = await summaries.Skip(pagination.Index).Take(pagination.PageSize).ToListAsync(),
+                PaginationInfo = pagination
+            };
         }
     }
 }

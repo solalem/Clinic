@@ -1,3 +1,4 @@
+using Clinic.Core.Appointments.Persistence.Visits;
 using MediatR;
 
 namespace Clinic.Core.Appointments.Application.Commands.ArchiveVisitCommands
@@ -5,10 +6,10 @@ namespace Clinic.Core.Appointments.Application.Commands.ArchiveVisitCommands
     public class ArchiveVisitCommandHandler
         : IRequestHandler<ArchiveVisitCommand, int>
     {
-        private readonly Domain.Visits.IVisitRepository _visitRepository;
+        private readonly IVisitRepository _visitRepository;
 
         public ArchiveVisitCommandHandler(IMediator mediator,
-            Domain.Visits.IVisitRepository visitRepository)
+            IVisitRepository visitRepository)
         {
             _visitRepository = visitRepository ?? throw new ArgumentNullException(nameof(visitRepository));
         }

@@ -1,5 +1,5 @@
 using MediatR;
-using Clinic.Core.Appointments.Domain.Patients;
+using Clinic.Core.Appointments.Persistence.Patients;
 
 namespace Clinic.Core.Appointments.Application.Patients
 {

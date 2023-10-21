@@ -1,20 +1,23 @@
 using System;
 using System.Threading.Tasks;
+using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.SharedKernel.Domain.Abstractions.Model;
+using Clinic.ViewModels;
+using Clinic.ViewModels.Appointments.Patients;
 
-namespace Clinic.Core.Appointments.Domain.Patients
+namespace Clinic.Core.Appointments.Persistence.Patients
 {
     //This is just the RepositoryContracts or Interface defined at the Domain Layer as requisite for each Aggregate
     public interface IPatientRepository : IRepository<Patient>
     {
         Patient Add(Patient patient);
-        
+
         void Update(Patient patient);
-        
+
         void Delete(Guid id);
 
         Task<Patient> GetAsync(Guid id);
 
-        Task<IEnumerable<Patient>> GetManyAsync(int skip, int take, string? searchString = null);
+        Task<PatientList> GetManyAsync(PaginationInfo pagination);
     }
 }

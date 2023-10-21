@@ -1,12 +1,12 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage;
 using MediatR;
 using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.Core.Appointments.Persistence.Patients;
 using Clinic.SharedKernel.Domain.Abstractions.Model;
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.ViewModels.Appointments.Patients;
 
 namespace Clinic.Core.Appointments.Persistence
 {
@@ -16,6 +16,7 @@ namespace Clinic.Core.Appointments.Persistence
 
         //public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<PatientSummary> PatientSummaries { get; set; }
         public DbSet<Visit> Visits { get; set; }
 
         private IDbContextTransaction _currentTransaction;
@@ -32,8 +33,9 @@ namespace Clinic.Core.Appointments.Persistence
 
             //modelBuilder.ApplyConfiguration(new AppointmentEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new VisitEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new VisitEntityTypeConfiguration());
 
+            modelBuilder.Entity<PatientSummary>().HasNoKey();//.ToTable((string?)null);
         }
 
         public async Task<int> SaveEntitiesAsync(string userId = null, CancellationToken cancellationToken = default(CancellationToken))

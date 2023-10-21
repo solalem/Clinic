@@ -1,4 +1,5 @@
 using Clinic.Core.Appointments.Domain.Patients;
+using Clinic.Core.Appointments.Persistence.Patients;
 using Clinic.ViewModels.Appointments.Patients;
 using MediatR;
 
@@ -17,9 +18,9 @@ namespace Clinic.Core.Appointments.Application.Patients
         public async Task<PatientList> Handle(GetPatientsCommand message, CancellationToken cancellationToken)
         {
             // TODO: Add Integration events to notify others
-            var models = await _patientRepository.GetManyAsync(message.Request.PaginationInfo.Index, message.Request.PaginationInfo.PageSize, message.Request.PaginationInfo.SearchString);
+            var models = await _patientRepository.GetManyAsync(message.Request.PaginationInfo);
 
-            return GetPatientsCommand.ToResponse(message.Request, models);
+            return models;// GetPatientsCommand.ToResponse(message.Request, models);
         }
     }
 

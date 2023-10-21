@@ -1,4 +1,5 @@
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Core.Appointments.Persistence.Visits;
 using Clinic.ViewModels.Appointments.Visits;
 using MediatR;
 
@@ -17,7 +18,7 @@ namespace Clinic.Core.Appointments.Application.Visits
         public async Task<VisitList> Handle(GetVisitsCommand message, CancellationToken cancellationToken)
         {
             // TODO: Add Integration events to notify others
-            var models = await _visitRepository.GetManyAsync(message.Request.PaginationInfo.Index, message.Request.PaginationInfo.PageSize, message.Request.PaginationInfo.SearchString);
+            var models = await _visitRepository.GetManyAsync(message.Request.PaginationInfo);
 
             return GetVisitsCommand.ToResponse(message.Request, models);
         }

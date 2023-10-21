@@ -1,4 +1,5 @@
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Core.Appointments.Persistence.Visits;
 using Clinic.ViewModels.Appointments.Visits;
 using FluentValidation;
 using MediatR;

@@ -19,10 +19,11 @@ namespace Clinic.ViewModels.Appointments.Patients
 
         public String Email { get; set; }
 
+        public DateTimeOffset? LastVisit { get; set; }
 
         public string DisplayName => this.FullName;
-        public string DisplayDescription => "N/A";
-        public string More => "";
+        public string DisplayDescription => "Last visit: " + LastVisit?.ToString("MMM dd, yy");
+        public string More => "#" + CardNumber;
     }
 
     public class PatientDetail: PatientSummary

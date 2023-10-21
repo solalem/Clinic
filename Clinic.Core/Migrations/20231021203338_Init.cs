@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Clinic.Core.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,57 +31,45 @@ namespace Clinic.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Visits",
+                name: "visits",
+                schema: "Appointments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Date = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
                     PatientId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Physician = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Visits", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Procedure",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    VisitId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Procedures = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Procedure", x => x.Id);
+                    table.PrimaryKey("PK_visits", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Procedure_Visits_VisitId",
-                        column: x => x.VisitId,
-                        principalTable: "Visits",
-                        principalColumn: "Id");
+                        name: "FK_visits_patients_PatientId",
+                        column: x => x.PatientId,
+                        principalSchema: "Appointments",
+                        principalTable: "patients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Procedure_VisitId",
-                table: "Procedure",
-                column: "VisitId");
+                name: "IX_visits_PatientId",
+                schema: "Appointments",
+                table: "visits",
+                column: "PatientId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "patients",
+                name: "visits",
                 schema: "Appointments");
 
             migrationBuilder.DropTable(
-                name: "Procedure");
-
-            migrationBuilder.DropTable(
-                name: "Visits");
+                name: "patients",
+                schema: "Appointments");
         }
     }
 }

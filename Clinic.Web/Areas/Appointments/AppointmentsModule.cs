@@ -1,10 +1,9 @@
 using Clinic.Core.Appointments.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Clinic.Core.Appointments.Persistence.Patients;
-using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.Web.Areas.Appointments.Patients;
-using Clinic.Core.Appointments.Domain.Visits;
 using Clinic.Web.Areas.Appointments.Visits;
+using Clinic.Core.Appointments.Persistence.Visits;
 
 namespace Clinic.Web.Areas.Appointments
 {

@@ -49,10 +49,8 @@ else
             <tr>
                 <th>@nameof(PatientSummary.CardNumber)</th>
                 <th>@nameof(PatientSummary.FullName)</th>
-                <th>@nameof(PatientSummary.Gender)</th>
                 <th>@nameof(PatientSummary.PhoneNumber)</th>
-                <th>@nameof(PatientSummary.DateOfBirth)</th>
-                <th>@nameof(PatientSummary.Email)</th>
+                <th>@nameof(PatientSummary.LastVisit)</th>
                 @if (Editable) 
                 {
                     <th></th>
@@ -66,10 +64,8 @@ else
                 <tr @key="item.Id" @onclick="@(() => SelectClick(item))">
                     <td>@item.CardNumber</td>
                     <td>@item.FullName</td>
-                    <td>@item.Gender</td>
                     <td>@item.PhoneNumber</td>
-                    <td>@item.DateOfBirth</td>
-                    <td>@item.Email</td>
+                    <td>@item.LastVisit?.ToString("MMM dd, yy")</td>
                     @if (Editable) 
                     {
                        @* <td>

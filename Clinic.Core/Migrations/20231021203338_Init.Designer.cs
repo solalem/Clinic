@@ -3,6 +3,7 @@ using System;
 using Clinic.Core.Appointments.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinic.Core.Migrations
 {
     [DbContext(typeof(AppointmentsDbContext))]
-    partial class AppointmentsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231021203338_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.22");
@@ -124,7 +126,7 @@ namespace Clinic.Core.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.ToTable("PatientSummaries");
+                    b.ToTable((string)null);
                 });
 
             modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Visit", b =>

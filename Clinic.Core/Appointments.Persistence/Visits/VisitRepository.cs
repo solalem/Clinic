@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Clinic.SharedKernel.Domain.Abstractions.Model;
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Core.Appointments.Persistence.Visits;
+using Clinic.ViewModels;
+using Clinic.ViewModels.Appointments.Visits;
+using System.Linq;
 
 namespace Clinic.Core.Appointments.Persistence
 {
@@ -40,15 +44,14 @@ namespace Clinic.Core.Appointments.Persistence
             _context.Remove(_context.Visits.FirstOrDefault(x => x.Id == id));
         }
 
-        public async Task<IEnumerable<Visit>> GetManyAsync(int skip, int take, string? searchString = null)
+        public async Task<IEnumerable<Visit>> GetManyAsync(PaginationInfo pagination)
         {
             var query = _context.Visits.AsQueryable();
-            if (!string.IsNullOrEmpty(searchString))
-                query = query.Where(x => x.Physician.Contains(searchString) ||
-                    //x.Patient.FullName.Contains(searchString) ||
-                    x.Description.Contains(searchString));
+            if (!string.IsNullOrEmpty(pagination.SearchString))
+                query = query.Where(x => x.Physician.Contains(pagination.SearchString) ||
+                    x.Description.Contains(pagination.SearchString));
 
-            return await query.Skip(skip).Take(take).ToListAsync();
+            return await query.Skip(pagination.Index).Take(pagination.PageSize).ToListAsync();
         }
 
     }

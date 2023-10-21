@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinic.Core.Migrations
 {
     [DbContext(typeof(AppointmentsDbContext))]
-    [Migration("20231018080508_Initial")]
-    partial class Initial
+    [Migration("20231021203852_SummaryTable")]
+    partial class SummaryTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,65 +59,83 @@ namespace Clinic.Core.Migrations
                     b.ToTable("patients", "Appointments");
                 });
 
-            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Procedure", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("VisitId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VisitId");
-
-                    b.ToTable("Procedure");
-                });
-
             modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Visit", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Id");
 
                     b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Date");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Description");
 
                     b.Property<Guid>("PatientId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PatientId");
 
                     b.Property<string>("Physician")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Physician");
+
+                    b.Property<string>("Procedures")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Procedures");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Visits");
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("visits", "Appointments");
                 });
 
-            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Procedure", b =>
+            modelBuilder.Entity("Clinic.ViewModels.Appointments.Patients.PatientSummary", b =>
                 {
-                    b.HasOne("Clinic.Core.Appointments.Domain.Visits.Visit", null)
-                        .WithMany("Procedures")
-                        .HasForeignKey("VisitId");
+                    b.Property<string>("CardNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("DateOfBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("LastVisit")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("PatientSummaries");
                 });
 
             modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Visit", b =>
                 {
-                    b.Navigation("Procedures");
+                    b.HasOne("Clinic.Core.Appointments.Domain.Patients.Patient", null)
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

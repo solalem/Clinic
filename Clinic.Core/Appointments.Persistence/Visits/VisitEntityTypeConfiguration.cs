@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Clinic.Core.Appointments.Domain.Visits;
 using Clinic.Core.Appointments.Domain.Patients;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace Clinic.Core.Appointments.Persistence
 {
@@ -39,7 +42,10 @@ namespace Clinic.Core.Appointments.Persistence
                 .IsRequired();
             config.Property(o => o.Procedures)
                 .HasColumnName("Procedures")
-                .HasColumnType("blob").IsRequired();
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+                    v => JsonSerializer.Deserialize<IReadOnlyCollection<Procedure>>(v, new JsonSerializerOptions()))
+                .IsRequired();
 
         }
     }

@@ -22,8 +22,8 @@ namespace Clinic.ViewModels.Appointments.Visits
 
 
         public string DisplayName => this.Physician;
-        public string DisplayDescription => "N/A";
-        public string More => "";
+        public string DisplayDescription => PatientName;
+        public string More => Date.ToString("MMM dd, yy");
     }
 
     public class ProcedureSummary
