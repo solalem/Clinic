@@ -1,24 +1,46 @@
 using Clinic.Core.Appointments.Domain.Patients;
+using Clinic.Core.Appointments.Persistence;
 using Clinic.Core.Appointments.Persistence.Patients;
 using Clinic.ViewModels.Appointments.Patients;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Core.Appointments.Application.Patients
 {
     public class GetPatientsCommandHandler
         : IRequestHandler<GetPatientsCommand, PatientList>
     {
-        private readonly IPatientRepository _patientRepository;
+        private readonly AppointmentsQueryDbContext _dbContext;
 
-        public GetPatientsCommandHandler(IPatientRepository patientRepository)
+        public GetPatientsCommandHandler(AppointmentsQueryDbContext context)
         {
-            _patientRepository = patientRepository ?? throw new ArgumentNullException(nameof(patientRepository));
+            _dbContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<PatientList> Handle(GetPatientsCommand message, CancellationToken cancellationToken)
         {
-            // TODO: Add Integration events to notify others
-            var models = await _patientRepository.GetManyAsync(message.Request.PaginationInfo);
+            var pagination = message.Request.PaginationInfo;
+            var summaries = _dbContext.PatientSummaries.FromSqlInterpolated(@$"
+                select p.*, vd.lastvisit from patients p
+                left join (
+                  select patientid, max(date) AS lastvisit
+                  from visits v
+                  group by v.patientid
+                ) vd on vd.patientid = p.id
+                where 
+                    {pagination.SearchString} = '' or
+                    ({pagination.SearchString} <> '' and
+                        (p.fullname like '%{pagination.SearchString}%' or
+                        p.fullname like '%{pagination.SearchString}%' or
+                        p.phonenumber like '%{pagination.SearchString}%' or
+                        p.cardnumber like '%{pagination.SearchString}%' ))
+                ");
+
+            var models =  new PatientList
+            {
+                Items = await summaries.Skip(pagination.Index).Take(pagination.PageSize).ToListAsync(),
+                PaginationInfo = pagination
+            };
 
             return models;// GetPatientsCommand.ToResponse(message.Request, models);
         }

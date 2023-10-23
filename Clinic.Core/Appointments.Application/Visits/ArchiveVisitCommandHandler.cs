@@ -1,4 +1,4 @@
-using Clinic.Core.Appointments.Persistence.Visits;
+using Clinic.Core.Appointments.Domain.Visits;
 using MediatR;
 
 namespace Clinic.Core.Appointments.Application.Commands.ArchiveVisitCommands

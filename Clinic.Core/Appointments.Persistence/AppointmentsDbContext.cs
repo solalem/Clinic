@@ -16,13 +16,12 @@ namespace Clinic.Core.Appointments.Persistence
 
         //public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<PatientSummary> PatientSummaries { get; set; }
         public DbSet<Visit> Visits { get; set; }
 
         private IDbContextTransaction _currentTransaction;
         public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
 
-        public AppointmentsDbContext(DbContextOptions options) : base(options)
+        public AppointmentsDbContext(DbContextOptions<AppointmentsDbContext> options) : base(options)
         {
         }
 
@@ -34,8 +33,6 @@ namespace Clinic.Core.Appointments.Persistence
             //modelBuilder.ApplyConfiguration(new AppointmentEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new VisitEntityTypeConfiguration());
-
-            modelBuilder.Entity<PatientSummary>().HasNoKey();//.ToTable((string?)null);
         }
 
         public async Task<int> SaveEntitiesAsync(string userId = null, CancellationToken cancellationToken = default(CancellationToken))
@@ -55,10 +52,10 @@ namespace Clinic.Core.Appointments.Persistence
             AddAuditInfo(userId);
             return base.SaveChanges();
         }
-        
+
         private void AddAuditInfo(string userId)
         {
-            if(string.IsNullOrEmpty(userId)) return;
+            if (string.IsNullOrEmpty(userId)) return;
 
             //// TODO: Add auditing information; createdBy/On, updatedBy/On
             //// get entries that are being Added or Updated
@@ -121,7 +118,7 @@ namespace Clinic.Core.Appointments.Persistence
             }
         }
     }
-        public static class StringExtensions
+    public static class StringExtensions
     {
         public static string ToSnakeCase(this string input)
         {

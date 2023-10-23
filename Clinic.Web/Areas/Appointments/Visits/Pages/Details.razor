@@ -33,47 +33,43 @@
 <VisitInfo @ref="info" Item="Item" />
 
 <Container>
-    <Tabs SelectedTab="@selectedTab">
-        <Items>
-            <Tab Name="More">More</Tab>
-        </Items>
-        <Content>
-            <TabPanel Name="More">
-                <Accordion>
-                    <Collapse>
-                        <CollapseHeader>
-                            Procedures
-                        </CollapseHeader>
-                        <CollapseBody>
-                            <table class="table table-sm table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>@nameof(ProcedureSummary.Name)</th>
-                                        <th>@nameof(ProcedureSummary.Description)</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="cursor-pointer">
-                                    @foreach (var item in Item.Procedures)
-                                    {
-                                        if (item == null) continue;
-                                        <tr @onclick="@(() => {})">
-                                            <td>@item.Name</td>
-                                            <td>@item.Description</td>
-                                            <td>
-                                                <button type="button" class="close" aria-label="Close" @onclick="() => {}" @onclick:stopPropagation="true">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </CollapseBody>
-                    </Collapse>
+    
+    <h4>Procedures</h4>
+    <Button Clicked="() => AddProcedure()">+</Button>
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>@nameof(ProcedureSummary.Name)</th>
+                <th>@nameof(ProcedureSummary.Description)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="cursor-pointer">
+            @foreach (var item in Item.Procedures)
+            {
+                if (item == null) continue;
+                <tr @onclick="@(() => EditProcedure(item))">
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <button type="button" class="close" aria-label="Close" @onclick="() => {}" @onclick:stopPropagation="true">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-                </Accordion>
-            </TabPanel>
-        </Content>
-    </Tabs>
+    <Modal @ref="procedureModal">
+        <ModalContent Centered="true" Size="ModalSize.Large">
+            <ModalHeader>
+                <ModalTitle>Edit Procedure</ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                <ProcedureForm Item="selectedProcedure" Visit="Item" @ref="procedureForm" />
+            </ModalBody>
+        </ModalContent>
+    </Modal>
 </Container>

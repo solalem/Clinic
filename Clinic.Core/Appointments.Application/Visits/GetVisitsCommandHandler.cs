@@ -1,26 +1,44 @@
 using Clinic.Core.Appointments.Domain.Visits;
-using Clinic.Core.Appointments.Persistence.Visits;
+using Clinic.Core.Appointments.Persistence;
+using Clinic.ViewModels.Appointments.Patients;
 using Clinic.ViewModels.Appointments.Visits;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Core.Appointments.Application.Visits
 {
     public class GetVisitsCommandHandler
         : IRequestHandler<GetVisitsCommand, VisitList>
     {
-        private readonly IVisitRepository _visitRepository;
-
-        public GetVisitsCommandHandler(IVisitRepository visitRepository)
+        private readonly AppointmentsQueryDbContext _dbContext;
+        
+        public GetVisitsCommandHandler(AppointmentsQueryDbContext context)
         {
-            _visitRepository = visitRepository ?? throw new ArgumentNullException(nameof(visitRepository));
+            _dbContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<VisitList> Handle(GetVisitsCommand message, CancellationToken cancellationToken)
         {
-            // TODO: Add Integration events to notify others
-            var models = await _visitRepository.GetManyAsync(message.Request.PaginationInfo);
+            var pagination = message.Request.PaginationInfo;
+            var summaries = _dbContext.VisitSummaries.FromSqlInterpolated(@$"
+                select v.*, p.fullname as patientname from visits v
+                left join patients p on v.patientid = p.id
+                where 
+                    {pagination.SearchString} = '' or
+                    ({pagination.SearchString} <> '' and
+                        (v.physician like '%{pagination.SearchString}%' or
+                        v.description like '%{pagination.SearchString}%' or
+                        p.fullname like '%{pagination.SearchString}%' or
+                        p.cardnumber like '%{pagination.SearchString}%' ))
+                ");
 
-            return GetVisitsCommand.ToResponse(message.Request, models);
+            var models = new VisitList
+            {
+                Items = await summaries.Skip(pagination.Index).Take(pagination.PageSize).ToListAsync(),
+                PaginationInfo = pagination
+            };
+
+            return models;// GetVisitsCommand.ToResponse(message.Request, models);
         }
     }
 
@@ -46,7 +64,7 @@ namespace Clinic.Core.Appointments.Application.Visits
                    Date = model.Date,
                    Description = model.Description,
                    PatientId = model.PatientId,
-                   PatientName = model.PatientId.ToString(),// TODO
+                   //PatientName = model.PatientId.ToString(),// TODO
                    Physician = model.Physician,
                }).ToList();
 

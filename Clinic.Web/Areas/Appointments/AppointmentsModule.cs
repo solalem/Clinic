@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Clinic.Core.Appointments.Persistence.Patients;
 using Clinic.Web.Areas.Appointments.Patients;
 using Clinic.Web.Areas.Appointments.Visits;
-using Clinic.Core.Appointments.Persistence.Visits;
+using Clinic.Core.Appointments.Domain.Patients;
+using Clinic.Core.Appointments.Domain.Visits;
 
 namespace Clinic.Web.Areas.Appointments
 {
@@ -12,6 +13,10 @@ namespace Clinic.Web.Areas.Appointments
         public static void Load(WebApplicationBuilder builder)
         {
             builder.Services.AddDbContext<AppointmentsDbContext>(c =>
+            {
+                c.UseSqlite(builder.Configuration.GetConnectionString("Default"));
+            });
+            builder.Services.AddDbContext<AppointmentsQueryDbContext>(c =>
             {
                 c.UseSqlite(builder.Configuration.GetConnectionString("Default"));
             });

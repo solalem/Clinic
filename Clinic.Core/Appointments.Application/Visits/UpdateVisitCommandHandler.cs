@@ -2,7 +2,6 @@ using FluentValidation;
 using MediatR;
 using Clinic.ViewModels.Appointments.Visits;
 using Clinic.Core.Appointments.Domain.Visits;
-using Clinic.Core.Appointments.Persistence.Visits;
 
 namespace Clinic.Core.Appointments.Application.Commands.UpdateVisitCommands
 {

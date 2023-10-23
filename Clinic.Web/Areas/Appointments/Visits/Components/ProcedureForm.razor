@@ -1,0 +1,45 @@
+@using Clinic.ViewModels.Appointments.Visits;
+@using Clinic.Web.Areas.Appointments.Visits
+@using Clinic.ViewModels
+@using Clinic.ViewModels.Appointments
+@using Clinic.ViewModels.Appointments.Patients;
+
+@namespace Clinic.Web.Areas.Appointments.Visits.Components
+@inject ILogger<VisitInfo> Logger
+@inject IJSRuntime JSRuntime
+@inherits Clinic.Web.Models.BlazorComponent
+
+@if (Item != null)
+{
+    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="updateForm">
+        <DataAnnotationsValidator />
+        <br />
+
+        <Field>
+            <FieldLabel>Name:</FieldLabel>
+            <TextEdit @bind-Text="@Item.Name" />
+            <ValidationMessage For="(() => Item.Name)" />
+        </Field>
+
+        <Field>
+            <FieldLabel>Description:</FieldLabel>
+            <TextEdit @bind-Text="@Item.Description" />
+            <ValidationMessage For="(() => Item.Description)" />
+        </Field>
+
+        <Button Type="ButtonType.Submit" form="updateForm">Save</Button>
+
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public ProcedureSummary Item { get; set; }
+    [Parameter]
+    public VisitDetail Visit { get; set; }
+
+    private async Task UpdateClick()
+    {
+        Visit.Procedures.Add(Item);
+    }
+}

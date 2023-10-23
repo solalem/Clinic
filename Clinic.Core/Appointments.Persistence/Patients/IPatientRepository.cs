@@ -18,6 +18,5 @@ namespace Clinic.Core.Appointments.Persistence.Patients
 
         Task<Patient> GetAsync(Guid id);
 
-        Task<PatientList> GetManyAsync(PaginationInfo pagination);
     }
 }

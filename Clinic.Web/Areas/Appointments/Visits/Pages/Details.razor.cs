@@ -3,6 +3,7 @@ using Clinic.Web.Models;
 using Clinic.ViewModels.Appointments.Visits;
 using Clinic.Web.Shared.Components;
 using Clinic.Web.Areas.Appointments.Visits.Components;
+using Blazorise;
 
 namespace Clinic.Web.Areas.Appointments.Visits.Pages
 {
@@ -83,5 +84,23 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
             selectedTab = name;
             return Task.CompletedTask;
         }
+
+        #region Procedures
+        private Modal procedureModal;
+        private ProcedureForm procedureForm;
+        private ProcedureSummary selectedProcedure;
+        private void AddProcedure()
+        {
+            selectedProcedure = new ProcedureSummary();
+            Item.Procedures.Add(selectedProcedure);
+            procedureModal.Show();
+        }
+        private void EditProcedure(ProcedureSummary procedure)
+        {
+            selectedProcedure = procedure;
+            procedureModal.Show();
+        }
+
+        #endregion
     }
 }

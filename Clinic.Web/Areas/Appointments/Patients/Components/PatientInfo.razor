@@ -29,7 +29,10 @@
 
             <Field>
                 <FieldLabel>Gender:</FieldLabel>
-                <TextEdit @bind-Text="@Item.Gender" />
+                <Select @bind-SelectedValue="@Item.Gender">
+                    <SelectItem Value="@("Male")">Male</SelectItem>
+                    <SelectItem Value="@("Female")">Female</SelectItem>
+                </Select>
                 <ValidationMessage For="(() => Item.Gender)" />
             </Field>
 
