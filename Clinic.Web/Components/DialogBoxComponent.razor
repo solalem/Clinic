@@ -1,5 +1,4 @@
-@using Clinic.Web.Shared.JavaScript
-;
+@using Clinic.Web.Shared.JavaScript;
 @using Clinic.Web.Models;
 
 @inject IJSRuntime JSRuntime
@@ -7,7 +6,6 @@
 @inherits BlazorComponent
 
 @namespace Clinic.Web.Shared.Components
-;
 
 <div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
     <div class="modal-dialog" role="document">
@@ -15,7 +13,7 @@
             <div class="modal-header">
                 <h6 class="modal-title" id="exampleModalLabel">@_context.Title</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times</span>
                 </button>
             </div>
             <div class="modal-body">
