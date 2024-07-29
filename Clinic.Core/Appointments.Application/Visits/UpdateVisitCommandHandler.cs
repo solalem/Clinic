@@ -22,10 +22,18 @@ namespace Clinic.Core.Appointments.Application.Commands.UpdateVisitCommands
             var model = await _visitRepository.GetAsync(message.Request.Id) ??
                 throw new ArgumentException($"No visit found {message.Request.Id}");
 
-            model.SetDate(message.Request.Date);
-            model.SetPatientId(message.Request.PatientId);
+            //model.SetDate(message.Request.Date);
+            //model.SetPatientId(message.Request.PatientId);
             model.SetPhysician(message.Request.Physician);
             model.SetDescription(message.Request.Description);
+            foreach (var procedure in message.Request.Procedures)
+            {
+                model.AddProcedure(new Procedure
+                {
+                    Description = procedure.Description,
+                    Name = procedure.Name,
+                });
+            }
             _visitRepository.Update(model);
 
             var result = await _visitRepository.UnitOfWork.SaveEntitiesAsync();
@@ -68,10 +76,10 @@ namespace Clinic.Core.Appointments.Application.Commands.UpdateVisitCommands
             // Insert all applicable rules
             // For example:
             // RuleFor(command => command.CardExpiration).NotEmpty().Must(BeValidExpirationDate).WithMessage("Please specify a valid card expiration date"); 
-            RuleFor(command => command.Request.Date).NotEmpty();
             RuleFor(command => command.Request.PatientId).NotEmpty();
             RuleFor(command => command.Request.Physician).NotEmpty();
             RuleFor(command => command.Request.Description).NotEmpty();
+            RuleFor(command => command.Request.Procedures).NotEmpty();
         }
         // Add your rules here
         // For example

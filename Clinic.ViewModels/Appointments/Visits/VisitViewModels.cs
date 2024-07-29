@@ -28,6 +28,7 @@ namespace Clinic.ViewModels.Appointments.Visits
 
     public class ProcedureSummary
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }

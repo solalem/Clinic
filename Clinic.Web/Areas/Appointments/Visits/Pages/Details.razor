@@ -68,7 +68,7 @@
                 <CloseButton />
             </ModalHeader>
             <ModalBody>
-                <ProcedureForm Item="selectedProcedure" Visit="Item" @ref="procedureForm" />
+                <ProcedureForm Item="selectedProcedure" Visit="Item" @ref="procedureForm" OnProcedureEdited="UpdateClick" />
             </ModalBody>
         </ModalContent>
     </Modal>

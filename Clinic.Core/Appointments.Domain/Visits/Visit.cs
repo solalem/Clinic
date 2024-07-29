@@ -61,7 +61,14 @@ namespace Clinic.Core.Appointments.Domain.Visits
 
         public void AddProcedure(Procedure newItem)
         {
-            _procedures.Add(newItem);
+            var existingId = _procedures.FirstOrDefault(x => x.Id == newItem.Id);
+            if (existingId != null)
+            {
+                existingId.Description = newItem.Description;
+                existingId.Name = newItem.Name;
+            }
+            else
+                _procedures.Add(newItem);
         }
 
 

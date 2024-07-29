@@ -25,10 +25,10 @@ namespace Clinic.Web.Areas.Appointments.Visits.Components
             await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisit
             {
                 Id = Item.Id,
-                Date = Item.Date,
                 PatientId = Item.PatientId,
                 Physician = Item.Physician,
                 Description = Item.Description,
+                Procedures = Item.Procedures,
             });
         }
 

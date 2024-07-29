@@ -10,7 +10,7 @@ namespace Clinic.ViewModels.Appointments.Patients
 
         public String PhoneNumber { get; set; }
 
-        public DateTimeOffset? DateOfBirth { get; set; }
+        public DateTimeOffset? DateOfBirth { get; set; } = DateTimeOffset.Now.AddYears(-10);
 
         public String Email { get; set; }
     }

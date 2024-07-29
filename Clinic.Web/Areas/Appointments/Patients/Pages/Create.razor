@@ -72,7 +72,7 @@ else
                         <ValidationMessage For="(() => Item.PhoneNumber)" />
                     </Field>
 
-                    <Field>
+                    <Field Style="display: inherit;">
                         <FieldLabel>Date Of Birth:</FieldLabel>
                         <DatePicker DateChanged="((x) => Item.DateOfBirth = x)" TValue="DateTimeOffset?" Date="Item.DateOfBirth" />
                         <ValidationMessage For="(() => Item.DateOfBirth)" />

@@ -13,7 +13,6 @@
 {
     <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="updateForm">
         <DataAnnotationsValidator />
-        <br />
 
         <Field>
             <FieldLabel>Name:</FieldLabel>
@@ -23,7 +22,7 @@
 
         <Field>
             <FieldLabel>Description:</FieldLabel>
-            <TextEdit @bind-Text="@Item.Description" />
+            <MemoEdit @bind-Text="@Item.Description" />
             <ValidationMessage For="(() => Item.Description)" />
         </Field>
 
@@ -38,8 +37,12 @@
     [Parameter]
     public VisitDetail Visit { get; set; }
 
+    [Parameter]
+    public EventCallback<ProcedureSummary> OnProcedureEdited { get; set; }
+
     private async Task UpdateClick()
     {
         Visit.Procedures.Add(Item);
+        await OnProcedureEdited.InvokeAsync(Item);
     }
 }

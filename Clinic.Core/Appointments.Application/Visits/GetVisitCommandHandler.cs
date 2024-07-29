@@ -49,6 +49,7 @@ namespace Clinic.Core.Appointments.Application.Visits
                 Physician = model.Physician,
                 Procedures = model.Procedures.Select(x => new ProcedureSummary 
                 { 
+                    Id = x.Id,
                     Name = x.Name, 
                     Description = x.Description 
                 }).ToList()

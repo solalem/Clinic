@@ -59,6 +59,19 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
             }
         }
 
+        private async Task UpdateClick()
+        {
+            await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisit
+            {
+                Id = Item.Id,
+                // Date = _item.CompanyName,
+                Physician = Item.Physician,
+                Description = Item.Description,
+                PatientId = Item.PatientId,
+                Procedures = Item.Procedures
+            });
+        }
+
         protected override async Task OnParametersSetAsync()
         {
             await Open(Id);

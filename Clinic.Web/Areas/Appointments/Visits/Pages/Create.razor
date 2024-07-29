@@ -42,12 +42,12 @@ else
 
             <EditForm Model="Item" OnValidSubmit="@CreateClick" id="createForm">
                 <DataAnnotationsValidator />
-                    <div class="container">
+                    <div class="container1">
                         <br/>
 
                     <Field>
                         <FieldLabel>Date:</FieldLabel>
-                        <DatePicker DateChanged="((x) => Item.Date = x)" TValue="DateTimeOffset" Date="Item.Date" />
+                            <DatePicker Style="display: inherit;" DateChanged="((x) => Item.Date = x)" TValue="DateTimeOffset" Date="Item.Date" />
                         <ValidationMessage For="(() => Item.Date)" />
                     </Field>
                         @if (!RoutedPatientId.HasValue) 
