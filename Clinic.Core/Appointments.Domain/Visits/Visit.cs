@@ -34,10 +34,10 @@ namespace Clinic.Core.Appointments.Domain.Visits
         /// <summary>
         /// 
         /// </summary>
-        public String Description { get; private set; }
-        public void SetDescription(String description)
+        public String PresentIllness { get; private set; }
+        public void SetPresentIllness(String presentIllness)
         {
-            this.Description = description;
+            this.PresentIllness = presentIllness;
         }
 
         private readonly List<Procedure> _procedures;
@@ -51,12 +51,12 @@ namespace Clinic.Core.Appointments.Domain.Visits
             _procedures = new List<Procedure>();
         }
 
-        public Visit(DateTimeOffset date, Guid patientId, String physician, String description) : this()
+        public Visit(DateTimeOffset date, Guid patientId, String physician, String presentIllness) : this()
         {
             this.SetDate(date);
 			this.SetPatientId(patientId);
 			this.SetPhysician(physician);
-			this.SetDescription(description);
+			this.SetPresentIllness(presentIllness);
         }
 
         public void AddProcedure(Procedure newItem)

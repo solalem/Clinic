@@ -24,7 +24,10 @@ namespace Clinic.Core.Appointments.Application.Patients
 				message.Request.Gender,
 				message.Request.PhoneNumber,
 				message.Request.DateOfBirth,
-				message.Request.Email);
+				message.Request.Email,
+				message.Request.City,
+				message.Request.MedicalHistory
+                );
             _patientRepository.Add(model);
 
             var result = await _patientRepository.UnitOfWork.SaveEntitiesAsync();
@@ -56,7 +59,10 @@ namespace Clinic.Core.Appointments.Application.Patients
 				Gender = model.Gender,
 				PhoneNumber = model.PhoneNumber,
 				DateOfBirth = model.DateOfBirth,
-				Email = model.Email
+				Email = model.Email,
+                City = model.City,
+                RegisterationDate = model.RegisterationDate,
+                MedicalHistory = model.MedicalHistory,
             };
         }
 

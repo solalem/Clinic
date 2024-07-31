@@ -13,6 +13,9 @@ namespace Clinic.ViewModels.Appointments.Patients
         public DateTimeOffset? DateOfBirth { get; set; } = DateTimeOffset.Now.AddYears(-10);
 
         public String Email { get; set; }
+
+        public String City { get; set; }
+        public string MedicalHistory { get; set; }
     }
 
     public class UpdatePatient
@@ -30,6 +33,9 @@ namespace Clinic.ViewModels.Appointments.Patients
         public DateTimeOffset? DateOfBirth { get; set; }
 
         public String Email { get; set; }
+
+        public String City { get; set; }
+        public string MedicalHistory { get; set; }
     }
 
 

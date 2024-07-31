@@ -20,14 +20,13 @@ namespace Clinic.Core.Appointments.Application.Visits
         public async Task<VisitList> Handle(GetVisitsCommand message, CancellationToken cancellationToken)
         {
             var pagination = message.Request.PaginationInfo;
-            var summaries = _dbContext.VisitSummaries.FromSqlInterpolated(@$"
+            var summaries = _dbContext.Database.SqlQuery<VisitSummary>(@$"
                 select v.*, p.fullname as patientname from visits v
                 left join patients p on v.patientid = p.id
                 where 
                     {pagination.SearchString} = '' or
                     ({pagination.SearchString} <> '' and
                         (v.physician like '%{pagination.SearchString}%' or
-                        v.description like '%{pagination.SearchString}%' or
                         p.fullname like '%{pagination.SearchString}%' or
                         p.cardnumber like '%{pagination.SearchString}%' ))
                 ");
@@ -62,7 +61,7 @@ namespace Clinic.Core.Appointments.Application.Visits
                {
                    Id = model.Id,
                    Date = model.Date,
-                   Description = model.Description,
+                   PresentIllness = model.PresentIllness,
                    PatientId = model.PatientId,
                    //PatientName = model.PatientId.ToString(),// TODO
                    Physician = model.Physician,

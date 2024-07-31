@@ -66,7 +66,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
                 Id = Item.Id,
                 // Date = _item.CompanyName,
                 Physician = Item.Physician,
-                Description = Item.Description,
+                PresentIllness = Item.PresentIllness,
                 PatientId = Item.PatientId,
                 Procedures = Item.Procedures
             });

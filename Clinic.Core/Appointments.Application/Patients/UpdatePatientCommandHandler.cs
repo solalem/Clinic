@@ -28,10 +28,11 @@ namespace Clinic.Core.Appointments.Application.Patients
             model.SetPhoneNumber(message.Request.PhoneNumber);
             model.SetDateOfBirth(message.Request.DateOfBirth);
             model.SetEmail(message.Request.Email);
+            model.SetCity(message.Request.City);
+            model.SetMedicalHistory(message.Request.MedicalHistory);
             _patientRepository.Update(model);
 
             var result = await _patientRepository.UnitOfWork.SaveEntitiesAsync();
-            if (result == 0) return null;
 
             return message.ToResponse(model);
         }
@@ -59,7 +60,10 @@ namespace Clinic.Core.Appointments.Application.Patients
                 Gender = model.Gender,
                 PhoneNumber = model.PhoneNumber,
                 DateOfBirth = model.DateOfBirth,
-                Email = model.Email
+                Email = model.Email,
+                City = model.City,
+                RegisterationDate = model.RegisterationDate,
+                MedicalHistory = model.MedicalHistory,
             };
         }
 

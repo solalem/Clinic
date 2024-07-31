@@ -27,7 +27,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Components
                 Id = Item.Id,
                 PatientId = Item.PatientId,
                 Physician = Item.Physician,
-                Description = Item.Description,
+                PresentIllness = Item.PresentIllness,
                 Procedures = Item.Procedures,
             });
         }

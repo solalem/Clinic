@@ -25,7 +25,7 @@ namespace Clinic.Core.Appointments.Application.Commands.UpdateVisitCommands
             //model.SetDate(message.Request.Date);
             //model.SetPatientId(message.Request.PatientId);
             model.SetPhysician(message.Request.Physician);
-            model.SetDescription(message.Request.Description);
+            model.SetPresentIllness(message.Request.PresentIllness);
             foreach (var procedure in message.Request.Procedures)
             {
                 model.AddProcedure(new Procedure
@@ -63,7 +63,7 @@ namespace Clinic.Core.Appointments.Application.Commands.UpdateVisitCommands
                 Date = model.Date,
 				PatientId = model.PatientId,
 				Physician = model.Physician,
-				Description = model.Description
+				PresentIllness = model.PresentIllness
             };
         }
 
@@ -78,7 +78,7 @@ namespace Clinic.Core.Appointments.Application.Commands.UpdateVisitCommands
             // RuleFor(command => command.CardExpiration).NotEmpty().Must(BeValidExpirationDate).WithMessage("Please specify a valid card expiration date"); 
             RuleFor(command => command.Request.PatientId).NotEmpty();
             RuleFor(command => command.Request.Physician).NotEmpty();
-            RuleFor(command => command.Request.Description).NotEmpty();
+            RuleFor(command => command.Request.PresentIllness).NotEmpty();
             RuleFor(command => command.Request.Procedures).NotEmpty();
         }
         // Add your rules here

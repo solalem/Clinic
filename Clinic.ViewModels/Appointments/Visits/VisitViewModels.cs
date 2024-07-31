@@ -16,13 +16,13 @@ namespace Clinic.ViewModels.Appointments.Visits
 
         public String Physician { get; set; }
 
-        public String Description { get; set; }
+        public String PresentIllness { get; set; }
 
         public List<ProcedureSummary> Procedures { get; set; } = new List<ProcedureSummary>();
 
 
-        public string DisplayName => this.Physician;
-        public string DisplayDescription => PatientName;
+        public string DisplayName => PatientName;
+        public string DisplayDescription => Physician;
         public string More => Date.ToString("MMM dd, yy");
     }
 

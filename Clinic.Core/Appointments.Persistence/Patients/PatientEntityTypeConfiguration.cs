@@ -38,6 +38,18 @@ namespace Clinic.Core.Appointments.Persistence.Patients
             config.Property(o => o.Email)
                 .HasColumnName("Email")
                 .IsRequired();
+            
+            config.Property(o => o.City)
+                .HasColumnName("City")
+                .IsRequired(false);
+            
+            config.Property(o => o.MedicalHistory)
+                .HasColumnName("MedicalHistory")
+                .IsRequired(false);
+            
+            config.Property(o => o.RegisterationDate)
+                .HasColumnName("RegisterationDate")
+                .IsRequired(false);
 
         }
     }

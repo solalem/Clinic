@@ -58,12 +58,38 @@ namespace Clinic.Core.Appointments.Domain.Patients
             this.Email = email;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public String City { get; private set; }
+        public void SetCity(String city)
+        {
+            this.City = city;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public String MedicalHistory { get; private set; }
+        public void SetMedicalHistory(String medicalHistory)
+        {
+            this.MedicalHistory = medicalHistory;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTimeOffset? RegisterationDate { get; private set; }
+        public void SetRegisterationDate(DateTimeOffset? registerationDate)
+        {
+            this.RegisterationDate = registerationDate;
+        }
 
         protected Patient() : base(Guid.NewGuid())
         {
         }
 
-        public Patient(String cardNumber, String fullName, String gender, String phoneNumber, DateTimeOffset? dateOfBirth, String email) : this()
+        public Patient(String cardNumber, String fullName, String gender, String phoneNumber, DateTimeOffset? dateOfBirth, String email, String city, String medicalHistory) : this()
         {
             this.SetCardNumber(cardNumber);
 			this.SetFullName(fullName);
@@ -71,11 +97,10 @@ namespace Clinic.Core.Appointments.Domain.Patients
 			this.SetPhoneNumber(phoneNumber);
 			this.SetDateOfBirth(dateOfBirth);
 			this.SetEmail(email);
-			
+			this.SetCity(city);
+            this.SetMedicalHistory(medicalHistory);
 
-            // TODO: Add the StartedDomainEvent to the domain events collection 
-            // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
-            // AddOrderStartedDomainEvent(userId, cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration);
+            SetRegisterationDate(DateTimeOffset.UtcNow);
         }
 
 

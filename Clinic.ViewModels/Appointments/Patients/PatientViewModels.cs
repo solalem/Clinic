@@ -19,6 +19,12 @@ namespace Clinic.ViewModels.Appointments.Patients
 
         public String Email { get; set; }
 
+        public string City { get; set; }
+
+        public DateTimeOffset? RegisterationDate { get; set; }
+
+        public string MedicalHistory { get; set; }
+
         public DateTimeOffset? LastVisit { get; set; }
 
         public string DisplayName => this.FullName;

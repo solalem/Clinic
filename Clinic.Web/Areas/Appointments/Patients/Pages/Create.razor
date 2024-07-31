@@ -83,6 +83,19 @@ else
                         <TextEdit @bind-Text="@Item.Email" />
                         <ValidationMessage For="(() => Item.Email)" />
                     </Field>
+
+                    <Field>
+                        <FieldLabel>City:</FieldLabel>
+                        <TextEdit @bind-Text="@Item.City" />
+                        <ValidationMessage For="(() => Item.City)" />
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>Medical History:</FieldLabel>
+                        <MemoEdit @bind-Text="@Item.MedicalHistory" />
+                        <ValidationMessage For="(() => Item.MedicalHistory)" />
+                    </Field>
+
                 </div>
             </EditForm>
         </Column>

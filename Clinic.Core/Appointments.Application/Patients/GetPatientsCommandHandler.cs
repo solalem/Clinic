@@ -10,9 +10,9 @@ namespace Clinic.Core.Appointments.Application.Patients
     public class GetPatientsCommandHandler
         : IRequestHandler<GetPatientsCommand, PatientList>
     {
-        private readonly AppointmentsQueryDbContext _dbContext;
+        private readonly AppointmentsDbContext _dbContext;
 
-        public GetPatientsCommandHandler(AppointmentsQueryDbContext context)
+        public GetPatientsCommandHandler(AppointmentsDbContext context)
         {
             _dbContext = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -20,7 +20,7 @@ namespace Clinic.Core.Appointments.Application.Patients
         public async Task<PatientList> Handle(GetPatientsCommand message, CancellationToken cancellationToken)
         {
             var pagination = message.Request.PaginationInfo;
-            var summaries = _dbContext.PatientSummaries.FromSqlInterpolated(@$"
+            var summaries = _dbContext.Database.SqlQuery<PatientSummary>(@$"
                 select p.*, vd.lastvisit from patients p
                 left join (
                   select patientid, max(date) AS lastvisit
@@ -31,7 +31,6 @@ namespace Clinic.Core.Appointments.Application.Patients
                     {pagination.SearchString} = '' or
                     ({pagination.SearchString} <> '' and
                         (p.fullname like '%{pagination.SearchString}%' or
-                        p.fullname like '%{pagination.SearchString}%' or
                         p.phonenumber like '%{pagination.SearchString}%' or
                         p.cardnumber like '%{pagination.SearchString}%' ))
                 ");
@@ -70,7 +69,10 @@ namespace Clinic.Core.Appointments.Application.Patients
                    Gender = model.Gender,
                    PhoneNumber = model.PhoneNumber,
                    DateOfBirth = model.DateOfBirth,
-                   Email = model.Email
+                   Email = model.Email,
+                   City = model.City,
+                   RegisterationDate = model.RegisterationDate,
+                   MedicalHistory = model.MedicalHistory,
                }).ToList();
 
             list.PaginationInfo = request.PaginationInfo;

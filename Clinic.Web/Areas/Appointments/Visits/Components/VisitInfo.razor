@@ -40,9 +40,9 @@
             </Field>
 
             <Field>
-                <FieldLabel>Description:</FieldLabel>
-                <TextEdit @bind-Text="@Item.Description" />
-                <ValidationMessage For="(() => Item.Description)" />
+                <FieldLabel>HPI:</FieldLabel>
+                <TextEdit @bind-Text="@Item.PresentIllness" />
+                <ValidationMessage For="(() => Item.PresentIllness)" />
             </Field>
             <Button Type="ButtonType.Submit" form="updateForm">Save</Button>
 

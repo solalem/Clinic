@@ -22,7 +22,7 @@ namespace Clinic.Core.Appointments.Application.Commands.CreateVisitCommands
             var model = new Visit(message.Request.Date,
 				message.Request.PatientId,
 				message.Request.Physician,
-				message.Request.Description);
+				message.Request.PresentIllness);
             _visitRepository.Add(model);
 
             // TODO: Add procedures
@@ -54,7 +54,7 @@ namespace Clinic.Core.Appointments.Application.Commands.CreateVisitCommands
                 Date = model.Date,
 				PatientId = model.PatientId,
 				Physician = model.Physician,
-				Description = model.Description
+				PresentIllness = model.PresentIllness
             };
         }
 
@@ -70,7 +70,7 @@ namespace Clinic.Core.Appointments.Application.Commands.CreateVisitCommands
             RuleFor(command => command.Request.Date).NotEmpty();
             RuleFor(command => command.Request.PatientId).NotEmpty();
             RuleFor(command => command.Request.Physician).NotEmpty();
-            RuleFor(command => command.Request.Description).NotEmpty();
+            RuleFor(command => command.Request.PresentIllness).NotEmpty();
         }
         // Add your rules here
         // For example

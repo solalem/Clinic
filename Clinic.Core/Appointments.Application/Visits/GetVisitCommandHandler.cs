@@ -43,7 +43,7 @@ namespace Clinic.Core.Appointments.Application.Visits
             {
                 Id = model.Id,
                 Date = model.Date,
-                Description = model.Description,
+                PresentIllness = model.PresentIllness,
                 PatientId = model.PatientId,
                 PatientName = model.PatientId.ToString(),// TODO
                 Physician = model.Physician,

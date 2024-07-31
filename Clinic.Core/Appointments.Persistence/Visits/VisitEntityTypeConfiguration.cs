@@ -37,8 +37,8 @@ namespace Clinic.Core.Appointments.Persistence
                 .HasColumnName("Physician")
                 .IsRequired();
 
-            config.Property(o => o.Description)
-                .HasColumnName("Description")
+            config.Property(o => o.PresentIllness)
+                .HasColumnName("PresentIllness")
                 .IsRequired();
             config.Property(o => o.Procedures)
                 .HasColumnName("Procedures")
