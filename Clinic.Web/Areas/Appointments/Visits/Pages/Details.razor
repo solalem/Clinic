@@ -45,7 +45,7 @@
             </tr>
         </thead>
         <tbody class="cursor-pointer">
-            @foreach (var item in Item.Procedures)
+            @foreach (var item in Item.ProcedureList)
             {
                 if (item == null) continue;
                 <tr @onclick="@(() => EditProcedure(item))">

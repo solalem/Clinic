@@ -42,7 +42,7 @@
 
     private async Task UpdateClick()
     {
-        Visit.Procedures.Add(Item);
+        Visit.ProcedureList.Add(Item);
         await OnProcedureEdited.InvokeAsync(Item);
     }
 }

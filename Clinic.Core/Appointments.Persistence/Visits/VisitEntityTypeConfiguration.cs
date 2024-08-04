@@ -47,6 +47,8 @@ namespace Clinic.Core.Appointments.Persistence
                     v => JsonSerializer.Deserialize<IReadOnlyCollection<Procedure>>(v, new JsonSerializerOptions()))
                 .IsRequired();
 
+            config.Property(o => o.PatientName)
+                .HasColumnName(null); ;
         }
     }
 }

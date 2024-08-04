@@ -10,9 +10,9 @@ namespace Clinic.Core.Appointments.Application.Visits
     public class GetVisitsCommandHandler
         : IRequestHandler<GetVisitsCommand, VisitList>
     {
-        private readonly AppointmentsQueryDbContext _dbContext;
+        private readonly AppointmentsDbContext _dbContext;
         
-        public GetVisitsCommandHandler(AppointmentsQueryDbContext context)
+        public GetVisitsCommandHandler(AppointmentsDbContext context)
         {
             _dbContext = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -20,7 +20,7 @@ namespace Clinic.Core.Appointments.Application.Visits
         public async Task<VisitList> Handle(GetVisitsCommand message, CancellationToken cancellationToken)
         {
             var pagination = message.Request.PaginationInfo;
-            var summaries = _dbContext.Database.SqlQuery<VisitSummary>(@$"
+            var summaries = _dbContext.Visits.FromSql(@$"
                 select v.*, p.fullname as patientname from visits v
                 left join patients p on v.patientid = p.id
                 where 
@@ -31,11 +31,14 @@ namespace Clinic.Core.Appointments.Application.Visits
                         p.cardnumber like '%{pagination.SearchString}%' ))
                 ");
 
-            var models = new VisitList
-            {
-                Items = await summaries.Skip(pagination.Index).Take(pagination.PageSize).ToListAsync(),
-                PaginationInfo = pagination
-            };
+            var models = GetVisitsCommand.ToResponse(message.Request, summaries);// new VisitList
+            //{
+            //    Items = await summaries.Select(x => new VisitSummary
+            //    {
+                    
+            //    }).ToListAsync(),
+            //    PaginationInfo = pagination
+            //};
 
             return models;// GetVisitsCommand.ToResponse(message.Request, models);
         }
@@ -63,7 +66,7 @@ namespace Clinic.Core.Appointments.Application.Visits
                    Date = model.Date,
                    PresentIllness = model.PresentIllness,
                    PatientId = model.PatientId,
-                   //PatientName = model.PatientId.ToString(),// TODO
+                   PatientName = model.PatientName,//.ToString(),// TODO
                    Physician = model.Physician,
                }).ToList();
 

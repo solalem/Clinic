@@ -68,7 +68,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
                 Physician = Item.Physician,
                 PresentIllness = Item.PresentIllness,
                 PatientId = Item.PatientId,
-                Procedures = Item.Procedures
+                Procedures = Item.ProcedureList
             });
         }
 
@@ -105,7 +105,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
         private void AddProcedure()
         {
             selectedProcedure = new ProcedureSummary();
-            Item.Procedures.Add(selectedProcedure);
+            Item.ProcedureList.Add(selectedProcedure);
             procedureModal.Show();
         }
         private void EditProcedure(ProcedureSummary procedure)

@@ -61,7 +61,7 @@ namespace Clinic.Core.Appointments.Domain.Patients
         /// <summary>
         /// 
         /// </summary>
-        public String City { get; private set; }
+        public String? City { get; private set; }
         public void SetCity(String city)
         {
             this.City = city;
@@ -70,7 +70,7 @@ namespace Clinic.Core.Appointments.Domain.Patients
         /// <summary>
         /// 
         /// </summary>
-        public String MedicalHistory { get; private set; }
+        public String? MedicalHistory { get; private set; }
         public void SetMedicalHistory(String medicalHistory)
         {
             this.MedicalHistory = medicalHistory;

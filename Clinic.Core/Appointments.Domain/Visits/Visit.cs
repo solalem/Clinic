@@ -40,6 +40,8 @@ namespace Clinic.Core.Appointments.Domain.Visits
             this.PresentIllness = presentIllness;
         }
 
+        public string PatientName { get; set; }
+
         private readonly List<Procedure> _procedures;
         /// <summary>
         /// 

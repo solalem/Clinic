@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Clinic.ViewModels;
+using System.Text.Json;
 
 namespace Clinic.ViewModels.Appointments.Visits
 {
@@ -18,8 +19,13 @@ namespace Clinic.ViewModels.Appointments.Visits
 
         public String PresentIllness { get; set; }
 
-        public List<ProcedureSummary> Procedures { get; set; } = new List<ProcedureSummary>();
-
+        public List<ProcedureSummary> ProcedureList 
+        {
+            get => JsonSerializer.Deserialize<List<ProcedureSummary>>(Procedures ?? "[]"); 
+            set => Procedures = JsonSerializer.Serialize(value); 
+        }
+        
+        public string? Procedures { get; set; }
 
         public string DisplayName => PatientName;
         public string DisplayDescription => Physician;

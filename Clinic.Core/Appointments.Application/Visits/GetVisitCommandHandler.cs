@@ -47,7 +47,7 @@ namespace Clinic.Core.Appointments.Application.Visits
                 PatientId = model.PatientId,
                 PatientName = model.PatientId.ToString(),// TODO
                 Physician = model.Physician,
-                Procedures = model.Procedures.Select(x => new ProcedureSummary 
+                ProcedureList = model.Procedures.Select(x => new ProcedureSummary 
                 { 
                     Id = x.Id,
                     Name = x.Name, 
