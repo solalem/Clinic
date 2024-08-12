@@ -27,12 +27,6 @@ namespace Clinic.Core.Appointments.Persistence
                 .HasColumnName("PatientId")
                 .IsRequired();
 
-            config.HasOne<Patient>()
-               .WithMany()
-               .HasForeignKey(y => y.PatientId) 
-               .IsRequired()
-               .OnDelete(DeleteBehavior.Cascade);
-
             config.Property(o => o.Physician)
                 .HasColumnName("Physician")
                 .IsRequired();
@@ -46,9 +40,6 @@ namespace Clinic.Core.Appointments.Persistence
                     v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
                     v => JsonSerializer.Deserialize<IReadOnlyCollection<Procedure>>(v, new JsonSerializerOptions()))
                 .IsRequired();
-
-            config.Property(o => o.PatientName)
-                .HasColumnName(null); ;
         }
     }
 }

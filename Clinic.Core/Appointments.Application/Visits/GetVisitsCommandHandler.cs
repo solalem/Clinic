@@ -20,25 +20,16 @@ namespace Clinic.Core.Appointments.Application.Visits
         public async Task<VisitList> Handle(GetVisitsCommand message, CancellationToken cancellationToken)
         {
             var pagination = message.Request.PaginationInfo;
-            var summaries = _dbContext.Visits.FromSql(@$"
-                select v.*, p.fullname as patientname from visits v
-                left join patients p on v.patientid = p.id
-                where 
-                    {pagination.SearchString} = '' or
-                    ({pagination.SearchString} <> '' and
-                        (v.physician like '%{pagination.SearchString}%' or
-                        p.fullname like '%{pagination.SearchString}%' or
-                        p.cardnumber like '%{pagination.SearchString}%' ))
-                ");
+            var summaries = _dbContext.Visits.Include(x => x.Patient).
+                Where(x =>
+                    string.IsNullOrEmpty(pagination.SearchString) ||
+                    (!string.IsNullOrEmpty(pagination.SearchString) &&
+                        (x.Physician.Contains(pagination.SearchString) ||
+                        x.Patient.FullName.Contains(pagination.SearchString) ||
+                        x.Patient.CardNumber.Contains(pagination.SearchString))
+                    ));
 
             var models = GetVisitsCommand.ToResponse(message.Request, summaries);// new VisitList
-            //{
-            //    Items = await summaries.Select(x => new VisitSummary
-            //    {
-                    
-            //    }).ToListAsync(),
-            //    PaginationInfo = pagination
-            //};
 
             return models;// GetVisitsCommand.ToResponse(message.Request, models);
         }
@@ -66,7 +57,7 @@ namespace Clinic.Core.Appointments.Application.Visits
                    Date = model.Date,
                    PresentIllness = model.PresentIllness,
                    PatientId = model.PatientId,
-                   PatientName = model.PatientName,//.ToString(),// TODO
+                   PatientName = model.Patient.FullName,
                    Physician = model.Physician,
                }).ToList();
 

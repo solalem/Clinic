@@ -1,3 +1,4 @@
+using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.SharedKernel.Domain.Abstractions.Model;
 
 namespace Clinic.Core.Appointments.Domain.Visits
@@ -40,7 +41,7 @@ namespace Clinic.Core.Appointments.Domain.Visits
             this.PresentIllness = presentIllness;
         }
 
-        public string PatientName { get; set; }
+        public virtual Patient Patient { get; set; }
 
         private readonly List<Procedure> _procedures;
         /// <summary>
