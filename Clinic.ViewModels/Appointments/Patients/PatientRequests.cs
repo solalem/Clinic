@@ -6,7 +6,7 @@ namespace Clinic.ViewModels.Appointments.Patients
 
         public String FullName { get; set; }
 
-        public String Gender { get; set; }
+        public String Gender { get; set; } = "Male";
 
         public String PhoneNumber { get; set; }
 

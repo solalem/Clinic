@@ -1,5 +1,6 @@
 using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.Core.Appointments.Persistence.Patients;
+using Clinic.SharedKernel.Domain.Abstractions;
 using Clinic.ViewModels.Appointments.Patients;
 using FluentValidation;
 using MediatR;
@@ -18,7 +19,9 @@ namespace Clinic.Core.Appointments.Application.Patients
 
         public async Task<PatientSummary> Handle(CreatePatientCommand message, CancellationToken cancellationToken)
         {
-            // TODO: Add Integration events to notify others
+            if (await _patientRepository.Exists(message.Request.CardNumber))
+                throw new ArgumentException("Patient with same card already exists");
+
             var model = new Patient(message.Request.CardNumber,
 				message.Request.FullName,
 				message.Request.Gender,

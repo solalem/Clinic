@@ -18,5 +18,6 @@ namespace Clinic.Core.Appointments.Persistence.Patients
 
         Task<Patient> GetAsync(Guid id);
 
+        Task<bool> Exists(string cardNumber);
     }
 }

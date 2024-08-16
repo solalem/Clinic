@@ -43,5 +43,10 @@ namespace Clinic.Core.Appointments.Domain.Patients
         {
             _context.Remove(_context.Patients.FirstOrDefault(x => x.Id == id));
         }
+
+        public async Task<bool> Exists(string cardNumber)
+        {
+            return await _context.Patients.AnyAsync(x => x.CardNumber == cardNumber);
+        }
     }
 }
