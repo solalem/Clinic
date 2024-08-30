@@ -12,6 +12,7 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
         public NavigationManager NavigationManager { get; set; }
 
         private CreatePatient Item = new CreatePatient();
+        public bool UseDOB { get; set; }
 
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -22,6 +23,12 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
             }
 
             await base.OnAfterRenderAsync(firstRender);
+        }
+
+        private void AgeChanged(int age)
+        {
+            Item.Age = age;
+            Item.DateOfBirth = DateTime.Now.AddYears(-age);
         }
 
         private async Task CreateClick()

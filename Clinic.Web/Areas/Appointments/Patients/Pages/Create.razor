@@ -72,11 +72,22 @@ else
                         <ValidationMessage For="(() => Item.PhoneNumber)" />
                     </Field>
 
-                    <Field Style="display: inherit;">
-                        <FieldLabel>Date Of Birth:</FieldLabel>
-                        <DatePicker DateChanged="((x) => Item.DateOfBirth = x)" TValue="DateTimeOffset?" Date="Item.DateOfBirth" />
-                        <ValidationMessage For="(() => Item.DateOfBirth)" />
-                    </Field>
+                    <Fields>
+                        <Field>
+                            <FieldLabel>Use DOB:</FieldLabel>
+                            <Check TValue="bool" CheckedChanged="((x) => UseDOB = x)" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Age:</FieldLabel>
+                            <NumericEdit Disabled="UseDOB" TValue="int" ValueChanged="((x) => AgeChanged(x))" />
+                            <ValidationMessage For="(() => Item.Age)" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Date Of Birth:</FieldLabel>
+                            <DatePicker Disabled="!UseDOB" Style="display: flex;" DateChanged="((x) => Item.DateOfBirth = x)" TValue="DateTimeOffset?" Date="Item.DateOfBirth" />
+                            <ValidationMessage For="(() => Item.DateOfBirth)" />
+                        </Field>
+                    </Fields>
 
                     <Field>
                         <FieldLabel>Email:</FieldLabel>

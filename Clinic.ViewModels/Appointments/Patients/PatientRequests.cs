@@ -12,6 +12,8 @@ namespace Clinic.ViewModels.Appointments.Patients
 
         public DateTimeOffset? DateOfBirth { get; set; } = DateTimeOffset.Now.AddYears(-10);
 
+        public Decimal Age { get; set; }
+    
         public String Email { get; set; }
 
         public String City { get; set; }
