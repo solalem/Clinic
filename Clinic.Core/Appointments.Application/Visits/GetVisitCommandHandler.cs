@@ -1,61 +1,46 @@
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Shared;
 using Clinic.ViewModels.Appointments.Visits;
-using FluentValidation;
 using MediatR;
 
 namespace Clinic.Core.Appointments.Application.Visits
 {
     public class GetVisitCommandHandler
-        : IRequestHandler<GetVisitCommand, VisitDetail>
+        : IRequestHandler<GetVisitCommand, GetVisitResponse>
     {
-        private readonly IVisitRepository _patientRepository;
+        private readonly IVisitRepository _visitRepository;
+        private readonly IIdentityService _identityService;
 
-        public GetVisitCommandHandler(IVisitRepository patientRepository)
+        public GetVisitCommandHandler(
+            IVisitRepository visitRepository, 
+            IIdentityService identityService)
         {
-            _patientRepository = patientRepository ?? throw new ArgumentNullException(nameof(patientRepository));
+            _visitRepository = visitRepository ?? throw new ArgumentNullException(nameof(visitRepository));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        public async Task<VisitDetail> Handle(GetVisitCommand message, CancellationToken cancellationToken)
+        public async Task<GetVisitResponse> Handle(GetVisitCommand message, CancellationToken cancellationToken)
         {
-            // TODO: Add Integration events to notify others
-            var model = await _patientRepository.GetAsync(message.Request.Id) ??
-                throw new ArgumentException($"No patient found {message.Request.Id}");
+            var model = await _visitRepository.GetAsync(message.Request.Id);
 
-            return GetVisitCommand.ToResponse(model);
+            return new GetVisitResponse
+            {
+                Succeed = true,
+                Data = VisitMapper.FromModel(model)
+            };
         }
     }
 
     /// <summary>
-    /// Get Visit Command Model
+    /// Visit Command Model
     /// </summary>
-    public class GetVisitCommand : IRequest<VisitDetail>
+    public class GetVisitCommand : IRequest<GetVisitResponse>
     {
-        public GetVisit Request { get; set; }
+        public GetVisitRequest Request { get; set; }
 
-        public GetVisitCommand(GetVisit request)
+        public GetVisitCommand(GetVisitRequest request)
         {
             Request = request;
         }
-
-        public static VisitDetail ToResponse(Visit model)
-        {
-            return new VisitDetail
-            {
-                Id = model.Id,
-                Date = model.Date,
-                PresentIllness = model.PresentIllness,
-                PatientId = model.PatientId,
-                PatientName = model.PatientId.ToString(),// TODO
-                Physician = model.Physician,
-                ProcedureList = model.Procedures.Select(x => new ProcedureSummary 
-                { 
-                    Id = x.Id,
-                    Name = x.Name, 
-                    Description = x.Description 
-                }).ToList()
-            };
-        }
-
     }
-
 }

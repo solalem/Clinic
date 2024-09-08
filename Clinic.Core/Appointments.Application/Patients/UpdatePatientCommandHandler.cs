@@ -1,93 +1,83 @@
-using Clinic.Core.Appointments.Domain.Patients;
-using Clinic.Core.Appointments.Persistence.Patients;
-using Clinic.ViewModels.Appointments.Patients;
-using FluentValidation;
 using MediatR;
+using Clinic.Core.Appointments.Domain.Patients;
+using Clinic.Shared;
+using Clinic.ViewModels.Appointments.Patients;
 
 namespace Clinic.Core.Appointments.Application.Patients
 {
     public class UpdatePatientCommandHandler
-        : IRequestHandler<UpdatePatientCommand, PatientSummary>
+        : IRequestHandler<UpdatePatientCommand, UpdatePatientResponse>
     {
         private readonly IPatientRepository _patientRepository;
+        private readonly IIdentityService _identityService;
 
-        public UpdatePatientCommandHandler(IPatientRepository patientRepository)
+        public UpdatePatientCommandHandler(
+            IPatientRepository patientRepository, 
+            IIdentityService identityService)
         {
             _patientRepository = patientRepository ?? throw new ArgumentNullException(nameof(patientRepository));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        public async Task<PatientSummary> Handle(UpdatePatientCommand message, CancellationToken cancellationToken)
+        public async Task<UpdatePatientResponse> Handle(UpdatePatientCommand command, CancellationToken cancellationToken)
         {
-            // TODO: Add Integration events to notify others
-            var model = await _patientRepository.GetAsync(message.Request.Id) ?? 
-                throw new ArgumentException($"No patient found {message.Request.Id}");
-           
-            model.SetCardNumber(message.Request.CardNumber);
-            model.SetFullName(message.Request.FullName);
-            model.SetGender(message.Request.Gender);
-            model.SetPhoneNumber(message.Request.PhoneNumber);
-            model.SetDateOfBirth(message.Request.DateOfBirth);
-            model.SetEmail(message.Request.Email);
-            model.SetCity(message.Request.City);
-            model.SetMedicalHistory(message.Request.MedicalHistory);
+            var (success, error) = command.Validate();
+            if (!success)
+                return new UpdatePatientResponse { Error = error };
+        
+            var model = await _patientRepository.GetAsync(command.Request.Id);
+            model.SetCardNumber(command.Request.CardNumber);
+			model.SetFullName(command.Request.FullName);
+			model.SetGender(command.Request.Gender);
+			model.SetPhoneNumber(command.Request.PhoneNumber);
+			model.SetDateOfBirth(command.Request.DateOfBirth);
+			model.SetEmail(command.Request.Email);
+			model.SetCity(command.Request.City);
+			model.SetMedicalHistory(command.Request.MedicalHistory);
             _patientRepository.Update(model);
 
-            var result = await _patientRepository.UnitOfWork.SaveEntitiesAsync();
+            try
+            {
+                await _patientRepository.UnitOfWork.SaveEntitiesAsync(_identityService.GetUserIdentity(), cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                return new UpdatePatientResponse { Error = ex.Message };
+            }
 
-            return message.ToResponse(model);
+            return new UpdatePatientResponse
+            {
+                Succeed = true,
+                Data = PatientMapper.FromModel(model)
+            };
         }
     }
 
     /// <summary>
     /// Update Patient Command Model
     /// </summary>
-    public class UpdatePatientCommand : IRequest<PatientSummary>
+    public class UpdatePatientCommand : IRequest<UpdatePatientResponse>
     {
-        public UpdatePatient Request { get; set; }
+        public UpdatePatientRequest Request { get; set; }
 
-        public UpdatePatientCommand(UpdatePatient request)
+        public UpdatePatientCommand(UpdatePatientRequest request)
         {
             Request = request;
         }
 
-        public PatientSummary ToResponse(Patient model)
+        public (bool, string) Validate()
         {
-            return new PatientSummary
-            {
-                Id = model.Id,
-                CardNumber = model.CardNumber,
-                FullName = model.FullName,
-                Gender = model.Gender,
-                PhoneNumber = model.PhoneNumber,
-                DateOfBirth = model.DateOfBirth,
-                Email = model.Email,
-                City = model.City,
-                RegisterationDate = model.RegisterationDate,
-                MedicalHistory = model.MedicalHistory,
-            };
-        }
+            if (Request == null)
+                return (false, "Request cannot be null");
 
-    }
+            if (string.IsNullOrEmpty(Request.CardNumber)) return (false, "Card number should not be null"); ;
+            if (string.IsNullOrEmpty(Request.FullName)) return (false, "Full Name should not be null"); ;
+            if (string.IsNullOrEmpty(Request.Gender)) return (false, "Gender should not be null"); ;
+            if (string.IsNullOrEmpty(Request.PhoneNumber)) return (false, "Phone number should not be null"); ;
+            if (string.IsNullOrEmpty(Request.Email)) return (false, "Email should not be null"); ;
 
-    public class UpdatePatientCommandValidator : AbstractValidator<UpdatePatientCommand>
-    {
-        public UpdatePatientCommandValidator()
-        {
-            // Insert all applicable rules
-            // For example:
-            // RuleFor(command => command.CardExpiration).NotEmpty().Must(BeValidExpirationDate).WithMessage("Please specify a valid card expiration date"); 
-            RuleFor(command => command.Request.CardNumber).NotEmpty();
-            RuleFor(command => command.Request.FullName).NotEmpty();
-            RuleFor(command => command.Request.Gender).NotEmpty();
-            RuleFor(command => command.Request.PhoneNumber).NotEmpty();
-            RuleFor(command => command.Request.Email).NotEmpty();
+            return (true, null);
         }
-        // Add your rules here
-        // For example
-        //private bool BeValidExpirationDate(DateTime dateTime)
-        //{
-        //    return dateTime >= DateTime.UtcNow;
-        //}
     }
 
 }

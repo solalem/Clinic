@@ -1,11 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Clinic.Shared.Model;
-using Clinic.Core.Appointments.Domain.Visits;
 using Clinic.ViewModels;
-using Clinic.ViewModels.Appointments.Visits;
-using System.Linq;
+using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Shared.Model;
 
-namespace Clinic.Core.Appointments.Persistence
+namespace Clinic.Core.Appointments.Persistence.Visits
 {
     public class VisitRepository : IVisitRepository
     {
@@ -26,13 +24,6 @@ namespace Clinic.Core.Appointments.Persistence
             return  _context.Visits.Add(visit).Entity;               
         }
 
-        public async Task<Visit> GetAsync(Guid id)
-        {
-            var visit = await _context.Visits.FindAsync(id);
-
-            return visit;
-        }
-
         public void Update(Visit visit)
         {
             _context.Entry(visit).State = EntityState.Modified;
@@ -41,6 +32,43 @@ namespace Clinic.Core.Appointments.Persistence
         public async void Delete(Guid id)
         {
             _context.Remove(_context.Visits.FirstOrDefault(x => x.Id == id));
+        }
+
+        public async Task<Visit> GetAsync(Guid id)
+        {
+            var visit = await _context.Visits.FindAsync(id);
+            if (visit != null)
+            {
+                await _context.Entry(visit)
+                    .Collection(i => i.Procedures).LoadAsync();
+            }
+
+            return visit;
+        }
+
+        public async Task<int> GetCountAsync(PaginationInfo paginationInfo)
+        {
+            var query = GetQuery(paginationInfo);
+
+            return await query.CountAsync();
+        }
+
+        public async Task<IEnumerable<Visit>> GetManyAsync(PaginationInfo pagination)
+        {
+            var query = GetQuery(pagination);
+
+            return await query.ToListAsync();
+        }
+  
+        private IQueryable<Visit> GetQuery(PaginationInfo pagination)
+        {
+            var query = _context.Visits
+                .Skip(pagination.Index)
+                .Take(pagination.PageSize).AsQueryable();
+            if (!string.IsNullOrEmpty(pagination.SearchString))
+                query = query.Where(x => x.Physician.Contains(pagination.SearchString));
+
+            return query.Skip(pagination.Index).Take(pagination.PageSize);
         }
 
     }

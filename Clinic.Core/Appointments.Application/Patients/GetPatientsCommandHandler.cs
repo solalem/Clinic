@@ -1,6 +1,4 @@
-using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.Core.Appointments.Persistence;
-using Clinic.Core.Appointments.Persistence.Patients;
 using Clinic.ViewModels.Appointments.Patients;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Clinic.Core.Appointments.Application.Patients
 {
     public class GetPatientsCommandHandler
-        : IRequestHandler<GetPatientsCommand, PatientList>
+        : IRequestHandler<GetPatientsCommand, GetPatientsResponse>
     {
         private readonly AppointmentsDbContext _dbContext;
 
@@ -17,7 +15,7 @@ namespace Clinic.Core.Appointments.Application.Patients
             _dbContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<PatientList> Handle(GetPatientsCommand message, CancellationToken cancellationToken)
+        public async Task<GetPatientsResponse> Handle(GetPatientsCommand message, CancellationToken cancellationToken)
         {
             var pagination = message.Request.PaginationInfo;
             var summaries = _dbContext.Database.SqlQuery<PatientSummary>(@$"
@@ -35,50 +33,28 @@ namespace Clinic.Core.Appointments.Application.Patients
                         p.cardnumber like '%{pagination.SearchString}%' ))
                 ");
 
-            var models =  new PatientList
+            return new GetPatientsResponse
             {
-                Items = await summaries.Skip(pagination.Index).Take(pagination.PageSize).ToListAsync(),
-                PaginationInfo = pagination
+                Succeed = true,
+                Data = new PatientList
+                {
+                    Items = await summaries.Skip(pagination.Index).Take(pagination.PageSize).ToListAsync(),
+                    PaginationInfo = pagination
+                }
             };
-
-            return models;// GetPatientsCommand.ToResponse(message.Request, models);
         }
     }
 
     /// <summary>
     /// Get Patient Command Model
     /// </summary>
-    public class GetPatientsCommand : IRequest<PatientList>
+    public class GetPatientsCommand : IRequest<GetPatientsResponse>
     {
-        public GetPatients Request { get; set; }
+        public GetPatientsRequest Request { get; set; }
 
-        public GetPatientsCommand(GetPatients request)
+        public GetPatientsCommand(GetPatientsRequest request)
         {
             Request = request;
         }
-
-        public static PatientList ToResponse(GetPatients request, IEnumerable<Patient> models)
-        {
-            var list = new PatientList();
-            list.Items = models.Select(model =>
-               new PatientSummary
-               {
-                   Id = model.Id,
-                   CardNumber = model.CardNumber,
-                   FullName = model.FullName,
-                   Gender = model.Gender,
-                   PhoneNumber = model.PhoneNumber,
-                   DateOfBirth = model.DateOfBirth,
-                   Email = model.Email,
-                   City = model.City,
-                   RegisterationDate = model.RegisterationDate,
-                   MedicalHistory = model.MedicalHistory,
-               }).ToList();
-
-            list.PaginationInfo = request.PaginationInfo;
-            return list;
-        }
-
     }
-
 }

@@ -1,35 +1,55 @@
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Shared;
+using Clinic.ViewModels.Appointments.Visits;
 using MediatR;
 
-namespace Clinic.Core.Appointments.Application.Commands.ArchiveVisitCommands
+namespace Clinic.Core.Appointments.Application.Visits
 {
     public class ArchiveVisitCommandHandler
-        : IRequestHandler<ArchiveVisitCommand, int>
+        : IRequestHandler<ArchiveVisitCommand, ArchiveVisitResponse>
     {
         private readonly IVisitRepository _visitRepository;
+        private readonly IIdentityService _identityService;
 
-        public ArchiveVisitCommandHandler(IMediator mediator,
-            IVisitRepository visitRepository)
+        public ArchiveVisitCommandHandler(
+            IVisitRepository visitRepository, 
+            IIdentityService identityService)
         {
             _visitRepository = visitRepository ?? throw new ArgumentNullException(nameof(visitRepository));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        public async Task<int> Handle(ArchiveVisitCommand message, CancellationToken cancellationToken)
+        public async Task<ArchiveVisitResponse> Handle(ArchiveVisitCommand message, CancellationToken cancellationToken)
         {
-            // TODO: Add Integration event to notify others
-            _visitRepository.Delete(message.Id);
-
-            return await _visitRepository.UnitOfWork.SaveEntitiesAsync();
+            try
+            {
+                _visitRepository.Delete(message.Request.Id);
+                await _visitRepository.UnitOfWork.SaveEntitiesAsync(_identityService.GetUserIdentity(), cancellationToken);
+          
+                return new ArchiveVisitResponse
+                {
+                    Succeed = true
+                };
+            }
+            catch (Exception ex)
+            {
+                // TODO: log
+                return new ArchiveVisitResponse { Error = ex.Message };
+            }
         }
     }
 
     /// <summary>
     /// Visit Command Model
     /// </summary>
-    public class ArchiveVisitCommand : IRequest<int>
+    public class ArchiveVisitCommand : IRequest<ArchiveVisitResponse>
     {
-        public Guid Id { get; set; }
+        public ArchiveVisitRequest Request { get; set; }
 
+        public ArchiveVisitCommand(ArchiveVisitRequest request)
+        {
+            Request = request;
+        }
     }
 
 }

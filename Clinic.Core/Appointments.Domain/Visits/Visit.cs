@@ -1,4 +1,3 @@
-using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.Shared.Model;
 
 namespace Clinic.Core.Appointments.Domain.Visits
@@ -41,8 +40,6 @@ namespace Clinic.Core.Appointments.Domain.Visits
             this.PresentIllness = presentIllness;
         }
 
-        public virtual Patient Patient { get; set; }
-
         private readonly List<Procedure> _procedures;
         /// <summary>
         /// 
@@ -54,26 +51,47 @@ namespace Clinic.Core.Appointments.Domain.Visits
             _procedures = new List<Procedure>();
         }
 
-        public Visit(DateTimeOffset date, Guid patientId, String physician, String presentIllness) : this()
+        public Visit(Guid patientId, String physician, String presentIllness) : this()
         {
-            this.SetDate(date);
+            this.SetDate(DateTimeOffset.Now);
 			this.SetPatientId(patientId);
 			this.SetPhysician(physician);
 			this.SetPresentIllness(presentIllness);
+			
+
+            // TODO: Add the StartedDomainEvent to the domain events collection 
+            // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
+            // AddOrderStartedDomainEvent(userId, cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration);
         }
 
         public void AddProcedure(Procedure newItem)
         {
-            var existingId = _procedures.FirstOrDefault(x => x.Id == newItem.Id);
-            if (existingId != null)
-            {
-                existingId.Description = newItem.Description;
-                existingId.Name = newItem.Name;
-            }
-            else
-                _procedures.Add(newItem);
+            _procedures.Add(newItem);
+            // TODO: Add domain logic, e.g change discount rate if item counts exceed some value
         }
 
+        public Procedure UpdateProcedure(int id, Procedure item) 
+        {
+            var existing = _procedures.Where(o => o.Id == id).SingleOrDefault();
+            if (existing != null)
+            {
+                //TODO: update values
+                existing.Name = item.Name;
+				existing.Description = item.Description;
+				
+                // ...
+            }
+            return existing;
+        }
+
+        public void RemoveProcedure(int id)
+        {
+            var existing = _procedures.Where(o => o.Id == id).SingleOrDefault();
+            if (existing != null)
+            {
+                _procedures.Remove(existing);
+            }
+        }
 
         /// <summary>
         /// Add Procedures

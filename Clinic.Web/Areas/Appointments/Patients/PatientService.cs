@@ -1,3 +1,4 @@
+using Blazorise;
 using Clinic.Core.Appointments.Application.Patients;
 using Clinic.ViewModels.Appointments.Patients;
 using MediatR;
@@ -13,27 +14,27 @@ namespace Clinic.Web.Areas.Appointments.Patients
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        public async Task<PatientSummary> CreateAsync(CreatePatient request)
+        public async Task<CreatePatientResponse> CreateAsync(CreatePatientRequest request)
         {
             return await _mediator.Send(new CreatePatientCommand(request));
         }
 
-        public async Task<PatientSummary> UpdateAsync(UpdatePatient request)
+        public async Task<UpdatePatientResponse> UpdateAsync(UpdatePatientRequest request)
         {
             return await _mediator.Send(new UpdatePatientCommand(request));
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async Task<ArchivePatientResponse> DeleteAsync(Guid id)
         {
-            return await _mediator.Send(new ArchivePatientCommand { Id = id });
+            return await _mediator.Send(new ArchivePatientCommand(new(id)));
         }
 
-        public async Task<PatientDetail> GetAsync(GetPatient request)
+        public async Task<GetPatientResponse> GetAsync(GetPatientRequest request)
         {
             return await _mediator.Send(new GetPatientCommand(request));
         }
 
-        public async Task<PatientList> ListAsync(GetPatients request)
+        public async Task<GetPatientsResponse> ListAsync(GetPatientsRequest request)
         {
             return await _mediator.Send(new GetPatientsCommand(request));
         }

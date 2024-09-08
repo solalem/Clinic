@@ -1,12 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Clinic.Core.Appointments.Domain.Visits;
-using Clinic.Core.Appointments.Domain.Patients;
-using System.Text.Json.Serialization;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
 
-namespace Clinic.Core.Appointments.Persistence
+namespace Clinic.Core.Appointments.Persistence.Visits
 {
     public class VisitEntityTypeConfiguration : IEntityTypeConfiguration<Visit>
     {
@@ -14,11 +11,12 @@ namespace Clinic.Core.Appointments.Persistence
         {
             config.ToTable("visits", AppointmentsDbContext.DEFAULT_SCHEMA);
             config.HasKey(o => o.Id);
+            config.Ignore(b => b.DomainEvents);
 
             config.Property(o => o.Id)
                 .HasColumnName("Id")
-                .ValueGeneratedNever()
-           ; 
+                .ValueGeneratedNever();
+
             config.Property(o => o.Date)
                 .HasColumnName("Date")
                 .IsRequired();

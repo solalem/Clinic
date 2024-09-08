@@ -5,12 +5,11 @@ namespace Clinic.Web.Areas.Appointments.Patients
 {
     public interface IPatientService
     {
-        Task<PatientDetail> GetAsync(GetPatient request);
-        Task<PatientList> ListAsync(GetPatients request);
-        Task<PatientSummary> CreateAsync(CreatePatient request);
-        Task<PatientSummary> UpdateAsync(UpdatePatient request);
-        Task<int> DeleteAsync(Guid id);
-
+        Task<GetPatientsResponse> GetAsync(GetPatientRequest request);
+        Task<GetPatientsResponse> ListAsync(GetPatientsRequest request);
+        Task<CreatePatientResponse> CreateAsync(CreatePatientRequest request);
+        Task<UpdatePatientResponse> UpdateAsync(UpdatePatientRequest request);
+        Task<ArchivePatientResponse> DeleteAsync(Guid id);
 
     }
 }

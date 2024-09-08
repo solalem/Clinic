@@ -1,71 +1,52 @@
 using Clinic.Core.Appointments.Domain.Visits;
-using Clinic.Core.Appointments.Persistence;
-using Clinic.ViewModels.Appointments.Patients;
+using Clinic.Shared;
 using Clinic.ViewModels.Appointments.Visits;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.Core.Appointments.Application.Visits
 {
     public class GetVisitsCommandHandler
-        : IRequestHandler<GetVisitsCommand, VisitList>
+        : IRequestHandler<GetVisitsCommand, GetVisitsResponse>
     {
-        private readonly AppointmentsDbContext _dbContext;
-        
-        public GetVisitsCommandHandler(AppointmentsDbContext context)
+        private readonly IVisitRepository _visitRepository;
+        private readonly IIdentityService _identityService;
+
+        public GetVisitsCommandHandler(
+            IVisitRepository visitRepository,
+            IIdentityService identityService)
         {
-            _dbContext = context ?? throw new ArgumentNullException(nameof(context));
+            _visitRepository = visitRepository ?? throw new ArgumentNullException(nameof(visitRepository));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        public async Task<VisitList> Handle(GetVisitsCommand message, CancellationToken cancellationToken)
+        public async Task<GetVisitsResponse> Handle(GetVisitsCommand message, CancellationToken cancellationToken)
         {
             var pagination = message.Request.PaginationInfo;
-            var summaries = _dbContext.Visits.Include(x => x.Patient).
-                Where(x =>
-                    string.IsNullOrEmpty(pagination.SearchString) ||
-                    (!string.IsNullOrEmpty(pagination.SearchString) &&
-                        (x.Physician.Contains(pagination.SearchString) ||
-                        x.Patient.FullName.Contains(pagination.SearchString) ||
-                        x.Patient.CardNumber.Contains(pagination.SearchString))
-                    ));
+            var models = await _visitRepository.GetManyAsync(message.Request.PaginationInfo);
+            pagination.TotalItems = await _visitRepository.GetCountAsync(message.Request.PaginationInfo);
 
-            var models = GetVisitsCommand.ToResponse(message.Request, summaries);// new VisitList
-
-            return models;// GetVisitsCommand.ToResponse(message.Request, models);
+            return new GetVisitsResponse
+            {
+                Succeed = true,
+                Data = new VisitList
+                {
+                    PaginationInfo = pagination,
+                    Items = VisitMapper.FromModel(models).ToList()
+                }
+            };
         }
     }
 
     /// <summary>
-    /// Get Visit Command Model
+    /// Visit Command Model
     /// </summary>
-    public class GetVisitsCommand : IRequest<VisitList>
+    public class GetVisitsCommand : IRequest<GetVisitsResponse>
     {
-        public GetVisits Request { get; set; }
+        public GetVisitsRequest Request { get; set; }
 
-        public GetVisitsCommand(GetVisits request)
+        public GetVisitsCommand(GetVisitsRequest request)
         {
             Request = request;
         }
-
-        public static VisitList ToResponse(GetVisits request, IEnumerable<Visit> models)
-        {
-            var list = new VisitList();
-            list.Items = models.Select(model =>
-               new VisitSummary
-               {
-                   Id = model.Id,
-                   Date = model.Date,
-                   PresentIllness = model.PresentIllness,
-                   PatientId = model.PatientId,
-                   PatientName = model.Patient.FullName,
-                   Physician = model.Physician,
-               }).ToList();
-
-            list.PaginationInfo = request.PaginationInfo;
-            return list;
-        }
-
     }
-
 }
-

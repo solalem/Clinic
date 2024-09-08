@@ -1,94 +1,81 @@
-using Clinic.Core.Appointments.Domain.Patients;
-using Clinic.Core.Appointments.Persistence.Patients;
-using Clinic.ViewModels.Appointments.Patients;
-using FluentValidation;
 using MediatR;
+using Clinic.Core.Appointments.Domain.Patients;
+using Clinic.Shared;
+using Clinic.ViewModels.Appointments.Patients;
 
 namespace Clinic.Core.Appointments.Application.Patients
 {
     public class CreatePatientCommandHandler
-        : IRequestHandler<CreatePatientCommand, PatientSummary>
+        : IRequestHandler<CreatePatientCommand, CreatePatientResponse>
     {
         private readonly IPatientRepository _patientRepository;
+        private readonly IIdentityService _identityService;
 
-        public CreatePatientCommandHandler(IPatientRepository patientRepository)
+        public CreatePatientCommandHandler(
+            IPatientRepository patientRepository, 
+            IIdentityService identityService)
         {
             _patientRepository = patientRepository ?? throw new ArgumentNullException(nameof(patientRepository));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        public async Task<PatientSummary> Handle(CreatePatientCommand message, CancellationToken cancellationToken)
+        public async Task<CreatePatientResponse> Handle(CreatePatientCommand command, CancellationToken cancellationToken)
         {
-            if (await _patientRepository.Exists(message.Request.CardNumber))
-                throw new ArgumentException("Patient with same card already exists");
+            var (success, error) = command.Validate();
+            if (!success)
+                return new CreatePatientResponse { Error = error };
 
-            var model = new Patient(message.Request.CardNumber,
-				message.Request.FullName,
-				message.Request.Gender,
-				message.Request.PhoneNumber,
-				message.Request.DateOfBirth,
-				message.Request.Email,
-				message.Request.City,
-				message.Request.MedicalHistory
-                );
+            var model = new Patient(command.Request.CardNumber,
+				command.Request.FullName,
+				command.Request.Gender,
+				command.Request.PhoneNumber,
+				command.Request.DateOfBirth,
+				command.Request.Email,
+				command.Request.City,
+				command.Request.MedicalHistory);
             _patientRepository.Add(model);
 
-            var result = await _patientRepository.UnitOfWork.SaveEntitiesAsync();
-            if (result == 0) return null;
+            try
+            {
+                await _patientRepository.UnitOfWork.SaveEntitiesAsync(_identityService.GetUserIdentity(), cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                return new CreatePatientResponse { Error = ex.Message };
+            }
 
-            return message.ToResponse(model);
+            return new CreatePatientResponse 
+            { 
+                Succeed = true, 
+                Data = PatientMapper.FromModel(model)
+            };
         }
     }
 
     /// <summary>
-    /// Create Patient Command Model
+    /// Patient Command Model
     /// </summary>
-    public class CreatePatientCommand : IRequest<PatientSummary>
+    public class CreatePatientCommand : IRequest<CreatePatientResponse>
     {
-        public CreatePatient Request { get; set; }
+        public CreatePatientRequest Request { get; set; }
 
-        public CreatePatientCommand(CreatePatient request)
+        public CreatePatientCommand(CreatePatientRequest request)
         {
             Request = request;
         }
 
-        public PatientSummary ToResponse(Patient model)
+        public (bool, string) Validate()
         {
-            return new PatientSummary
-            {
-                Id = model.Id,
-                CardNumber = model.CardNumber,
-				FullName = model.FullName,
-				Gender = model.Gender,
-				PhoneNumber = model.PhoneNumber,
-				DateOfBirth = model.DateOfBirth,
-				Email = model.Email,
-                City = model.City,
-                RegisterationDate = model.RegisterationDate,
-                MedicalHistory = model.MedicalHistory,
-            };
+            if (Request == null)
+                return (false, "Request cannot be null");
+            
+            if(string.IsNullOrEmpty(Request.CardNumber)) return (false, "Card number should not be null"); ;
+            if(string.IsNullOrEmpty(Request.FullName)) return (false, "Full Name should not be null"); ;
+            if(string.IsNullOrEmpty(Request.Gender)) return (false, "Gender should not be null"); ;
+            if(string.IsNullOrEmpty(Request.PhoneNumber)) return (false, "Phone number should not be null"); ;
+            if(string.IsNullOrEmpty(Request.Email)) return (false, "Email should not be null"); ;
+
+            return (true, null);
         }
-
     }
-
-    public class CreatePatientCommandValidator : AbstractValidator<CreatePatientCommand>
-    {
-        public CreatePatientCommandValidator()
-        {
-            // Insert all applicable rules
-            // For example:
-            // RuleFor(command => command.CardExpiration).NotEmpty().Must(BeValidExpirationDate).WithMessage("Please specify a valid card expiration date"); 
-            RuleFor(command => command.Request.CardNumber).NotEmpty();
-            RuleFor(command => command.Request.FullName).NotEmpty();
-            RuleFor(command => command.Request.Gender).NotEmpty();
-            RuleFor(command => command.Request.PhoneNumber).NotEmpty();
-            RuleFor(command => command.Request.Email).NotEmpty();
-        }
-        // Add your rules here
-        // For example
-        //private bool BeValidExpirationDate(DateTime dateTime)
-        //{
-        //    return dateTime >= DateTime.UtcNow;
-        //}
-    }
-
 }

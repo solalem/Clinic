@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Clinic.Core.Appointments.Persistence.Patients;
 using Clinic.Web.Areas.Appointments.Patients;
 using Clinic.Web.Areas.Appointments.Visits;
-using Clinic.Core.Appointments.Domain.Patients;
+using Clinic.Core.Appointments.Persistence.Visits;
 using Clinic.Core.Appointments.Domain.Visits;
 
 namespace Clinic.Web.Areas.Appointments

@@ -1,60 +1,46 @@
 using Clinic.Core.Appointments.Domain.Patients;
-using Clinic.Core.Appointments.Persistence.Patients;
+using Clinic.Shared;
 using Clinic.ViewModels.Appointments.Patients;
-using FluentValidation;
 using MediatR;
 
 namespace Clinic.Core.Appointments.Application.Patients
 {
     public class GetPatientCommandHandler
-        : IRequestHandler<GetPatientCommand, PatientDetail>
+        : IRequestHandler<GetPatientCommand, GetPatientResponse>
     {
         private readonly IPatientRepository _patientRepository;
+        private readonly IIdentityService _identityService;
 
-        public GetPatientCommandHandler(IPatientRepository patientRepository)
+        public GetPatientCommandHandler(
+            IPatientRepository patientRepository, 
+            IIdentityService identityService)
         {
             _patientRepository = patientRepository ?? throw new ArgumentNullException(nameof(patientRepository));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        public async Task<PatientDetail> Handle(GetPatientCommand message, CancellationToken cancellationToken)
+        public async Task<GetPatientResponse> Handle(GetPatientCommand message, CancellationToken cancellationToken)
         {
-            // TODO: Add Integration events to notify others
-            var model = await _patientRepository.GetAsync(message.Request.Id) ?? 
-                throw new ArgumentException($"No patient found {message.Request.Id}");
+            var model = await _patientRepository.GetAsync(message.Request.Id);
 
-            return GetPatientCommand.ToResponse(model);
+            return new GetPatientResponse
+            {
+                Succeed = true,
+                Data = PatientMapper.FromModel(model)
+            };
         }
     }
 
     /// <summary>
-    /// Get Patient Command Model
+    /// Patient Command Model
     /// </summary>
-    public class GetPatientCommand : IRequest<PatientDetail>
+    public class GetPatientCommand : IRequest<GetPatientResponse>
     {
-        public GetPatient Request { get; set; }
+        public GetPatientRequest Request { get; set; }
 
-        public GetPatientCommand(GetPatient request)
+        public GetPatientCommand(GetPatientRequest request)
         {
             Request = request;
         }
-
-        public static PatientDetail ToResponse(Patient model)
-        {
-            return new PatientDetail
-            {
-                Id = model.Id,
-                CardNumber = model.CardNumber,
-                FullName = model.FullName,
-                Gender = model.Gender,
-                PhoneNumber = model.PhoneNumber,
-                DateOfBirth = model.DateOfBirth,
-                Email = model.Email,
-                City = model.City,
-                RegisterationDate = model.RegisterationDate,
-                MedicalHistory = model.MedicalHistory
-            };
-        }
-
     }
-
 }

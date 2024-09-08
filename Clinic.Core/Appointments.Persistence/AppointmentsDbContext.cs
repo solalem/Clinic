@@ -7,6 +7,7 @@ using Clinic.Core.Appointments.Persistence.Patients;
 using Clinic.Shared.Model;
 using Clinic.Core.Appointments.Domain.Visits;
 using Clinic.ViewModels.Appointments.Patients;
+using Clinic.Core.Appointments.Persistence.Visits;
 
 namespace Clinic.Core.Appointments.Persistence
 {

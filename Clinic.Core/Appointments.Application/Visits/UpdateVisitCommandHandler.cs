@@ -1,32 +1,34 @@
-using FluentValidation;
 using MediatR;
-using Clinic.ViewModels.Appointments.Visits;
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Shared;
+using Clinic.ViewModels.Appointments.Visits;
 
-namespace Clinic.Core.Appointments.Application.Commands.UpdateVisitCommands
+namespace Clinic.Core.Appointments.Application.Visits
 {
     public class UpdateVisitCommandHandler
-        : IRequestHandler<UpdateVisitCommand, VisitSummary>
+        : IRequestHandler<UpdateVisitCommand, UpdateVisitResponse>
     {
         private readonly IVisitRepository _visitRepository;
+        private readonly IIdentityService _identityService;
 
-        public UpdateVisitCommandHandler(IMediator mediator,
-            IVisitRepository visitRepository)
+        public UpdateVisitCommandHandler(
+            IVisitRepository visitRepository, 
+            IIdentityService identityService)
         {
             _visitRepository = visitRepository ?? throw new ArgumentNullException(nameof(visitRepository));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        public async Task<VisitSummary> Handle(UpdateVisitCommand message, CancellationToken cancellationToken)
+        public async Task<UpdateVisitResponse> Handle(UpdateVisitCommand command, CancellationToken cancellationToken)
         {
-            // TODO: Add Integration events to notify others
-            var model = await _visitRepository.GetAsync(message.Request.Id) ??
-                throw new ArgumentException($"No visit found {message.Request.Id}");
-
-            //model.SetDate(message.Request.Date);
-            //model.SetPatientId(message.Request.PatientId);
-            model.SetPhysician(message.Request.Physician);
-            model.SetPresentIllness(message.Request.PresentIllness);
-            foreach (var procedure in message.Request.Procedures)
+            var (success, error) = command.Validate();
+            if (!success)
+                return new UpdateVisitResponse { Error = error };
+        
+            var model = await _visitRepository.GetAsync(command.Request.Id);
+			model.SetPhysician(command.Request.Physician);
+			model.SetPresentIllness(command.Request.PresentIllness);
+            foreach (var procedure in command.Request.Procedures)
             {
                 model.AddProcedure(new Procedure
                 {
@@ -36,57 +38,45 @@ namespace Clinic.Core.Appointments.Application.Commands.UpdateVisitCommands
             }
             _visitRepository.Update(model);
 
-            var result = await _visitRepository.UnitOfWork.SaveEntitiesAsync();
-            if (result == 0) return null;
+            try
+            {
+                await _visitRepository.UnitOfWork.SaveEntitiesAsync(_identityService.GetUserIdentity(), cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                return new UpdateVisitResponse { Error = ex.Message };
+            }
 
-            return message.ToResponse(model);
+            return new UpdateVisitResponse
+            {
+                Succeed = true,
+                Data = VisitMapper.FromModel(model)
+            };
         }
     }
 
     /// <summary>
-    /// Visit Command Model
+    /// Update Visit Command Model
     /// </summary>
-    public class UpdateVisitCommand : IRequest<VisitSummary>
+    public class UpdateVisitCommand : IRequest<UpdateVisitResponse>
     {
-        public UpdateVisit Request { get; set; }
+        public UpdateVisitRequest Request { get; set; }
 
-        public UpdateVisitCommand(UpdateVisit request)
+        public UpdateVisitCommand(UpdateVisitRequest request)
         {
             Request = request;
         }
 
-        public VisitSummary ToResponse(Visit model)
+        public (bool, string) Validate()
         {
-            return new VisitSummary
-            {
-                Id = model.Id,
-                Date = model.Date,
-				PatientId = model.PatientId,
-				Physician = model.Physician,
-				PresentIllness = model.PresentIllness
-            };
-        }
+            if (Request == null)
+                return (false, "Request cannot be null");
 
-    }
+            if (string.IsNullOrEmpty(Request.PresentIllness)) return (false, "Present Illness cannot be null");
+            if (string.IsNullOrEmpty(Request.Physician)) return (false, "Physician cannot be null");
 
-    public class UpdateVisitCommandValidator : AbstractValidator<UpdateVisitCommand>
-    {
-        public UpdateVisitCommandValidator()
-        {
-            // Insert all applicable rules
-            // For example:
-            // RuleFor(command => command.CardExpiration).NotEmpty().Must(BeValidExpirationDate).WithMessage("Please specify a valid card expiration date"); 
-            RuleFor(command => command.Request.PatientId).NotEmpty();
-            RuleFor(command => command.Request.Physician).NotEmpty();
-            RuleFor(command => command.Request.PresentIllness).NotEmpty();
-            RuleFor(command => command.Request.Procedures).NotEmpty();
+            return (true, null);
         }
-        // Add your rules here
-        // For example
-        //private bool BeValidExpirationDate(DateTime dateTime)
-        //{
-        //    return dateTime >= DateTime.UtcNow;
-        //}
     }
 
 }

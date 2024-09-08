@@ -1,6 +1,6 @@
-using Clinic.Core.Appointments.Domain.Patients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Clinic.Core.Appointments.Domain.Patients;
 
 namespace Clinic.Core.Appointments.Persistence.Patients
 {
@@ -10,11 +10,12 @@ namespace Clinic.Core.Appointments.Persistence.Patients
         {
             config.ToTable("patients", AppointmentsDbContext.DEFAULT_SCHEMA);
             config.HasKey(o => o.Id);
+            config.Ignore(b => b.DomainEvents);
 
             config.Property(o => o.Id)
                 .HasColumnName("Id")
-                .ValueGeneratedNever()
-           ; 
+                .ValueGeneratedNever();
+
             config.Property(o => o.CardNumber)
                 .HasColumnName("CardNumber")
                 .IsRequired();
@@ -38,15 +39,15 @@ namespace Clinic.Core.Appointments.Persistence.Patients
             config.Property(o => o.Email)
                 .HasColumnName("Email")
                 .IsRequired();
-            
+
             config.Property(o => o.City)
                 .HasColumnName("City")
                 .IsRequired(false);
-            
+
             config.Property(o => o.MedicalHistory)
                 .HasColumnName("MedicalHistory")
                 .IsRequired(false);
-            
+
             config.Property(o => o.RegisterationDate)
                 .HasColumnName("RegisterationDate")
                 .IsRequired(false);

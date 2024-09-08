@@ -1,83 +1,72 @@
-using FluentValidation;
-using Clinic.ViewModels.Appointments.Visits;
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Shared;
+using Clinic.ViewModels.Appointments.Visits;
 using MediatR;
 
-namespace Clinic.Core.Appointments.Application.Commands.CreateVisitCommands
+namespace Clinic.Core.Appointments.Application.Visits
 {
     public class CreateVisitCommandHandler
-        : IRequestHandler<CreateVisitCommand, VisitSummary>
+        : IRequestHandler<CreateVisitCommand, CreateVisitResponse>
     {
         private readonly IVisitRepository _visitRepository;
+        private readonly IIdentityService _identityService;
 
-        public CreateVisitCommandHandler(IMediator mediator,
-            IVisitRepository visitRepository)
+        public CreateVisitCommandHandler(
+            IVisitRepository visitRepository, 
+            IIdentityService identityService)
         {
             _visitRepository = visitRepository ?? throw new ArgumentNullException(nameof(visitRepository));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        public async Task<VisitSummary> Handle(CreateVisitCommand message, CancellationToken cancellationToken)
+        public async Task<CreateVisitResponse> Handle(CreateVisitCommand command, CancellationToken cancellationToken)
         {
-            // TODO: Add Integration events to notify others
-            var model = new Visit(message.Request.Date,
-				message.Request.PatientId,
-				message.Request.Physician,
-				message.Request.PresentIllness);
+            var (success, error) = command.Validate();
+            if (!success)
+                return new CreateVisitResponse { Error = error };
+
+            var model = new Visit(
+                command.Request.PatientId,
+				command.Request.Physician,
+				command.Request.PresentIllness);
             _visitRepository.Add(model);
 
-            // TODO: Add procedures
+            try
+            {
+                await _visitRepository.UnitOfWork.SaveEntitiesAsync(_identityService.GetUserIdentity(), cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                return new CreateVisitResponse { Error = ex.Message };
+            }
 
-            var result = await _visitRepository.UnitOfWork.SaveEntitiesAsync();
-            if (result == 0) return null;
-
-            return message.ToResponse(model);
+            return new CreateVisitResponse 
+            { 
+                Succeed = true, 
+                Data = VisitMapper.FromModel(model)
+            };
         }
     }
 
     /// <summary>
     /// Visit Command Model
     /// </summary>
-    public class CreateVisitCommand : IRequest<VisitSummary>
+    public class CreateVisitCommand : IRequest<CreateVisitResponse>
     {
-        public CreateVisit Request { get; set; }
+        public CreateVisitRequest Request { get; set; }
 
-        public CreateVisitCommand(CreateVisit request)
+        public CreateVisitCommand(CreateVisitRequest request)
         {
             Request = request;
         }
 
-        public VisitSummary ToResponse(Visit model)
+        public (bool, string) Validate()
         {
-            return new VisitSummary
-            {
-                Id = model.Id,
-                Date = model.Date,
-				PatientId = model.PatientId,
-				Physician = model.Physician,
-				PresentIllness = model.PresentIllness
-            };
+            if (Request == null)
+                return (false, "Request cannot be null");
+            //if (string.IsNullOrEmpty(Request.Name)) return (false, "Name cannot be null");
+
+            return (true, null);
         }
-
     }
-
-    public class CreateVisitCommandValidator : AbstractValidator<CreateVisitCommand>
-    {
-        public CreateVisitCommandValidator()
-        {
-            // Insert all applicable rules
-            // For example:
-            // RuleFor(command => command.CardExpiration).NotEmpty().Must(BeValidExpirationDate).WithMessage("Please specify a valid card expiration date"); 
-            RuleFor(command => command.Request.Date).NotEmpty();
-            RuleFor(command => command.Request.PatientId).NotEmpty();
-            RuleFor(command => command.Request.Physician).NotEmpty();
-            RuleFor(command => command.Request.PresentIllness).NotEmpty();
-        }
-        // Add your rules here
-        // For example
-        //private bool BeValidExpirationDate(DateTime dateTime)
-        //{
-        //    return dateTime >= DateTime.UtcNow;
-        //}
-    }
-
 }

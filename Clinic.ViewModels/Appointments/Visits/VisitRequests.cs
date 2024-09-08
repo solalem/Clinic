@@ -1,36 +1,28 @@
+using System;
+
 namespace Clinic.ViewModels.Appointments.Visits
 {
-    public class CreateVisit
+    public record GetVisitRequest (Guid Id);
+    public class GetVisitResponse: ApiResponse<VisitDetail>
     {
-        public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
-        public Guid PatientId { get; set; }
-        public String Physician { get; set; }
-        public String PresentIllness { get; set; }
     }
 
-    public class UpdateVisit
+    public record GetVisitsRequest(PaginationInfo PaginationInfo);
+    public class GetVisitsResponse: ApiListResponse<VisitList>
     {
-        public Guid Id { get; set; }
-        // public DateTimeOffset Date { get; set; }
-        public Guid PatientId { get; set; }
-        public String Physician { get; set; }
-        public String PresentIllness { get; set; }
-        public List<ProcedureSummary> Procedures { get; set; } = new List<ProcedureSummary>();
     }
 
-    public class DeleteVisit
+    public record ArchiveVisitRequest (Guid Id);
+    public class ArchiveVisitResponse: ApiResponse<VisitDetail>
     {
-        public Guid Id { get; set; }
-    }
+    } 
 
-    public class GetVisit
-    {
-        public Guid Id { get; set; }
-    }
+    public record AddProcedureRequest (string Name);
+    public class AddProcedureResponse : ApiResponse<VisitDetail> { }
+    public record UpdateProcedureRequest (Guid Id, string Name);
+    public class UpdateProcedureResponse : ApiResponse<VisitDetail> { }
+    public record RemoveProcedureRequest (Guid Id, Guid VisitId);
+    public class RemoveProcedureResponse : ApiResponse<VisitDetail> { }
 
-    public class GetVisits
-    {
-        public PaginationInfo PaginationInfo { get; set; } = new PaginationInfo();
-    }
-
+    
 }
