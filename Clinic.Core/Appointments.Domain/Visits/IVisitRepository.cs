@@ -1,4 +1,4 @@
-using Clinic.Shared.Domain.Abstractions.Model;
+using Clinic.Shared.Model;
 
 namespace Clinic.Core.Appointments.Domain.Visits
 {

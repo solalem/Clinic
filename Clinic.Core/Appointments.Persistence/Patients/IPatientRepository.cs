@@ -1,9 +1,5 @@
-using System;
-using System.Threading.Tasks;
 using Clinic.Core.Appointments.Domain.Patients;
-using Clinic.Shared.Domain.Abstractions.Model;
-using Clinic.ViewModels;
-using Clinic.ViewModels.Appointments.Patients;
+using Clinic.Shared.Model;
 
 namespace Clinic.Core.Appointments.Persistence.Patients
 {

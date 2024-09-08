@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Clinic.Shared.Domain.Abstractions.Model;
+using Clinic.Shared.Model;
 using Clinic.Core.Appointments.Persistence;
 using Clinic.Core.Appointments.Persistence.Patients;
 
