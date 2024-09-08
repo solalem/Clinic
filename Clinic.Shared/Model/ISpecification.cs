@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Clinic.SharedKernel.Domain.Abstractions.Model
+namespace Clinic.Shared.Model
 {
     public interface ISpecfication<in T>
     {
@@ -16,11 +11,7 @@ namespace Clinic.SharedKernel.Domain.Abstractions.Model
 
         public OrSpecification(params ISpecfication<T>[] specifications)
         {
-            _specifications = new List<ISpecfication<T>>();
-            foreach (ISpecfication<T> entity in specifications)
-            {
-                _specifications.Add(entity);
-            }
+            _specifications = [.. specifications];
         }
         public bool IsSatisfiedBy(T entity)
         {
@@ -40,11 +31,7 @@ namespace Clinic.SharedKernel.Domain.Abstractions.Model
 
         public AndSpecification(params ISpecfication<T>[] specifications)
         {
-            _specifications = new List<ISpecfication<T>>();
-            foreach (ISpecfication<T> entity in specifications)
-            {
-                _specifications.Add(entity);
-            }
+            _specifications = [.. specifications];
         }
         public bool IsSatisfiedBy(T entity)
         {

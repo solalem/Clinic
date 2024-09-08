@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using MediatR;
 using Clinic.Core.Appointments.Domain.Patients;
 using Clinic.Core.Appointments.Persistence.Patients;
-using Clinic.SharedKernel.Domain.Abstractions.Model;
+using Clinic.Shared.Domain.Abstractions.Model;
 using Clinic.Core.Appointments.Domain.Visits;
 using Clinic.ViewModels.Appointments.Patients;
 
@@ -28,7 +28,7 @@ namespace Clinic.Core.Appointments.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // TODO: This is to suppress complaining about DomainEvents in Entities during creating migrations 
-            modelBuilder.Ignore<SharedKernel.Domain.Abstractions.Events.DomainEvent>();
+            modelBuilder.Ignore<Shared.Domain.Abstractions.Events.DomainEvent>();
 
             //modelBuilder.ApplyConfiguration(new AppointmentEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());

@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
-namespace Clinic.SharedKernel.Domain.Abstractions.Model
+namespace Clinic.Shared.Model
 {
     public abstract class Enumeration : IComparable
     {

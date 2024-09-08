@@ -1,4 +1,4 @@
-using Clinic.SharedKernel.Domain.Abstractions;
+using Clinic.Shared.Domain.Abstractions;
 
 namespace Clinic.Core.Appointments.Domain
 {

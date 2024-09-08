@@ -1,4 +1,4 @@
-namespace Clinic.SharedKernel.Domain.Abstractions.Model
+namespace Clinic.Shared.Model
 {
     public interface IRepository<T> where T : IAggregateRoot
     {

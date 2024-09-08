@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Clinic.SharedKernel\Clinic.SharedKernel.csproj" />
+    <ProjectReference Include="..\Clinic.Shared\Clinic.Shared.csproj" />
     <ProjectReference Include="..\Clinic.ViewModels\Clinic.ViewModels.csproj" />
   </ItemGroup>
 

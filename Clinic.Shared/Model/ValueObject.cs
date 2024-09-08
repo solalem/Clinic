@@ -1,22 +1,19 @@
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Clinic.SharedKernel.Domain.Abstractions.Model
+namespace Clinic.Shared.Model
 {
     public abstract class ValueObject
     {
         protected static bool EqualOperator(ValueObject left, ValueObject right)
         {
-            if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
+            if (left is null ^ right is null)
             {
                 return false;
             }
-            return ReferenceEquals(left, null) || left.Equals(right);
+            return left is null || left.Equals(right);
         }
 
         protected static bool NotEqualOperator(ValueObject left, ValueObject right)
         {
-            return !(EqualOperator(left, right));
+            return !EqualOperator(left, right);
         }
 
         protected abstract IEnumerable<object> GetAtomicValues();
@@ -53,7 +50,7 @@ namespace Clinic.SharedKernel.Domain.Abstractions.Model
 
         public ValueObject GetCopy()
         {
-            return this.MemberwiseClone() as ValueObject;
+            return MemberwiseClone() as ValueObject;
         }
     }
 }

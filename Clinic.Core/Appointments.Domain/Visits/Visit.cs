@@ -1,5 +1,5 @@
 using Clinic.Core.Appointments.Domain.Patients;
-using Clinic.SharedKernel.Domain.Abstractions.Model;
+using Clinic.Shared.Domain.Abstractions.Model;
 
 namespace Clinic.Core.Appointments.Domain.Visits
 {

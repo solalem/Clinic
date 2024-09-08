@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Clinic.Core.Appointments.Domain.Patients;
-using Clinic.SharedKernel.Domain.Abstractions.Model;
+using Clinic.Shared.Domain.Abstractions.Model;
 using Clinic.ViewModels;
 using Clinic.ViewModels.Appointments.Patients;
 

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Clinic.SharedKernel.Domain.Abstractions.Model;
+using Clinic.Shared.Domain.Abstractions.Model;
 using Clinic.Core.Appointments.Domain.Visits;
 using Clinic.ViewModels;
 using Clinic.ViewModels.Appointments.Visits;

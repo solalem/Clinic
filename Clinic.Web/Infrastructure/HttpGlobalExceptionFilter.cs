@@ -1,5 +1,5 @@
 using System.Net;
-using Clinic.SharedKernel.Domain.Abstractions;
+using Clinic.Shared.Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

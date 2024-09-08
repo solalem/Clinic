@@ -1,8 +1,4 @@
-using System;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Clinic.SharedKernel.Domain.Abstractions.Events
+namespace Clinic.Shared.Events
 {
     /// <summary>
     /// Domain Event base class

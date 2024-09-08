@@ -17,7 +17,7 @@ namespace Clinic.Web.Areas.Appointments
                 c.UseSqlite(builder.Configuration.GetConnectionString("Default"));
             });
 
-            builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+            builder.Services.AddScoped<PatientRepository, PatientRepository>();
             builder.Services.AddScoped<IVisitRepository, VisitRepository>();
 
             // UI

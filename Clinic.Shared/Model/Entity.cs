@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using Clinic.SharedKernel.Domain.Abstractions.Events;
+using Clinic.Shared.Events;
 
-namespace Clinic.SharedKernel.Domain.Abstractions.Model
+namespace Clinic.Shared.Model
 {
     public abstract class Entity<TId> : IEquatable<Entity<TId>>
     {
@@ -42,7 +40,7 @@ namespace Clinic.SharedKernel.Domain.Abstractions.Model
 
         public bool IsTransient()
         {
-            return Equals(this.Id, default(TId));
+            return Equals(Id, default(TId));
         }
 
         public bool Equals(Entity<TId> other)
@@ -60,7 +58,7 @@ namespace Clinic.SharedKernel.Domain.Abstractions.Model
         }
         public static bool operator ==(Entity<TId> left, Entity<TId> right)
         {
-            return left?.Equals(right) ?? object.Equals(right, null);
+            return left?.Equals(right) ?? Equals(right, null);
         }
 
         public static bool operator !=(Entity<TId> left, Entity<TId> right)

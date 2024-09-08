@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Clinic.SharedKernel.Domain.Abstractions.Extensions
+namespace Clinic.Shared.Extensions
 {
     public static class LinqSelectExtensions
     {
@@ -17,7 +13,7 @@ namespace Clinic.SharedKernel.Domain.Abstractions.Extensions
                 }
                 catch (Exception ex)
                 {
-                    returnedValue = new SelectTryResult<TSource, TResult>(element, default(TResult), ex);
+                    returnedValue = new SelectTryResult<TSource, TResult>(element, default, ex);
                 }
                 yield return returnedValue;
             }
