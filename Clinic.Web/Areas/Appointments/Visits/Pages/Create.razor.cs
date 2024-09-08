@@ -13,7 +13,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
-        private CreateVisit Item = new CreateVisit();
+        private CreateVisitRequest Item = new CreateVisitRequest();
 
         [Parameter]
         [SupplyParameterFromQuery]
@@ -25,7 +25,10 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
                 return;
             Logger.LogInformation("Now loading PatientOptions...");
 
-            PatientOptions = await AppointmentsServices.PatientService.ListAsync(new GetPatients { PaginationInfo = PatientOptions.PaginationInfo });
+            var response = await AppointmentsServices.PatientService.ListAsync(new GetPatientsRequest(PatientOptions.PaginationInfo));
+            if (response != null && response.Succeed)
+                PatientOptions = response.Data;
+            
             StateHasChanged();
         }
         private void SetPatientId(PatientSummary item)
@@ -40,7 +43,8 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
             {
                 if(RoutedPatientId.HasValue)
                     Item.PatientId = RoutedPatientId.Value;
-                PatientOptions = await AppointmentsServices.PatientService.ListAsync(new GetPatients { PaginationInfo = PatientOptions.PaginationInfo });
+                await LoadPatientOptions(PatientOptions.PaginationInfo);
+                
                 CallRequestRefresh();
             }
 
@@ -53,7 +57,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
             {
                 var result = await AppointmentsServices.VisitService.CreateAsync(Item);
 
-                NavigationManager.NavigateTo($"Appointments/Visits/Index?HighlightId={result.Id}");
+                NavigationManager.NavigateTo($"Appointments/Visits/Index?HighlightId={result.Data.Id}");
             }
             catch (System.Exception)
             {

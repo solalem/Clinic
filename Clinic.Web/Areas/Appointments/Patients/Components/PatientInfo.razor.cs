@@ -20,7 +20,7 @@ namespace Clinic.Web.Areas.Appointments.Patients.Components
 
         private async Task UpdateClick()
         {
-            await AppointmentsServices.PatientService.UpdateAsync(new UpdatePatient
+            await AppointmentsServices.PatientService.UpdateAsync(new UpdatePatientRequest
             {
                 Id = Item.Id,
                 CardNumber = Item.CardNumber,

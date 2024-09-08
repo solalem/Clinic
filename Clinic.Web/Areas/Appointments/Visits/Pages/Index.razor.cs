@@ -71,7 +71,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
         {
             if (context.Type == "delete" && context.Result == DialogResult.Accept)
             {
-                await AppointmentsServices.VisitService.DeleteAsync(context.TagId);
+                await AppointmentsServices.VisitService.DeleteAsync(new(context.TagId));
                 await ReloadVisits(Visits.PaginationInfo);
             }
         }
@@ -85,7 +85,9 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
         }
         public async Task ReloadVisits(PaginationInfo pagination)
         {
-            visits = await AppointmentsServices.VisitService.ListAsync(pagination);
+            var response = await AppointmentsServices.VisitService.ListAsync(new(pagination));
+            if (response != null && response.Succeed)
+                visits = response.Data;
             showPreview = false;
             CallRequestRefresh();
         }

@@ -22,7 +22,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Components
 
         private async Task UpdateClick()
         {
-            await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisit
+            await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisitRequest
             {
                 Id = Item.Id,
                 PatientId = Item.PatientId,
@@ -49,7 +49,9 @@ namespace Clinic.Web.Areas.Appointments.Visits.Components
                 return;
             Logger.LogInformation("Now loading PatientOptions...");
 
-            PatientOptions = await AppointmentsServices.PatientService.ListAsync(new GetPatients { PaginationInfo = paginationInfo });
+            var response = await AppointmentsServices.PatientService.ListAsync(new GetPatientsRequest(paginationInfo));
+            if (response != null && response.Succeed)
+                PatientOptions = response.Data;
         }
         private void SetPatientId(PatientSummary item)
         {

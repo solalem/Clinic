@@ -86,8 +86,12 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
         }
         public async Task ReloadPatients(PaginationInfo pagination)
         {
-            patients = await AppointmentsServices.PatientService.ListAsync(new GetPatients { PaginationInfo = pagination });
-            showPreview = false;
+            var response = await AppointmentsServices.PatientService.ListAsync(new GetPatientsRequest(pagination));
+            if (response != null && response.Succeed)
+            {
+                patients = response.Data;
+                showPreview = false;
+            }
             CallRequestRefresh();
         }
     }

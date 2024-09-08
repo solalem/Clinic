@@ -37,7 +37,7 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
             {
                 var result = await AppointmentsServices.PatientService.CreateAsync(Item);
 
-                NavigationManager.NavigateTo($"Appointments/Patients/Index?HighlightId={result.Id}");
+                NavigationManager.NavigateTo($"Appointments/Patients/Index?HighlightId={result.Data.Id}");
             }
             catch (System.Exception)
             {

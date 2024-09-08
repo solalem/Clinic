@@ -51,7 +51,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
         {
             if (context.Type == "delete" && context.Result == DialogResult.Accept)
             {
-                await AppointmentsServices.VisitService.DeleteAsync(context.TagId);
+                await AppointmentsServices.VisitService.DeleteAsync(new(context.TagId));
                 if (OnDeleteClick.HasDelegate)
                     await OnDeleteClick.InvokeAsync(null);
           
@@ -61,7 +61,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
 
         private async Task UpdateClick()
         {
-            await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisit
+            await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisitRequest
             {
                 Id = Item.Id,
                 // Date = _item.CompanyName,
@@ -84,7 +84,9 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
 
             Logger.LogInformation("Now loading Visit... {Id}", Id);
 
-            Item = await AppointmentsServices.VisitService.GetAsync(Id);
+            var response = await AppointmentsServices.VisitService.GetAsync(new(Id));
+            if (response != null && response.Succeed)
+                Item = response.Data;
             await info.Open(Item);
             
             StateHasChanged();

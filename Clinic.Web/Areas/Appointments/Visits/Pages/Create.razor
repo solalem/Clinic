@@ -45,11 +45,6 @@ else
                     <div class="container1">
                         <br/>
 
-                    <Field>
-                        <FieldLabel>Date:</FieldLabel>
-                            <DatePicker Style="display: inherit;" DateChanged="((x) => Item.Date = x)" TValue="DateTimeOffset" Date="Item.Date" />
-                        <ValidationMessage For="(() => Item.Date)" />
-                    </Field>
                         @if (!RoutedPatientId.HasValue) 
                         {
                     <Field>

@@ -9,13 +9,10 @@ namespace Clinic.Web.Areas.Appointments.Visits
 {
     public interface IVisitService
     {
-        Task<VisitDetail> GetAsync(Guid id);
-        Task<VisitList> ListAsync(PaginationInfo pagination);
-        Task<VisitSummary> CreateAsync(CreateVisit request);
-        Task<VisitSummary> UpdateAsync(UpdateVisit request);
-        Task<int> DeleteAsync(Guid id);
-
-
-        Task<VisitList> ListVisitsByPatientIdAsync(Guid patientId, PaginationInfo pagination);
+        Task<GetVisitResponse> GetAsync(GetVisitRequest request);
+        Task<GetVisitsResponse> ListAsync(GetVisitsRequest request);
+        Task<CreateVisitResponse> CreateAsync(CreateVisitRequest request);
+        Task<UpdateVisitResponse> UpdateAsync(UpdateVisitRequest request);
+        Task<ArchiveVisitResponse> DeleteAsync(ArchiveVisitRequest request);
     }
 }

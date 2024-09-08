@@ -1,12 +1,5 @@
-using Blazorise;
-using Clinic.Core.Appointments.Application.Commands.ArchiveVisitCommands;
-using Clinic.Core.Appointments.Application.Commands.CreateVisitCommands;
-using Clinic.Core.Appointments.Application.Commands.UpdateVisitCommands;
-using Clinic.Core.Appointments.Application.Patients;
 using Clinic.Core.Appointments.Application.Visits;
-using Clinic.ViewModels;
 using Clinic.ViewModels.Appointments.Visits;
-using Clinic.Web.Models;
 using MediatR;
 
 namespace Clinic.Web.Areas.Appointments.Visits
@@ -24,34 +17,28 @@ namespace Clinic.Web.Areas.Appointments.Visits
         }
 
 
-        public async Task<VisitSummary> CreateAsync(CreateVisit request)
+        public async Task<CreateVisitResponse> CreateAsync(CreateVisitRequest request)
         {
             return await _mediator.Send(new CreateVisitCommand(request));
         }
 
-        public async Task<VisitSummary> UpdateAsync(UpdateVisit request)
+        public async Task<UpdateVisitResponse> UpdateAsync(UpdateVisitRequest request)
         {
             return await _mediator.Send(new UpdateVisitCommand(request));
         }
 
-        public async Task<int> DeleteAsync(Guid id)
+        public async Task<ArchiveVisitResponse> DeleteAsync(ArchiveVisitRequest request)
         {
-            return await _mediator.Send(new ArchiveVisitCommand { Id = id });
+            return await _mediator.Send(new ArchiveVisitCommand(request));
         }
 
-        public async Task<VisitDetail> GetAsync(Guid id)
+        public async Task<GetVisitResponse> GetAsync(GetVisitRequest request)
         {
-            return await _mediator.Send(new GetVisitCommand(new GetVisit { Id = id }));
+            return await _mediator.Send(new GetVisitCommand(request));
         }
-
-        public async Task<VisitList> ListAsync(PaginationInfo paginationInfo)
+        public async Task<GetVisitsResponse> ListAsync(GetVisitsRequest request)
         {
-            return await _mediator.Send(new GetVisitsCommand(new GetVisits { PaginationInfo = paginationInfo }));
-        }
-
-        public async Task<VisitList> ListVisitsByPatientIdAsync(Guid patientId, PaginationInfo paginationInfo)
-        {
-            return await _mediator.Send(new GetVisitsCommand(new GetVisits { PaginationInfo = paginationInfo }));
+            return await _mediator.Send(new GetVisitsCommand(request));
         }
 
     }

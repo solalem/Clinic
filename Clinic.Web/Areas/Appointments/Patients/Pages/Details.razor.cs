@@ -70,8 +70,9 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
 
             Logger.LogInformation("Now loading Patient... {Id}", Id);
 
-            Item = await AppointmentsServices.PatientService.GetAsync(new GetPatientRequest(Id));
-            await info.Open(Item);
+            var response = await AppointmentsServices.PatientService.GetAsync(new GetPatientRequest(Id));
+            if (response != null && response.Succeed)
+                await info.Open(Item);
 
             StateHasChanged();
         }
