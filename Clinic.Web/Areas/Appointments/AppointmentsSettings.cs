@@ -18,7 +18,7 @@ namespace Clinic.Web.Areas.Appointments
 
         public NavigationMenuItem[] GetMenu()
         {
-            var mainMenu = new NavigationMenuItem() { Link = "#", IconId = IconName.Circle, Title = "Appointments" };
+            var mainMenu = new NavigationMenuItem() { Link = "#", IconId = IconName.Circle, Title = "Patient Records" };
 
             mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Patients/index", IconId = IconName.UserPlus, Title = "Patients" });
             // mainMenu.SubMenus.Add(new NavigationMenuItem() { Link = "Appointments/Appointments/index", IconId = IconName.CalendarWeek, Title = "Appointments" });

@@ -16,51 +16,33 @@
         </BarItem>
     </BarBrand>
     <BarMenu>
-                <BarStart>
-                    <BarLabel>Admin</BarLabel>
+        <BarStart>
+            @foreach (var item in GetMenu().Items)
+            {
+                if (item.SubMenus.Count > 0)
+                {
                     <BarItem>
-                        <BarLink To="dashboard">
-                            <BarIcon IconName="IconName.Dashboard" />
-                            Dashboard
-                        </BarLink>
+                        <BarDropdown>
+                            <BarDropdownToggle>
+                                <BarIcon IconName="item.IconId" />
+                                @item.Title
+                            </BarDropdownToggle>
+                            <BarDropdownMenu>
+                                @foreach (var subMenu in item.SubMenus)
+                                {
+                                    <BarDropdownItem To="@subMenu.Link">
+                                        <BarIcon IconName="subMenu.IconId" />
+                                        @subMenu.Title
+                                    </BarDropdownItem>
+                                }
+                            </BarDropdownMenu>
+                        </BarDropdown>
                     </BarItem>
-                    <BarLabel>Transactions</BarLabel>
-                    @foreach (var item in GetMenu().Items)
-                    {
-                        if (item.SubMenus.Count == 0)
-                        {
-                            <BarItem>
-                                <BarLink To="@item.Link">
-                                    <BarIcon IconName="item.IconId" />
-                                    @item.Title
-                                </BarLink>
-                            </BarItem>
-                        }
-                        else
-                        {
-                            <BarItem>
-                                <BarDropdown>
-                                    <BarDropdownToggle>
-                                        <BarIcon IconName="item.IconId" />
-                                        @item.Title
-                                    </BarDropdownToggle>
-                                    <BarDropdownMenu>
-                                        @foreach (var subMenu in item.SubMenus)
-                                        {
-                                            <BarDropdownItem To="@subMenu.Link">
-                                                <BarIcon IconName="subMenu.IconId" />
-                                                @subMenu.Title
-                                            </BarDropdownItem>
-                                        }
-                                    </BarDropdownMenu>
-                                </BarDropdown>
-                            </BarItem>
-                            
-                        }
-                    }
-                </BarStart>
-                <BarEnd>
-                </BarEnd>
+                }
+            }
+        </BarStart>
+        <BarEnd>
+        </BarEnd>
     </BarMenu>
 </Bar>
 

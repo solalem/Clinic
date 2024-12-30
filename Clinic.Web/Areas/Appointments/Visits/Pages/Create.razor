@@ -43,32 +43,35 @@ else
             <EditForm Model="Item" OnValidSubmit="@CreateClick" id="createForm">
                 <DataAnnotationsValidator />
                     <div class="container1">
-                        <br/>
+                    <br/>
 
-                        @if (!RoutedPatientId.HasValue) 
-                        {
-                    <Field>
-                        <FieldLabel>Patient:</FieldLabel>
-                        <Autocomplete TItem="PatientSummary"
-                            TValue="Guid"                        
-                            Data="@PatientOptions.Items"
-                            TextField="@((i)=>i.FullName)"
-                            ValueField="@((i)=>i.Id)"
-                            @bind-SelectedValue="@Item.PatientId"
-                            SearchChanged="(s) => LoadPatientOptions(new PaginationInfo { IsSearch = true, SearchString = s })"
-                            Placeholder="Search Patient..." />
-                        <ValidationMessage For="(() => Item.PatientId)" />
-                    </Field>
-                        }
+                    @if (!RoutedPatientId.HasValue) 
+                    {
+                        <Field>
+                            <FieldLabel>Patient:</FieldLabel>
+                            <Autocomplete TItem="PatientSummary"
+                                TValue="Guid"                        
+                                Data="@PatientOptions.Items"
+                                TextField="@((i)=>i.FullName)"
+                                ValueField="@((i)=>i.Id)"
+                                @bind-SelectedValue="@Item.PatientId"
+                                SearchChanged="(s) => LoadPatientOptions(new PaginationInfo { IsSearch = true, SearchString = s })"
+                                Placeholder="Search Patient..." />
+                            <ValidationMessage For="(() => Item.PatientId)" />
+                        </Field>
+                    }
 
                     <Field>
                         <FieldLabel>Physician:</FieldLabel>
-                        <TextEdit @bind-Text="@Item.Physician" />
+                        <Select @bind-SelectedValue="@Item.Physician">
+                            <SelectItem Value="@("Dr. Eshetu")">Dr. Eshetu</SelectItem>
+                            <SelectItem Value="@("Dr. Feven")">Dr. Feven</SelectItem>
+                        </Select>
                         <ValidationMessage For="(() => Item.Physician)" />
                     </Field>
 
                     <Field>
-                        <FieldLabel>Description:</FieldLabel>
+                        <FieldLabel>Present Illness:</FieldLabel>
                         <TextEdit @bind-Text="@Item.PresentIllness" />
                         <ValidationMessage For="(() => Item.PresentIllness)" />
                     </Field>

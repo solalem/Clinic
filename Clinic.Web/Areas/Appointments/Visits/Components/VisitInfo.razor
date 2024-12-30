@@ -35,7 +35,10 @@
 
             <Field>
                 <FieldLabel>Physician:</FieldLabel>
-                <TextEdit @bind-Text="@Item.Physician" />
+                <Select @bind-SelectedValue="@Item.Physician">
+                    <SelectItem Value="@("Dr. Eshetu")">Dr. Eshetu</SelectItem>
+                    <SelectItem Value="@("Dr. Feven")">Dr. Feven</SelectItem>
+                </Select>
                 <ValidationMessage For="(() => Item.Physician)" />
             </Field>
 

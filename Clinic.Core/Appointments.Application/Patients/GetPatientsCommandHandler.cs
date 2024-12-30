@@ -18,6 +18,7 @@ namespace Clinic.Core.Appointments.Application.Patients
         public async Task<GetPatientsResponse> Handle(GetPatientsCommand message, CancellationToken cancellationToken)
         {
             var pagination = message.Request.PaginationInfo;
+            
             var summaries = _dbContext.Database.SqlQuery<PatientSummary>(@$"
                 select p.*, vd.lastvisit from patients p
                 left join (

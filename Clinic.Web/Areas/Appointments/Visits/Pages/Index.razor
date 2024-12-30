@@ -21,7 +21,7 @@
                             </Addon>
                             <Addon AddonType="AddonType.End">
                                 <AddonLabel>
-                                    <Icon Name="@IconName.Search"></Icon>
+                                    <Icon Name="IconName.Search"></Icon>
                                 </AddonLabel>
                             </Addon>
                         </Addons>
@@ -37,10 +37,10 @@
             {
                 <VisitsComponent IsList="showPreview" Visits="Visits" OnSelectClick="x => DetailClick(x)" OnRemoveClick="x => DeleteClick(x)">
                     <Paginator Title="Visits" PaginationInfo="Visits.PaginationInfo" Spread="5" PageSelected="(p)=> ReloadVisits(p)">
-                        <Button Clicked="() => CreateClick()">
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="() => CreateClick()">
                             <Icon Name="IconName.Add"></Icon>
                         </Button>
-                    </Paginator>
+                    </Paginator> 
                 </VisitsComponent>
                 
                 <DialogBoxComponent OnDialogResultClick="(context) => DialogResultReceive(context)" @ref="DialogBox" />

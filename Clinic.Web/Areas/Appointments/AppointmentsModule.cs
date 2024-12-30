@@ -5,6 +5,7 @@ using Clinic.Web.Areas.Appointments.Patients;
 using Clinic.Web.Areas.Appointments.Visits;
 using Clinic.Core.Appointments.Persistence.Visits;
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Core.Appointments.Domain.Patients;
 
 namespace Clinic.Web.Areas.Appointments
 {
@@ -17,7 +18,7 @@ namespace Clinic.Web.Areas.Appointments
                 c.UseSqlite(builder.Configuration.GetConnectionString("Default"));
             });
 
-            builder.Services.AddScoped<PatientRepository, PatientRepository>();
+            builder.Services.AddScoped<IPatientRepository, PatientRepository>();
             builder.Services.AddScoped<IVisitRepository, VisitRepository>();
 
             // UI

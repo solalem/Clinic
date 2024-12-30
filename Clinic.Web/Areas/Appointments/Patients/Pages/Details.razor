@@ -14,9 +14,13 @@
         <BarToggler />
         <BarMenu>
             <BarStart>
-             @*   <BarItem>
+                <BarItem>
+                    <Button Type="ButtonType.Submit" Shadow="Shadow.Remove" form="updateForm">Save</Button>
+                </BarItem>
+
+                <BarItem>
                     <Button Type="ButtonType.Button" Class="shadow-none text-danger" PreventDefaultOnSubmit="true" @onclick="() => DeleteClick(Item.Id)">Delete</Button>
-                </BarItem>*@
+                </BarItem>
             </BarStart>
             <BarEnd>
                 <BarItem>

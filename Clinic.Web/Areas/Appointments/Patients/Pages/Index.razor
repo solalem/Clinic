@@ -22,7 +22,7 @@
                                 </Addon>
                                 <Addon AddonType="AddonType.End">
                                     <AddonLabel>
-                                        <Icon Name="@IconName.Search"></Icon>
+                                        <Icon Name="IconName.Search"></Icon>
                                     </AddonLabel>
                                 </Addon>
                             </Addons>
@@ -39,7 +39,7 @@
             {
                 <PatientsComponent IsList="showPreview" Patients="Patients" OnSelectClick="x => DetailClick(x)" OnRemoveClick="x => DeleteClick(x)">
                     <Paginator Title="Patients" PaginationInfo="Patients.PaginationInfo" Spread="5" PageSelected="(p)=> ReloadPatients(p)">
-                        <Button Clicked="() => CreateClick()">
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="() => CreateClick()">
                             <Icon Name="IconName.Add"></Icon>
                         </Button>
                     </Paginator>

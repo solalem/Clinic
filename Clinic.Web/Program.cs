@@ -5,6 +5,7 @@ using Blazorise.Icons.FontAwesome;
 using Clinic.Core.Appointments.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Clinic.Web.Models;
+using Clinic.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
@@ -21,6 +22,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Clinic.Core.Appointments.Application.Patients.CreatePatientCommand>());
 
 builder.Services.AddSingleton<PageHistoryState>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 AppointmentsModule.Load(builder);
 

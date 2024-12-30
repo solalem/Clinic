@@ -3,6 +3,6 @@ namespace Clinic.Shared
     public interface IIdentityService
     {
         string GetUserIdentity();
-        string GetUserName();
+        bool IsInRole(string role);
     }
 }
