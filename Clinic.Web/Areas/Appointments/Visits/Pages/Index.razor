@@ -8,51 +8,52 @@
 
 @using Clinic.Web.Areas.Appointments.Visits.Components
 
-<Row Class="no-gutters h-100">
-    <Column Class="@(showPreview? "bg-light" : "")" ColumnSize="showPreview ? ColumnSize.Is3 : ColumnSize.Is12">
-        <div class="sticky-top">
-            <Bar Breakpoint="Breakpoint.Desktop" Background="Background.Light" ThemeContrast="ThemeContrast.Light" Shadow="Shadow.Remove">
-                <BarToggler />
-                <BarMenu>
-                    <BarStart>
-                        <Addons>
-                            <Addon AddonType="AddonType.Body">
-                                <TextEdit @bind-Text="@Visits.PaginationInfo.SearchString" @onkeydown="(x) => Search(x)" Placeholder="Search..." />
-                            </Addon>
-                            <Addon AddonType="AddonType.End">
-                                <AddonLabel>
-                                    <Icon Name="IconName.Search"></Icon>
-                                </AddonLabel>
-                            </Addon>
-                        </Addons>
-                    </BarStart>
-                </BarMenu>
-            </Bar>
+<PageTitle>Visits | Clinic</PageTitle>
 
-            @if (Visits == null)
-            {
-                <Spinner></Spinner>
-            }
-            else
-            {
+<section class="records-page">
+    <header class="records-page-heading">
+        <div>
+            <p class="eyebrow">PATIENT CARE</p>
+            <h1>Visits</h1>
+            <p>Review visits and continue a patient’s care record.</p>
+        </div>
+        <Button Color="Color.Primary" Clicked="() => CreateClick()">
+            <Icon Name="IconName.CalendarCheck" />
+            <span>Record a visit</span>
+        </Button>
+    </header>
+
+    <Row Class="records-layout">
+        <Column Class="records-list-column" ColumnSize="showPreview ? ColumnSize.Is4 : ColumnSize.Is12">
+            <div class="records-panel">
+                <div class="records-toolbar">
+                    <div class="records-toolbar-title">
+                        <h2>Visit history</h2>
+                        <p>Search visit and patient details.</p>
+                    </div>
+                    <div class="record-search">
+                        <Icon Name="IconName.Search" />
+                        <TextEdit @bind-Text="@Visits.PaginationInfo.SearchString"
+                                  @onkeydown="(x) => Search(x)"
+                                  Placeholder="Search visits" />
+                    </div>
+                </div>
+
                 <VisitsComponent IsList="showPreview" Visits="Visits" OnSelectClick="x => DetailClick(x)" OnRemoveClick="x => DeleteClick(x)">
                     <Paginator Title="Visits" PaginationInfo="Visits.PaginationInfo" Spread="5" PageSelected="(p)=> ReloadVisits(p)">
                         <Button Size="Size.Small" Color="Color.Primary" Clicked="() => CreateClick()">
-                            <Icon Name="IconName.Add"></Icon>
+                            <Icon Name="IconName.Add" />
                         </Button>
-                    </Paginator> 
+                    </Paginator>
                 </VisitsComponent>
-                
-                <DialogBoxComponent OnDialogResultClick="(context) => DialogResultReceive(context)" @ref="DialogBox" />
-            }
+            </div>
+            <DialogBoxComponent OnDialogResultClick="(context) => DialogResultReceive(context)" @ref="DialogBox" />
+        </Column>
 
-        </div>
-    </Column>
-
-    <Column hidden="@(!showPreview)" ColumnSize="ColumnSize.Is9">
-        <Container>
-            <Clinic.Web.Areas.Appointments.Visits.Pages.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadVisits(visits.PaginationInfo)" />
-        </Container>
-    </Column>
-
-</Row>
+        <Column hidden="@(!showPreview)" ColumnSize="ColumnSize.Is8">
+            <div class="records-detail-panel">
+                <Clinic.Web.Areas.Appointments.Visits.Pages.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadVisits(visits.PaginationInfo)" />
+            </div>
+        </Column>
+    </Row>
+</section>

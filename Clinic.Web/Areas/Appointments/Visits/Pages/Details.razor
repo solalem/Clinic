@@ -10,66 +10,69 @@
 @inject IJSRuntime JSRuntime
 @inherits Clinic.Web.Models.BlazorPage
 
-<div class="sticky-top">
-    <Bar Breakpoint="Breakpoint.Desktop" Background="Background.White" ThemeContrast="ThemeContrast.Light" Shadow="Shadow.Remove">
-        <BarToggler />
-        <BarMenu>
-            <BarStart>
-                <BarItem>
-                    <Button Type="ButtonType.Button" Class="shadow-none text-danger" PreventDefaultOnSubmit="true" @onclick="() => DeleteClick(Item.Id)">Delete</Button>
-                </BarItem>
-            </BarStart>
-            <BarEnd>
-                <BarItem>
-                    <Button Type="ButtonType.Submit" Shadow="Shadow.Remove" Clicked="() => CloseClick()">
-                        <Icon Name="IconName.Times"></Icon>
-                    </Button>
-                </BarItem>
-            </BarEnd>
-        </BarMenu>
-    </Bar>
+<div class="record-detail-toolbar">
+    <span class="record-detail-toolbar-label">Visit record</span>
+    <div>
+        <Button Color="Color.Light" Clicked="CloseClick">Close</Button>
+        <Button Color="Color.Danger" Type="ButtonType.Button" Clicked="() => DeleteClick(Item.Id)">Delete visit</Button>
+    </div>
 </div>
 
 <VisitInfo @ref="info" Item="Item" />
 
-<Container>
-    
-    <h4>Procedures</h4>
-    <Button Clicked="() => AddProcedure()">+</Button>
-    <table class="table table-sm table-hover">
-        <thead>
-            <tr>
-                <th>@nameof(ProcedureSummary.Name)</th>
-                <th>@nameof(ProcedureSummary.Description)</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody class="cursor-pointer">
-            @foreach (var item in Item.ProcedureList)
-            {
-                if (item == null) continue;
-                <tr @onclick="@(() => EditProcedure(item))">
-                    <td>@item.Name</td>
-                    <td>@item.Description</td>
-                    <td>
-                        <button type="button" class="close" aria-label="Close" @onclick="() => {}" @onclick:stopPropagation="true">
-                            <span aria-hidden="true">&times</span>
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<section class="form-card procedure-card">
+    <div class="form-card-heading procedure-card-heading">
+        <div>
+            <h2>Procedures</h2>
+            <p>Add or review procedures associated with this visit.</p>
+        </div>
+        <Button Color="Color.Primary" Clicked="() => AddProcedure()">
+            <Icon Name="IconName.Add" />
+            Add procedure
+        </Button>
+    </div>
+    <div class="records-table-wrap">
+        @if (Item.ProcedureList.Count == 0)
+        {
+            <div class="records-empty">
+                <strong>No procedures recorded</strong>
+                <p>Add a procedure to include it in this visit record.</p>
+            </div>
+        }
+        else
+        {
+            <table class="table records-table">
+                <thead>
+                    <tr>
+                        <th>Procedure</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Item.ProcedureList)
+                    {
+                        if (item == null) continue;
+                        <tr @onclick="@(() => EditProcedure(item))">
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td><span class="procedure-edit-hint">Edit</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</section>
 
-    <Modal @ref="procedureModal">
-        <ModalContent Centered="true" Size="ModalSize.Large">
-            <ModalHeader>
-                <ModalTitle>Edit Procedure</ModalTitle>
-                <CloseButton />
-            </ModalHeader>
-            <ModalBody>
-                <ProcedureForm Item="selectedProcedure" Visit="Item" @ref="procedureForm" OnProcedureEdited="UpdateClick" />
-            </ModalBody>
-        </ModalContent>
-    </Modal>
-</Container>
+<Modal @ref="procedureModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>Edit procedure</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <ProcedureForm Item="selectedProcedure" Visit="Item" @ref="procedureForm" OnProcedureEdited="UpdateClick" />
+        </ModalBody>
+    </ModalContent>
+</Modal>

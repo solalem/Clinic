@@ -10,45 +10,65 @@
 
 @if (Item != null)
 {
-    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="updateForm">
+    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="updateForm" class="clinic-form">
         <DataAnnotationsValidator />
-        <div class="container">
-            <br />
+        <section class="form-card edit-form-card" aria-labelledby="edit-visit-title">
+            <div class="form-card-heading">
+                <div class="form-heading-identity">
+                    <span class="record-avatar"><Icon Name="IconName.CalendarCheck" /></span>
+                    <span>
+                        <h2 id="edit-visit-title">Visit details</h2>
+                        <p>@Item.PatientName · @Item.Date.ToString("MMM dd, yyyy")</p>
+                    </span>
+                </div>
+            </div>
 
-            <Field>
-                <FieldLabel>Date:</FieldLabel>
-                <DatePicker DateChanged="((x) => Item.Date = x)" TValue="DateTimeOffset" Date="Item.Date" />
-                <ValidationMessage For="(() => Item.Date)" />
-            </Field>
-            <Field>
-                <FieldLabel>Patient:</FieldLabel>
-                <Autocomplete TItem="PatientSummary"
-                    TValue="Guid"                        
-                    Data="@PatientOptions.Items"
-                    TextField="@((i)=>i.FullName)"
-                    ValueField="@((i)=>i.Id)"
-                    @bind-SelectedValue="@Item.PatientId"
-                    SearchChanged="(s) => LoadPatientOptions(new PaginationInfo { IsSearch = true, SearchString = s })"
-                    Placeholder="Search Patient..." />
-                <ValidationMessage For="(() => Item.PatientId)" />
-            </Field>
+            <div class="form-card-body">
+                <div class="form-section">
+                    <h3>Visit information</h3>
+                    <div class="form-grid form-grid-two">
+                        <Field>
+                            <FieldLabel>Date</FieldLabel>
+                            <DatePicker DateChanged="((x) => Item.Date = x)" TValue="DateTimeOffset" Date="Item.Date" />
+                            <ValidationMessage For="(() => Item.Date)" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Patient</FieldLabel>
+                            <Autocomplete TItem="PatientSummary"
+                                          TValue="Guid"
+                                          Data="@PatientOptions.Items"
+                                          TextField="@((i) => i.FullName)"
+                                          ValueField="@((i) => i.Id)"
+                                          @bind-SelectedValue="@Item.PatientId"
+                                          SearchChanged="(s) => LoadPatientOptions(new PaginationInfo { IsSearch = true, SearchString = s })"
+                                          Placeholder="Search by patient name" />
+                            <ValidationMessage For="(() => Item.PatientId)" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Clinician</FieldLabel>
+                            <Select @bind-SelectedValue="@Item.Physician">
+                                <SelectItem Value="@("Dr. Eshetu")">Dr. Eshetu</SelectItem>
+                                <SelectItem Value="@("Dr. Feven")">Dr. Feven</SelectItem>
+                            </Select>
+                            <ValidationMessage For="(() => Item.Physician)" />
+                        </Field>
+                    </div>
+                </div>
 
-            <Field>
-                <FieldLabel>Physician:</FieldLabel>
-                <Select @bind-SelectedValue="@Item.Physician">
-                    <SelectItem Value="@("Dr. Eshetu")">Dr. Eshetu</SelectItem>
-                    <SelectItem Value="@("Dr. Feven")">Dr. Feven</SelectItem>
-                </Select>
-                <ValidationMessage For="(() => Item.Physician)" />
-            </Field>
+                <div class="form-section">
+                    <h3>Visit summary</h3>
+                    <Field>
+                        <FieldLabel>Presenting concern</FieldLabel>
+                        <MemoEdit @bind-Text="@Item.PresentIllness" />
+                        <ValidationMessage For="(() => Item.PresentIllness)" />
+                    </Field>
+                </div>
+            </div>
 
-            <Field>
-                <FieldLabel>HPI:</FieldLabel>
-                <TextEdit @bind-Text="@Item.PresentIllness" />
-                <ValidationMessage For="(() => Item.PresentIllness)" />
-            </Field>
-            <Button Type="ButtonType.Submit" form="updateForm">Save</Button>
-
-        </div>
+            <div class="form-card-footer">
+                <span class="form-footer-hint">Changes are saved to this visit record.</span>
+                <Button Color="Color.Primary" Type="ButtonType.Submit" form="updateForm">Save changes</Button>
+            </div>
+        </section>
     </EditForm>
 }

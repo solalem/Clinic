@@ -1,8 +1,71 @@
-﻿@page "/"
-@using Clinic.Web.Models;
+@page "/"
+@using Clinic.Web.Models
 @inherits BlazorPage
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Overview | Clinic</PageTitle>
 
-<h1>Welcome!</h1>
+<section class="welcome-banner">
+    <div>
+        <p class="eyebrow">FRONT DESK</p>
+        <h1>Good day. What do you need to do?</h1>
+        <p class="welcome-copy">Find a patient record or continue with a common task.</p>
+    </div>
+    <div class="welcome-icon" aria-hidden="true"><Icon Name="IconName.Circle" /></div>
+</section>
 
+<section class="dashboard-section" aria-labelledby="quick-actions-title">
+    <div class="section-heading">
+        <div>
+            <h2 id="quick-actions-title">Quick actions</h2>
+            <p>Get through the front-desk essentials in a few steps.</p>
+        </div>
+    </div>
+
+    <div class="action-grid">
+        <NavLink class="action-card action-card-primary" href="/Appointments/Patients/new">
+            <span class="action-icon"><Icon Name="IconName.UserPlus" /></span>
+            <span class="action-card-copy">
+                <strong>Register a patient</strong>
+                <span>Create a new patient record</span>
+            </span>
+            <Icon class="action-arrow" Name="IconName.ArrowRight" />
+        </NavLink>
+        <NavLink class="action-card" href="/Appointments/Visits/new">
+            <span class="action-icon"><Icon Name="IconName.CalendarCheck" /></span>
+            <span class="action-card-copy">
+                <strong>Record a visit</strong>
+                <span>Start a visit for a patient</span>
+            </span>
+            <Icon class="action-arrow" Name="IconName.ArrowRight" />
+        </NavLink>
+        <NavLink class="action-card" href="/Appointments/Patients/index">
+            <span class="action-icon"><Icon Name="IconName.Search" /></span>
+            <span class="action-card-copy">
+                <strong>Find a patient</strong>
+                <span>Look up an existing record</span>
+            </span>
+            <Icon class="action-arrow" Name="IconName.ArrowRight" />
+        </NavLink>
+    </div>
+</section>
+
+<section class="dashboard-section workflow-section" aria-labelledby="workflow-title">
+    <div class="section-heading">
+        <div>
+            <h2 id="workflow-title">Your workspace</h2>
+            <p>Patient and visit records, all in one place.</p>
+        </div>
+    </div>
+    <div class="workspace-cards">
+        <NavLink class="workspace-card" href="/Appointments/Patients/index">
+            <span class="workspace-card-icon"><Icon Name="IconName.Users" /></span>
+            <span><strong>Patient records</strong><small>Search, review, and update patient details</small></span>
+            <Icon class="action-arrow" Name="IconName.ArrowRight" />
+        </NavLink>
+        <NavLink class="workspace-card" href="/Appointments/Visits/index">
+            <span class="workspace-card-icon"><Icon Name="IconName.CalendarCheck" /></span>
+            <span><strong>Visit history</strong><small>Review recorded patient visits</small></span>
+            <Icon class="action-arrow" Name="IconName.ArrowRight" />
+        </NavLink>
+    </div>
+</section>

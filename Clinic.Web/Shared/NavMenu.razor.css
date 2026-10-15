@@ -1,62 +1,152 @@
-.navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
+.clinic-brand {
+    min-height: 88px;
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #eff2f1;
 }
 
-.top-row {
-    height: 3.5rem;
-    background-color: rgba(0,0,0,0.4);
+.brand-mark {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #e5f3ef;
+    color: #237968;
+    font-size: 1.15rem;
 }
 
-.navbar-brand {
-    font-size: 1.1rem;
+.brand-name {
+    color: #24332f;
+    font-size: 1.05rem;
+    font-weight: 750;
+    letter-spacing: -.02em;
 }
 
-.oi {
-    width: 2rem;
-    font-size: 1.1rem;
-    vertical-align: text-top;
-    top: -2px;
+.brand-caption {
+    margin-top: 2px;
+    color: #87938f;
+    font-size: .76rem;
 }
 
-.nav-item {
-    font-size: 0.9rem;
-    padding-bottom: 0.5rem;
+.clinic-navigation {
+    padding: 24px 14px;
 }
 
-    .nav-item:first-of-type {
-        padding-top: 1rem;
+.nav-section-label {
+    padding: 0 10px;
+    color: #9aa6a2;
+    font-size: .67rem;
+    font-weight: 750;
+    letter-spacing: .11em;
+}
+
+.nav-section-spaced {
+    margin-top: 28px;
+}
+
+.clinic-navigation ::deep .clinic-nav-link {
+    min-height: 44px;
+    margin-top: 5px;
+    padding: 0 11px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 8px;
+    color: #56655f;
+    font-size: .89rem;
+    font-weight: 550;
+    text-decoration: none;
+    transition: background-color .15s ease, color .15s ease;
+}
+
+.clinic-navigation ::deep .clinic-nav-link:first-of-type {
+    margin-top: 12px;
+}
+
+.clinic-navigation ::deep .clinic-nav-link .icon {
+    width: 18px;
+    color: #81908a;
+    text-align: center;
+}
+
+.clinic-navigation ::deep .clinic-nav-link:hover {
+    background: #f4f8f6;
+    color: #176c5d;
+    text-decoration: none;
+}
+
+.clinic-navigation ::deep .clinic-nav-link.active {
+    background: #e9f4f1;
+    color: #176c5d;
+    font-weight: 700;
+}
+
+.clinic-navigation ::deep .clinic-nav-link.active .icon {
+    color: #237968;
+}
+
+.sidebar-note {
+    margin: auto 14px 18px;
+    padding: 13px 11px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border: 1px solid #e8eeeb;
+    border-radius: 9px;
+    background: #fafcfb;
+}
+
+.sidebar-note-icon {
+    color: #438777;
+    padding-top: 2px;
+}
+
+.sidebar-note strong,
+.sidebar-note span {
+    display: block;
+}
+
+.sidebar-note strong {
+    color: #42534c;
+    font-size: .76rem;
+}
+
+.sidebar-note span {
+    margin-top: 4px;
+    color: #85918c;
+    font-size: .69rem;
+    line-height: 1.45;
+}
+
+@media (max-width: 640px) {
+    .clinic-brand {
+        min-height: 68px;
+        padding: 12px 18px;
     }
 
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
-
-    .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
+    .clinic-navigation {
+        padding: 8px 12px 12px;
         display: flex;
         align-items: center;
-        line-height: 3rem;
+        gap: 4px;
+        overflow-x: auto;
     }
 
-.nav-item ::deep a.active {
-    background-color: rgba(255,255,255,0.25);
-    color: white;
-}
-
-.nav-item ::deep a:hover {
-    background-color: rgba(255,255,255,0.1);
-    color: white;
-}
-
-@media (min-width: 641px) {
-    .navbar-toggler {
+    .nav-section-label,
+    .sidebar-note {
         display: none;
     }
 
-    .collapse {
-        /* Never collapse the sidebar for wide screens */
-        display: block;
+    .clinic-navigation ::deep .clinic-nav-link,
+    .clinic-navigation ::deep .clinic-nav-link:first-of-type {
+        min-height: 38px;
+        margin: 0;
+        padding: 0 10px;
+        flex: 0 0 auto;
+        gap: 7px;
+        font-size: .8rem;
     }
 }

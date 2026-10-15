@@ -9,48 +9,12 @@
 @inject IJSRuntime JSRuntime
 @inherits BlazorPage
 
-<div class="sticky-top">
-    <Bar Breakpoint="Breakpoint.Desktop" Background="Background.White" ThemeContrast="ThemeContrast.Light" Shadow="Shadow.Remove">
-        <BarToggler />
-        <BarMenu>
-            <BarStart>
-                <BarItem>
-                    <Button Type="ButtonType.Submit" Shadow="Shadow.Remove" form="updateForm">Save</Button>
-                </BarItem>
-
-                <BarItem>
-                    <Button Type="ButtonType.Button" Class="shadow-none text-danger" PreventDefaultOnSubmit="true" @onclick="() => DeleteClick(Item.Id)">Delete</Button>
-                </BarItem>
-            </BarStart>
-            <BarEnd>
-                <BarItem>
-                    <Button Type="ButtonType.Submit" Shadow="Shadow.Remove" Clicked="() => CloseClick()">
-                        <Icon Name="IconName.Times"></Icon>
-                    </Button>
-                </BarItem>
-            </BarEnd>
-        </BarMenu>
-    </Bar>
+<div class="record-detail-toolbar">
+    <span class="record-detail-toolbar-label">Patient record</span>
+    <div>
+        <Button Color="Color.Light" Clicked="CloseClick">Close</Button>
+        <Button Color="Color.Danger" Type="ButtonType.Button" Class="delete-record-button" Clicked="() => DeleteClick(Item.Id)">Delete patient</Button>
+    </div>
 </div>
 
 <PatientInfo @ref="info" Item="Item" />
-<br/>
-
-<Container>
-    <Tabs SelectedTab="@selectedTab">
-        <Items>
-            <Tab Name="More">More</Tab>
-            <Tab Name="Appointment">Appointments</Tab>
-        </Items>
-        <Content>
-            <TabPanel Name="More">
-                <Accordion>
-                </Accordion>
-            </TabPanel>
-            <TabPanel Name="Appointment">
-  
-            </TabPanel>
-
-        </Content>
-    </Tabs>
-</Container>

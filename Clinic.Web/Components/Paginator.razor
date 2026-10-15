@@ -2,7 +2,7 @@
 @namespace Clinic.Web.Shared.Components
 @inherits BlazorComponent
 
-<Div Flex="Flex.Row">
+<Div Flex="Flex.Row.AlignItems.Center">
     <Div Flex="Flex.Grow.Is1" Class="m-2 pl-3">
         <b>@Title</b>
     </Div>
@@ -18,7 +18,7 @@
             }
         </Pagination>
     </Div>
-    <Div Class="m-1">
+    <Div Class="pr-3">
         @ChildContent
     </Div>
 </Div>

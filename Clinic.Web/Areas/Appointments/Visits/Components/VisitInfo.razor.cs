@@ -25,6 +25,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Components
             await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisitRequest
             {
                 Id = Item.Id,
+                Date = Item.Date,
                 PatientId = Item.PatientId,
                 Physician = Item.Physician,
                 PresentIllness = Item.PresentIllness,

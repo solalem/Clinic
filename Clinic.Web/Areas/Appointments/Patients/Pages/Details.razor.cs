@@ -72,7 +72,10 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
 
             var response = await AppointmentsServices.PatientService.GetAsync(new GetPatientRequest(Id));
             if (response != null && response.Succeed)
+            {
+                Item = response.Data;
                 await info.Open(Item);
+            }
 
             StateHasChanged();
         }

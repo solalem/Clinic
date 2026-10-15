@@ -10,116 +10,139 @@
 @using Clinic.Web.Models;
 @using Clinic.Web.Shared.Components;
 
-<div class="sticky-top">
-    <Bar Breakpoint="Breakpoint.Desktop" Background="Background.White" ThemeContrast="ThemeContrast.Light" Shadow="Shadow.Remove">
-        <BarToggler />
-        <BarMenu>
-            <BarStart>
-                <BarItem>
-                    <Button Type="ButtonType.Submit" Shadow="Shadow.Remove" form="createForm">Create</Button>
-                </BarItem>
-            </BarStart>
-            <BarEnd>
-                <BarItem>
-                    <Button Type="ButtonType.Submit" Shadow="Shadow.Remove" Clicked="() => NavigationManager.NavigateTo(_pageState.PreviousPage())">
-                        <Icon Name="IconName.Times"></Icon>
-                    </Button>
-                </BarItem>
-            </BarEnd>
-        </BarMenu>
-    </Bar>
-</div>
+<PageTitle>New patient | Clinic</PageTitle>
 
-@if (Item == null)
-{
-    <Spinner></Spinner>
-}
-else
-{
-<Container>
-    <Row>
-        <Column ColumnSize="ColumnSize.Is8">
+<section class="form-page">
+    <header class="form-page-heading">
+        <div>
+            <p class="eyebrow">PATIENT RECORDS</p>
+            <h1>Register a patient</h1>
+            <p>Add the patient’s details to their clinic record.</p>
+        </div>
+        <div class="form-heading-actions">
+            <Button Color="Color.Light" Clicked="() => NavigationManager.NavigateTo(_pageState.PreviousPage())">Cancel</Button>
+            <Button Color="Color.Primary" Type="ButtonType.Submit" form="createForm">
+                <Icon Name="IconName.UserPlus" />
+                Create patient
+            </Button>
+        </div>
+    </header>
 
-            <EditForm Model="Item" OnValidSubmit="@CreateClick" id="createForm">
+    @if (Item == null)
+    {
+        <div class="form-loading"><Spinner /></div>
+    }
+    else
+    {
+        <div class="form-layout">
+            <EditForm Model="Item" OnValidSubmit="@CreateClick" id="createForm" class="clinic-form">
                 <DataAnnotationsValidator />
-                    <div class="container">
-                        <br/>
+                <section class="form-card" aria-labelledby="patient-details-title">
+                    <div class="form-card-heading">
+                        <h2 id="patient-details-title">Patient details</h2>
+                        <p>Enter the information needed to identify and contact the patient.</p>
+                    </div>
 
-                    <Field>
-                        <FieldLabel>Card Number:</FieldLabel>
-                        <TextEdit @bind-Text="@Item.CardNumber" />
-                        <ValidationMessage For="(() => Item.CardNumber)" />
-                    </Field>
+                    <div class="form-card-body">
+                        <div class="form-section">
+                            <h3>Basic information</h3>
+                            <div class="form-grid form-grid-two">
+                                <Field>
+                                    <FieldLabel>Card number</FieldLabel>
+                                    <TextEdit @bind-Text="@Item.CardNumber" />
+                                    <ValidationMessage For="(() => Item.CardNumber)" />
+                                </Field>
+                                <Field>
+                                    <FieldLabel>Full name</FieldLabel>
+                                    <TextEdit @bind-Text="@Item.FullName" />
+                                    <ValidationMessage For="(() => Item.FullName)" />
+                                </Field>
+                                <Field>
+                                    <FieldLabel>Gender</FieldLabel>
+                                    <Select @bind-SelectedValue="@Item.Gender">
+                                        <SelectItem Value="@("Male")">Male</SelectItem>
+                                        <SelectItem Value="@("Female")">Female</SelectItem>
+                                    </Select>
+                                    <ValidationMessage For="(() => Item.Gender)" />
+                                </Field>
+                                <Field>
+                                    <FieldLabel>Phone number</FieldLabel>
+                                    <TextEdit @bind-Text="@Item.PhoneNumber" />
+                                    <ValidationMessage For="(() => Item.PhoneNumber)" />
+                                </Field>
+                            </div>
+                        </div>
 
-                    <Field>
-                        <FieldLabel>Full Name:</FieldLabel>
-                        <TextEdit @bind-Text="@Item.FullName" />
-                        <ValidationMessage For="(() => Item.FullName)" />
-                    </Field>
+                        <div class="form-section">
+                            <h3>Age and date of birth</h3>
+                            <div class="form-grid form-grid-age">
+                                <Field Class="dob-toggle-field">
+                                    <FieldLabel>Enter date of birth</FieldLabel>
+                                    <Check TValue="bool" CheckedChanged="((x) => UseDOB = x)" />
+                                    <small class="form-help">Turn on to enter the exact date instead of age.</small>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>Age</FieldLabel>
+                                    <NumericEdit Disabled="UseDOB" TValue="int" ValueChanged="((x) => AgeChanged(x))" />
+                                    <ValidationMessage For="(() => Item.Age)" />
+                                </Field>
+                                <Field>
+                                    <FieldLabel>Date of birth</FieldLabel>
+                                    <DatePicker Disabled="!UseDOB" Style="display: flex;" DateChanged="((x) => Item.DateOfBirth = x)" TValue="DateTimeOffset?" Date="Item.DateOfBirth" />
+                                    <ValidationMessage For="(() => Item.DateOfBirth)" />
+                                </Field>
+                            </div>
+                        </div>
 
-                    <Field>
-                        <FieldLabel>Gender:</FieldLabel>
-                        <Select @bind-SelectedValue="@Item.Gender">
-                            <SelectItem Value="@("Male")">Male</SelectItem>
-                            <SelectItem Value="@("Female")">Female</SelectItem>
-                        </Select>
-                        <ValidationMessage For="(() => Item.Gender)" />
-                    </Field>
+                        <div class="form-section">
+                            <h3>Contact information</h3>
+                            <div class="form-grid form-grid-two">
+                                <Field>
+                                    <FieldLabel>Email</FieldLabel>
+                                    <TextEdit @bind-Text="@Item.Email" />
+                                    <ValidationMessage For="(() => Item.Email)" />
+                                </Field>
+                                <Field>
+                                    <FieldLabel>City</FieldLabel>
+                                    <TextEdit @bind-Text="@Item.City" />
+                                    <ValidationMessage For="(() => Item.City)" />
+                                </Field>
+                            </div>
+                        </div>
 
-                    <Field>
-                        <FieldLabel>Phone Number:</FieldLabel>
-                        <TextEdit @bind-Text="@Item.PhoneNumber" />
-                        <ValidationMessage For="(() => Item.PhoneNumber)" />
-                    </Field>
+                        <div class="form-section">
+                            <h3>Medical information</h3>
+                            <Field>
+                                <FieldLabel>Medical history</FieldLabel>
+                                <MemoEdit @bind-Text="@Item.MedicalHistory" />
+                                <ValidationMessage For="(() => Item.MedicalHistory)" />
+                                <small class="form-help">Record relevant history provided for the patient’s clinic record.</small>
+                            </Field>
+                        </div>
+                    </div>
 
-                    <Fields>
-                        <Field>
-                            <FieldLabel>Use DOB:</FieldLabel>
-                            <Check TValue="bool" CheckedChanged="((x) => UseDOB = x)" />
-                        </Field>
-                        <Field>
-                            <FieldLabel>Age:</FieldLabel>
-                            <NumericEdit Disabled="UseDOB" TValue="int" ValueChanged="((x) => AgeChanged(x))" />
-                            <ValidationMessage For="(() => Item.Age)" />
-                        </Field>
-                        <Field>
-                            <FieldLabel>Date Of Birth:</FieldLabel>
-                            <DatePicker Disabled="!UseDOB" Style="display: flex;" DateChanged="((x) => Item.DateOfBirth = x)" TValue="DateTimeOffset?" Date="Item.DateOfBirth" />
-                            <ValidationMessage For="(() => Item.DateOfBirth)" />
-                        </Field>
-                    </Fields>
-
-                    <Field>
-                        <FieldLabel>Email:</FieldLabel>
-                        <TextEdit @bind-Text="@Item.Email" />
-                        <ValidationMessage For="(() => Item.Email)" />
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>City:</FieldLabel>
-                        <TextEdit @bind-Text="@Item.City" />
-                        <ValidationMessage For="(() => Item.City)" />
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>Medical History:</FieldLabel>
-                        <MemoEdit @bind-Text="@Item.MedicalHistory" />
-                        <ValidationMessage For="(() => Item.MedicalHistory)" />
-                    </Field>
-
-                </div>
+                    <div class="form-card-footer">
+                        <Button Color="Color.Light" Clicked="() => NavigationManager.NavigateTo(_pageState.PreviousPage())">Cancel</Button>
+                        <Button Color="Color.Primary" Type="ButtonType.Submit" form="createForm">Create patient</Button>
+                    </div>
+                </section>
             </EditForm>
-        </Column>
-        <Column ColumnSize="ColumnSize.Is4">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Help</CardTitle>
-                </CardHeader>
-                <CardBody>
-                    No help available.
-                </CardBody>
-            </Card>
-        </Column>
-    </Row>
-</Container>
-}
+
+            <aside class="form-side-column">
+                <section class="form-note-card">
+                    <span class="form-note-icon"><Icon Name="IconName.Lock" /></span>
+                    <h2>Handle records with care</h2>
+                    <p>Confirm the patient’s identity before creating a new record. Keep medical information accurate and private.</p>
+                </section>
+                <section class="form-note-card form-note-muted">
+                    <h2>Before you save</h2>
+                    <ul>
+                        <li>Check the spelling of the patient’s name.</li>
+                        <li>Confirm the card number and phone number.</li>
+                        <li>Use either age or date of birth.</li>
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    }
+</section>

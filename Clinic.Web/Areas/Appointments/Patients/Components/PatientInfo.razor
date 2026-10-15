@@ -10,63 +10,84 @@
 
 @if (Item != null)
 {
-    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="updateForm">
+    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="updateForm" class="clinic-form">
         <DataAnnotationsValidator />
-        <div class="container">
-            <br />
+        <section class="form-card edit-form-card" aria-labelledby="edit-patient-title">
+            <div class="form-card-heading">
+                <div class="form-heading-identity">
+                    <span class="record-avatar"><Icon Name="IconName.User" /></span>
+                    <span>
+                        <h2 id="edit-patient-title">@Item.FullName</h2>
+                        <p>Patient record · Card @Item.CardNumber</p>
+                    </span>
+                </div>
+            </div>
 
-            <Field>
-                <FieldLabel>Card Number:</FieldLabel>
-                <TextEdit @bind-Text="@Item.CardNumber" />
-                <ValidationMessage For="(() => Item.CardNumber)" />
-            </Field>
+            <div class="form-card-body">
+                <div class="form-section">
+                    <h3>Basic information</h3>
+                    <div class="form-grid form-grid-two">
+                        <Field>
+                            <FieldLabel>Card number</FieldLabel>
+                            <TextEdit @bind-Text="@Item.CardNumber" />
+                            <ValidationMessage For="(() => Item.CardNumber)" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Full name</FieldLabel>
+                            <TextEdit @bind-Text="@Item.FullName" />
+                            <ValidationMessage For="(() => Item.FullName)" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Gender</FieldLabel>
+                            <Select @bind-SelectedValue="@Item.Gender">
+                                <SelectItem Value="@("Male")">Male</SelectItem>
+                                <SelectItem Value="@("Female")">Female</SelectItem>
+                            </Select>
+                            <ValidationMessage For="(() => Item.Gender)" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Date of birth</FieldLabel>
+                            <DatePicker Style="display: flex;" DateChanged="((x) => Item.DateOfBirth = x)" TValue="DateTimeOffset?" Date="Item.DateOfBirth" />
+                            <ValidationMessage For="(() => Item.DateOfBirth)" />
+                        </Field>
+                    </div>
+                </div>
 
-            <Field>
-                <FieldLabel>Full Name:</FieldLabel>
-                <TextEdit @bind-Text="@Item.FullName" />
-                <ValidationMessage For="(() => Item.FullName)" />
-            </Field>
+                <div class="form-section">
+                    <h3>Contact information</h3>
+                    <div class="form-grid form-grid-two">
+                        <Field>
+                            <FieldLabel>Phone number</FieldLabel>
+                            <TextEdit @bind-Text="@Item.PhoneNumber" />
+                            <ValidationMessage For="(() => Item.PhoneNumber)" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Email</FieldLabel>
+                            <TextEdit @bind-Text="@Item.Email" />
+                            <ValidationMessage For="(() => Item.Email)" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>City</FieldLabel>
+                            <TextEdit @bind-Text="@Item.City" />
+                            <ValidationMessage For="(() => Item.City)" />
+                        </Field>
+                    </div>
+                </div>
 
-            <Field>
-                <FieldLabel>Gender:</FieldLabel>
-                <Select @bind-SelectedValue="@Item.Gender">
-                    <SelectItem Value="@("Male")">Male</SelectItem>
-                    <SelectItem Value="@("Female")">Female</SelectItem>
-                </Select>
-                <ValidationMessage For="(() => Item.Gender)" />
-            </Field>
+                <div class="form-section">
+                    <h3>Medical information</h3>
+                    <Field>
+                        <FieldLabel>Medical history</FieldLabel>
+                        <MemoEdit @bind-Text="@Item.MedicalHistory" />
+                        <ValidationMessage For="(() => Item.MedicalHistory)" />
+                    </Field>
+                </div>
+            </div>
 
-            <Field>
-                <FieldLabel>Phone Number:</FieldLabel>
-                <TextEdit @bind-Text="@Item.PhoneNumber" />
-                <ValidationMessage For="(() => Item.PhoneNumber)" />
-            </Field>
-
-            <Field>
-                <FieldLabel>Date Of Birth:</FieldLabel>
-                <DatePicker Style="display: flex;" DateChanged="((x) => Item.DateOfBirth = x)" TValue="DateTimeOffset?" Date="Item.DateOfBirth" />
-                <ValidationMessage For="(() => Item.DateOfBirth)" />
-            </Field>
-
-            <Field>
-                <FieldLabel>Email:</FieldLabel>
-                <TextEdit @bind-Text="@Item.Email" />
-                <ValidationMessage For="(() => Item.Email)" />
-            </Field>
-
-            <Field>
-                <FieldLabel>City:</FieldLabel>
-                <TextEdit @bind-Text="@Item.City" />
-                <ValidationMessage For="(() => Item.City)" />
-            </Field>
-
-            <Field>
-                <FieldLabel>PMH:</FieldLabel>
-                <MemoEdit @bind-Text="@Item.MedicalHistory" />
-                <ValidationMessage For="(() => Item.MedicalHistory)" />
-            </Field>
-            <Button Type="ButtonType.Submit" form="updateForm">Save</Button>
-
-        </div>
+            <div class="form-card-footer">
+                <span class="form-footer-hint">Changes are saved to this patient record.</span>
+                <Button Color="Color.Primary" Type="ButtonType.Submit" form="updateForm">Save changes</Button>
+            </div>
+        </section>
     </EditForm>
 }

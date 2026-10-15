@@ -1,42 +1,58 @@
-@inject IJSRuntime JSRuntime
 @namespace Clinic.Web.Shared
-@using Clinic.Web.Models;
-
+@using Clinic.Web.Models
 @inherits BlazorLayoutComponent
+@inject NavigationManager NavigationManager
 
-<Layout Sider="true">
-    <LayoutSider>
-        <LayoutSiderContent>
-            <NavMenu />
-        </LayoutSiderContent>
-    </LayoutSider>
+<div class="clinic-shell">
+    <aside class="clinic-sidebar">
+        <NavMenu />
+    </aside>
 
-    <Layout>
-        <LayoutHeader Fixed="true">
-        </LayoutHeader>
-        <Layout>
-            <LayoutContent>
-                @Body
-            </LayoutContent>
-        </Layout>
-        <LayoutFooter>
-            ...
-        </LayoutFooter>
-    </Layout>
-</Layout>
+    <div class="clinic-main">
+        <header class="clinic-topbar">
+            <form class="global-search" @onsubmit="SearchPatients" @onsubmit:preventDefault>
+                <Icon Name="IconName.Search" />
+                <input aria-label="Search patient records"
+                       placeholder="Search patients by name, card number or phone"
+                       @bind="searchText"
+                       @bind:event="oninput" />
+                @if (!string.IsNullOrWhiteSpace(searchText))
+                {
+                    <button class="search-submit" type="submit">Search</button>
+                }
+            </form>
+            <div class="workspace-label">
+                <span class="workspace-indicator" aria-hidden="true"></span>
+                <span>Local workspace</span>
+            </div>
+        </header>
 
-@code
-{
+        <main class="clinic-content">
+            @Body
+        </main>
+
+        <footer class="clinic-footer">Clinic records workspace</footer>
+    </div>
+</div>
+
+@code {
+    private string searchText = string.Empty;
+
+    private void SearchPatients()
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            return;
+        }
+
+        NavigationManager.NavigateTo(
+            $"Appointments/Patients/index?searchString={Uri.EscapeDataString(searchText.Trim())}");
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            //var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-
-            //if (authState.User == null)
-            //{
-            //    await new Route(JSRuntime).RouteOutside("/Identity/Account/Login");
-            //}
             CallRequestRefresh();
         }
 

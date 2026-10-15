@@ -8,6 +8,7 @@ namespace Clinic.ViewModels.Appointments.Visits
     public class UpdateVisitRequest
     {
         public Guid Id { get; set; }
+        public DateTimeOffset Date { get; set; }
         public Guid PatientId { get; set; }
         public String Physician { get; set; }
         public String PresentIllness { get; set; }

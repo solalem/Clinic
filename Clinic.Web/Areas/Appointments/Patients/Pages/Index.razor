@@ -8,53 +8,52 @@
 
 @using Clinic.Web.Areas.Appointments.Patients.Components
 
-<Row Class="no-gutters h-100">
-    <Column Class="@(showPreview? "bg-light" : "")" ColumnSize="showPreview ? ColumnSize.Is3 : ColumnSize.Is12">
-        <div class="sticky-top">
-            <Bar Breakpoint="Breakpoint.Desktop" Background="Background.Light" ThemeContrast="ThemeContrast.Light" Shadow="Shadow.Remove">
-                <BarToggler />
-                <BarMenu>
-                    <BarStart>
-                        <BarItem>
-                            <Addons>
-                                <Addon AddonType="AddonType.Body">
-                                    <TextEdit @bind-Text="@Patients.PaginationInfo.SearchString" @onkeydown="(x) => Search(x)" Placeholder="Search..." />
-                                </Addon>
-                                <Addon AddonType="AddonType.End">
-                                    <AddonLabel>
-                                        <Icon Name="IconName.Search"></Icon>
-                                    </AddonLabel>
-                                </Addon>
-                            </Addons>
-                        </BarItem>
-                    </BarStart>
-                </BarMenu>
-            </Bar>
+<PageTitle>Patients | Clinic</PageTitle>
 
-            @if (Patients == null)
-            {
-                <Spinner></Spinner>
-            }
-            else
-            {
+<section class="records-page">
+    <header class="records-page-heading">
+        <div>
+            <p class="eyebrow">PATIENT RECORDS</p>
+            <h1>Patients</h1>
+            <p>Find and review patient details.</p>
+        </div>
+        <Button Color="Color.Primary" Clicked="() => CreateClick()">
+            <Icon Name="IconName.UserPlus" />
+            <span>New patient</span>
+        </Button>
+    </header>
+
+    <Row Class="records-layout">
+        <Column Class="records-list-column" ColumnSize="showPreview ? ColumnSize.Is4 : ColumnSize.Is12">
+            <div class="records-panel">
+                <div class="records-toolbar">
+                    <div class="records-toolbar-title">
+                        <h2>All patients</h2>
+                        <p>Search by name, card number, or phone.</p>
+                    </div>
+                    <div class="record-search">
+                        <Icon Name="IconName.Search" />
+                        <TextEdit @bind-Text="@Patients.PaginationInfo.SearchString"
+                                  @onkeydown="(x) => Search(x)"
+                                  Placeholder="Search patients" />
+                    </div>
+                </div>
+
                 <PatientsComponent IsList="showPreview" Patients="Patients" OnSelectClick="x => DetailClick(x)" OnRemoveClick="x => DeleteClick(x)">
                     <Paginator Title="Patients" PaginationInfo="Patients.PaginationInfo" Spread="5" PageSelected="(p)=> ReloadPatients(p)">
                         <Button Size="Size.Small" Color="Color.Primary" Clicked="() => CreateClick()">
-                            <Icon Name="IconName.Add"></Icon>
+                            <Icon Name="IconName.Add" />
                         </Button>
                     </Paginator>
                 </PatientsComponent>
+            </div>
+            <DialogBoxComponent OnDialogResultClick="(context) => DialogResultReceive(context)" @ref="DialogBox" />
+        </Column>
 
-                <DialogBoxComponent OnDialogResultClick="(context) => DialogResultReceive(context)" @ref="DialogBox" />
-            }
-
-        </div>
-    </Column>
-
-    <Column hidden="@(!showPreview)" ColumnSize="ColumnSize.Is9">
-        <Container>
-            <Clinic.Web.Areas.Appointments.Patients.Pages.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadPatients(patients.PaginationInfo)" />
-        </Container>
-    </Column>
-
-</Row>
+        <Column hidden="@(!showPreview)" ColumnSize="ColumnSize.Is8">
+            <div class="records-detail-panel">
+                <Clinic.Web.Areas.Appointments.Patients.Pages.Details @ref="Details" OnCloseClick="(x) => showPreview = false" OnDeleteClick="(x) => ReloadPatients(patients.PaginationInfo)" />
+            </div>
+        </Column>
+    </Row>
+</section>

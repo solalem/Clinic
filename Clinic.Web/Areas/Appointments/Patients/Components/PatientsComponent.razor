@@ -11,21 +11,21 @@
 
 @if (Patients.Items == null || Patients.Items.Count() == 0)
 {
-    <br />
-    <div class="offset-md-2 col-md-8 card">
-        <p class="card-header">No Patients</p>
+    <div class="records-empty">
+        <strong>No patient records found</strong>
+        <p>Try another search or register a new patient.</p>
     </div>
     return;
 }
 
 @if (IsList)
 {
-    <ul class="pl-1 mb-0 list-unstyled">
+    <ul class="records-items list-unstyled">
         @foreach (var item in Patients.Items)
         {
             if (item == null) continue;
-            var highlight = (selectedItem == item) ? "bg-white": "";
-            <li @key="item.Id" class="p-2 list-group-item-action @highlight" @onclick="@(() => SelectClick(item))">
+            var selected = selectedItem == item;
+            <li @key="item.Id" class="records-item @(selected ? "selected" : "")" @onclick="@(() => SelectClick(item))">
                 <div class="d-flex w-100 justify-content-between">
                     <span>@item.DisplayName</span>
                     <small class="text-info">@item.More</small>
@@ -43,40 +43,30 @@
 }
 else
 {
-    <table class="table table-sm table-hover">
-        <thead>
-            <tr>
-                <th>@nameof(PatientSummary.CardNumber)</th>
-                <th>@nameof(PatientSummary.FullName)</th>
-                <th>@nameof(PatientSummary.PhoneNumber)</th>
-                <th>@nameof(PatientSummary.LastVisit)</th>
-                @if (Editable) 
-                {
-                    <th></th>
-                }
-            </tr>
-        </thead>
-        <tbody class="cursor-pointer">
-            @foreach (var item in Patients.Items)
-            {
-                if (item == null) continue;
-                <tr @key="item.Id" @onclick="@(() => SelectClick(item))">
-                    <td>@item.CardNumber</td>
-                    <td>@item.FullName</td>
-                    <td>@item.PhoneNumber</td>
-                    <td>@item.LastVisit?.ToString("MMM dd, yy")</td>
-                    @if (Editable) 
-                    {
-                       @* <td>
-                            <button type="button" class="close" aria-label="Close" @onclick="() => RemoveClick(item)" @onclick:stopPropagation="true">
-                                <span aria-hidden="true">&times</span>
-                            </button>
-                        </td>*@
-                    }
+    <div class="records-table-wrap">
+        <table class="table records-table">
+            <thead>
+                <tr>
+                    <th>Card number</th>
+                    <th>Patient</th>
+                    <th>Phone</th>
+                    <th>Last visit</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Patients.Items)
+                {
+                    if (item == null) continue;
+                    <tr @key="item.Id" @onclick="@(() => SelectClick(item))">
+                        <td>@item.CardNumber</td>
+                        <td>@item.FullName</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@item.LastVisit?.ToString("MMM dd, yy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @code{

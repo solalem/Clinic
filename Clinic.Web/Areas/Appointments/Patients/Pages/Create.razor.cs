@@ -11,7 +11,7 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
-        private CreatePatientRequest Item = new CreatePatientRequest();
+        private CreatePatientRequest Item = new CreatePatientRequest { Age = 25 };
         public bool UseDOB { get; set; }
 
 

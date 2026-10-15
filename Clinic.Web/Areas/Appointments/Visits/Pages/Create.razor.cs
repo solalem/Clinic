@@ -25,7 +25,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
                 return;
             Logger.LogInformation("Now loading PatientOptions...");
 
-            var response = await AppointmentsServices.PatientService.ListAsync(new GetPatientsRequest(PatientOptions.PaginationInfo));
+            var response = await AppointmentsServices.PatientService.ListAsync(new GetPatientsRequest(paginationInfo));
             if (response != null && response.Succeed)
                 PatientOptions = response.Data;
             

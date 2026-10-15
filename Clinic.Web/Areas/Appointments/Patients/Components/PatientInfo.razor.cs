@@ -29,6 +29,8 @@ namespace Clinic.Web.Areas.Appointments.Patients.Components
                 PhoneNumber = Item.PhoneNumber,
                 DateOfBirth = Item.DateOfBirth,
                 Email = Item.Email,
+                City = Item.City,
+                MedicalHistory = Item.MedicalHistory,
             });
         }
 

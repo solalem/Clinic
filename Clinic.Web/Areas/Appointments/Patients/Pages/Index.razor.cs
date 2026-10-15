@@ -26,8 +26,14 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
         [SupplyParameterFromQuery]
         public Guid HighlightId { get; set; }
 
+        [Parameter]
+        [SupplyParameterFromQuery(Name = "searchString")]
+        public string SearchString { get; set; } = string.Empty;
+
         protected override async Task OnParametersSetAsync()
         {
+            patients.PaginationInfo.SearchString = SearchString ?? string.Empty;
+            patients.PaginationInfo.Page = 1;
             await ReloadPatients(patients.PaginationInfo);
             if (HighlightId != Guid.Empty && Details != null)
             {
@@ -81,6 +87,7 @@ namespace Clinic.Web.Areas.Appointments.Patients.Pages
         {
             if (e.Code == "Enter" || e.Code == "NumpadEnter")
             {
+                Patients.PaginationInfo.Page = 1;
                 await ReloadPatients(Patients.PaginationInfo);
             }
         }

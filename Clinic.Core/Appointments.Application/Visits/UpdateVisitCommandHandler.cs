@@ -26,16 +26,16 @@ namespace Clinic.Core.Appointments.Application.Visits
                 return new UpdateVisitResponse { Error = error };
         
             var model = await _visitRepository.GetAsync(command.Request.Id);
+            model.SetDate(command.Request.Date);
+            model.SetPatientId(command.Request.PatientId);
 			model.SetPhysician(command.Request.Physician);
 			model.SetPresentIllness(command.Request.PresentIllness);
-            foreach (var procedure in command.Request.Procedures)
+            model.AddProcedures(command.Request.Procedures.Select(procedure => new Procedure
             {
-                model.AddProcedure(new Procedure
-                {
-                    Description = procedure.Description,
-                    Name = procedure.Name,
-                });
-            }
+                Id = procedure.Id,
+                Description = procedure.Description,
+                Name = procedure.Name,
+            }).ToArray());
             _visitRepository.Update(model);
 
             try

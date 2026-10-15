@@ -1,75 +1,43 @@
 @namespace Clinic.Web.Shared
-@using Clinic.Web.Areas.Appointments;
-@using Microsoft.AspNetCore.Components.Authorization;
-@using Clinic.Web.Models;
-@inherits BlazorComponent
 
-<Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet" ThemeContrast="ThemeContrast.Dark"
-     Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small">
-    <BarToggler />
-    <BarBrand>
-        <BarItem>
-            <BarLink To="">
-                <BarIcon IconName="IconName.ShoppingBasket" />
-                Clinic
-            </BarLink>
-        </BarItem>
-    </BarBrand>
-    <BarMenu>
-        <BarStart>
-            @foreach (var item in GetMenu().Items)
-            {
-                if (item.SubMenus.Count > 0)
-                {
-                    <BarItem>
-                        <BarDropdown>
-                            <BarDropdownToggle>
-                                <BarIcon IconName="item.IconId" />
-                                @item.Title
-                            </BarDropdownToggle>
-                            <BarDropdownMenu>
-                                @foreach (var subMenu in item.SubMenus)
-                                {
-                                    <BarDropdownItem To="@subMenu.Link">
-                                        <BarIcon IconName="subMenu.IconId" />
-                                        @subMenu.Title
-                                    </BarDropdownItem>
-                                }
-                            </BarDropdownMenu>
-                        </BarDropdown>
-                    </BarItem>
-                }
-            }
-        </BarStart>
-        <BarEnd>
-        </BarEnd>
-    </BarMenu>
-</Bar>
+<div class="clinic-brand">
+    <div class="brand-mark" aria-hidden="true"><Icon Name="IconName.Circle" /></div>
+    <div>
+        <div class="brand-name">Clinic</div>
+        <div class="brand-caption">Front desk</div>
+    </div>
+</div>
 
+<nav class="clinic-navigation" aria-label="Main navigation">
+    <div class="nav-section-label">WORKSPACE</div>
+    <NavLink class="clinic-nav-link" href="/" Match="NavLinkMatch.All">
+        <Icon Name="IconName.Home" />
+        <span>Overview</span>
+    </NavLink>
+    <NavLink class="clinic-nav-link" href="/Appointments/Patients/index">
+        <Icon Name="IconName.Users" />
+        <span>Patients</span>
+    </NavLink>
+    <NavLink class="clinic-nav-link" href="/Appointments/Visits/index">
+        <Icon Name="IconName.CalendarCheck" />
+        <span>Visits</span>
+    </NavLink>
 
-@code {
+    <div class="nav-section-label nav-section-spaced">QUICK ACTIONS</div>
+    <NavLink class="clinic-nav-link" href="/Appointments/Patients/new">
+        <Icon Name="IconName.UserPlus" />
+        <span>New patient</span>
+    </NavLink>
+    <NavLink class="clinic-nav-link" href="/Appointments/Visits/new">
+        <Icon Name="IconName.PlusCircle" />
+        <span>Record a visit</span>
+    </NavLink>
+</nav>
 
-    private bool collapseNavMenu = true;
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
-    private NavigationMenu GetMenu()
-    {
-        var vm = new NavigationMenu();
-        //if (user == null)
-        //    return vm;
-
-        var Appointment = new AppointmentsSettings(null); // user.User);
-        vm.Items.AddRange(Appointment.GetMenu());
-
-        //var reporting = new Clinic.Reporting.ReportingModuleSettings(user.User);
-        //vm.Items.AddRange(reporting.GetMenu());
-
-        return vm;
-    }
-
-}
+<div class="sidebar-note">
+    <div class="sidebar-note-icon"><Icon Name="IconName.Lock" /></div>
+    <div>
+        <strong>Private workspace</strong>
+        <span>Remember to lock the screen when away.</span>
+    </div>
+</div>
