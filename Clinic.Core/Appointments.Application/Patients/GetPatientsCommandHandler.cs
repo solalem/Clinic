@@ -18,6 +18,8 @@ namespace Clinic.Core.Appointments.Application.Patients
         public async Task<GetPatientsResponse> Handle(GetPatientsCommand message, CancellationToken cancellationToken)
         {
             var pagination = message.Request.PaginationInfo;
+            var searchString = pagination.SearchString ?? string.Empty;
+            var searchPattern = $"%{searchString}%";
             
             var summaries = _dbContext.Database.SqlQuery<PatientSummary>(@$"
                 select p.*, vd.lastvisit from patients p
@@ -27,11 +29,11 @@ namespace Clinic.Core.Appointments.Application.Patients
                   group by v.patientid
                 ) vd on vd.patientid = p.id
                 where 
-                    {pagination.SearchString} = '' or
-                    ({pagination.SearchString} <> '' and
-                        (p.fullname like '%{pagination.SearchString}%' or
-                        p.phonenumber like '%{pagination.SearchString}%' or
-                        p.cardnumber like '%{pagination.SearchString}%' ))
+                    {searchString} = '' or
+                    ({searchString} <> '' and
+                        (p.fullname like {searchPattern} or
+                        p.phonenumber like {searchPattern} or
+                        p.cardnumber like {searchPattern}))
                 ");
 
             return new GetPatientsResponse

@@ -18,6 +18,7 @@ namespace Clinic.Core.Appointments.Application.Visits
                 Id = model.Id,
                 Date = model.Date,
                 PatientId = model.PatientId,
+                PatientName = model.Patient?.FullName ?? string.Empty,
                 Physician = model.Physician,
                 PresentIllness = model.PresentIllness,
                 Procedures = JsonSerializer.Serialize(model.Procedures)

@@ -59,17 +59,30 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
             }
         }
 
-        private async Task UpdateClick()
+        private string? ProcedureSaveError;
+        private async Task SaveProcedureAsync(ProcedureSummary procedure)
         {
-            await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisitRequest
+            ProcedureSaveError = null;
+            var procedures = Item.ProcedureList
+                .Select(CopyProcedure)
+                .ToList();
+
+            if (IsAddingProcedure)
             {
-                Id = Item.Id,
-                Date = Item.Date,
-                Physician = Item.Physician,
-                PresentIllness = Item.PresentIllness,
-                PatientId = Item.PatientId,
-                Procedures = Item.ProcedureList
-            });
+                procedures.Add(CopyProcedure(procedure));
+            }
+            else if (SelectedProcedureIndex >= 0 && SelectedProcedureIndex < procedures.Count)
+            {
+                procedures[SelectedProcedureIndex] = CopyProcedure(procedure);
+            }
+            else
+            {
+                ProcedureSaveError = "The selected procedure could not be found.";
+                return;
+            }
+
+            if (await SaveProceduresAsync(procedures))
+                await procedureModal.Hide();
         }
 
         protected override async Task OnParametersSetAsync()
@@ -104,16 +117,77 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
         private Modal procedureModal;
         private ProcedureForm procedureForm;
         private ProcedureSummary selectedProcedure;
-        private void AddProcedure()
+        private int SelectedProcedureIndex = -1;
+        private bool IsAddingProcedure;
+
+        private async Task AddProcedure()
         {
-            selectedProcedure = new ProcedureSummary();
-            Item.ProcedureList.Add(selectedProcedure);
-            procedureModal.Show();
+            IsAddingProcedure = true;
+            SelectedProcedureIndex = -1;
+            ProcedureSaveError = null;
+            selectedProcedure = new ProcedureSummary
+            {
+                Id = Item.ProcedureList.Count == 0 ? 1 : Item.ProcedureList.Max(procedure => procedure.Id) + 1
+            };
+            await procedureModal.Show();
         }
-        private void EditProcedure(ProcedureSummary procedure)
+
+        private async Task EditProcedure(int index)
         {
-            selectedProcedure = procedure;
-            procedureModal.Show();
+            if (index < 0 || index >= Item.ProcedureList.Count)
+                return;
+
+            IsAddingProcedure = false;
+            SelectedProcedureIndex = index;
+            ProcedureSaveError = null;
+            selectedProcedure = CopyProcedure(Item.ProcedureList[index]);
+            await procedureModal.Show();
+        }
+
+        private async Task RemoveProcedure(int index)
+        {
+            if (index < 0 || index >= Item.ProcedureList.Count)
+                return;
+
+            ProcedureSaveError = null;
+            var procedures = Item.ProcedureList
+                .Select(CopyProcedure)
+                .ToList();
+            procedures.RemoveAt(index);
+            await SaveProceduresAsync(procedures);
+        }
+
+        private async Task<bool> SaveProceduresAsync(List<ProcedureSummary> procedures)
+        {
+            var response = await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisitRequest
+            {
+                Id = Item.Id,
+                Date = Item.Date,
+                Physician = Item.Physician,
+                PresentIllness = Item.PresentIllness,
+                PatientId = Item.PatientId,
+                Procedures = procedures
+            });
+
+            if (response == null || !response.Succeed || response.Data == null)
+            {
+                ProcedureSaveError = response?.Error ?? "The procedure changes could not be saved.";
+                return false;
+            }
+
+            Item.ProcedureList = response.Data.ProcedureList;
+            StateHasChanged();
+            return true;
+        }
+
+        private static ProcedureSummary CopyProcedure(ProcedureSummary procedure)
+        {
+            return new ProcedureSummary
+            {
+                Id = procedure.Id,
+                Name = procedure.Name,
+                Description = procedure.Description
+            };
         }
 
         #endregion

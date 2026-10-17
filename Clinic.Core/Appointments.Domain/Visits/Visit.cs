@@ -1,4 +1,5 @@
 using Clinic.Shared.Model;
+using Clinic.Core.Appointments.Domain.Patients;
 
 namespace Clinic.Core.Appointments.Domain.Visits
 {
@@ -21,6 +22,7 @@ namespace Clinic.Core.Appointments.Domain.Visits
         {
             this.PatientId = patientId;
         }
+        public Patient? Patient { get; private set; }
 
         /// <summary>
         /// 

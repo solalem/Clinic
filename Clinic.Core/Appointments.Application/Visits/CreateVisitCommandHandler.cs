@@ -64,7 +64,10 @@ namespace Clinic.Core.Appointments.Application.Visits
         {
             if (Request == null)
                 return (false, "Request cannot be null");
-            //if (string.IsNullOrEmpty(Request.Name)) return (false, "Name cannot be null");
+            if (Request.PatientId == Guid.Empty)
+                return (false, "Patient cannot be null");
+            if (string.IsNullOrWhiteSpace(Request.Physician))
+                return (false, "Physician cannot be null");
 
             return (true, null);
         }

@@ -31,6 +31,10 @@
             Add procedure
         </Button>
     </div>
+    @if (!string.IsNullOrWhiteSpace(ProcedureSaveError))
+    {
+        <div class="alert alert-danger" role="alert">@ProcedureSaveError</div>
+    }
     <div class="records-table-wrap">
         @if (Item.ProcedureList.Count == 0)
         {
@@ -50,13 +54,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Item.ProcedureList)
+                    @for (var index = 0; index < Item.ProcedureList.Count; index++)
                     {
-                        if (item == null) continue;
-                        <tr @onclick="@(() => EditProcedure(item))">
+                        var procedureIndex = index;
+                        var item = Item.ProcedureList[index];
+                        <tr>
                             <td>@item.Name</td>
                             <td>@item.Description</td>
-                            <td><span class="procedure-edit-hint">Edit</span></td>
+                            <td class="procedure-row-actions">
+                                <Button Color="Color.Light" Clicked="@(() => EditProcedure(procedureIndex))">Edit</Button>
+                                <Button Color="Color.Danger" Clicked="@(() => RemoveProcedure(procedureIndex))">Remove</Button>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -68,11 +76,11 @@
 <Modal @ref="procedureModal">
     <ModalContent Centered="true" Size="ModalSize.Large">
         <ModalHeader>
-            <ModalTitle>Edit procedure</ModalTitle>
+            <ModalTitle>@(IsAddingProcedure ? "Add procedure" : "Edit procedure")</ModalTitle>
             <CloseButton />
         </ModalHeader>
         <ModalBody>
-            <ProcedureForm Item="selectedProcedure" Visit="Item" @ref="procedureForm" OnProcedureEdited="UpdateClick" />
+            <ProcedureForm Item="selectedProcedure" Visit="Item" @ref="procedureForm" OnProcedureEdited="SaveProcedureAsync" />
         </ModalBody>
     </ModalContent>
 </Modal>

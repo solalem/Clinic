@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Clinic.Core.Appointments.Domain.Visits;
+using Clinic.Core.Appointments.Domain.Patients;
 using System.Text.Json;
 
 namespace Clinic.Core.Appointments.Persistence.Visits
@@ -23,6 +24,11 @@ namespace Clinic.Core.Appointments.Persistence.Visits
 
             config.Property(o => o.PatientId)
                 .HasColumnName("PatientId")
+                .IsRequired();
+
+            config.HasOne(o => o.Patient)
+                .WithMany()
+                .HasForeignKey(o => o.PatientId)
                 .IsRequired();
 
             config.Property(o => o.Physician)

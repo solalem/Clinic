@@ -36,14 +36,9 @@ namespace Clinic.Core.Appointments.Persistence.Visits
 
         public async Task<Visit> GetAsync(Guid id)
         {
-            var visit = await _context.Visits.FindAsync(id);
-            if (visit != null)
-            {
-                await _context.Entry(visit)
-                    .Collection(i => i.Procedures).LoadAsync();
-            }
-
-            return visit;
+            return await _context.Visits
+                .Include(visit => visit.Patient)
+                .FirstOrDefaultAsync(visit => visit.Id == id);
         }
 
         public async Task<int> GetCountAsync(PaginationInfo paginationInfo)
@@ -63,6 +58,7 @@ namespace Clinic.Core.Appointments.Persistence.Visits
         private IQueryable<Visit> GetQuery(PaginationInfo pagination)
         {
             var query = _context.Visits
+                .Include(visit => visit.Patient)
                 .Skip(pagination.Index)
                 .Take(pagination.PageSize).AsQueryable();
             if (!string.IsNullOrEmpty(pagination.SearchString))

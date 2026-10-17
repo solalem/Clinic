@@ -37,6 +37,10 @@
         <div class="form-layout form-layout-visit">
             <EditForm Model="Item" OnValidSubmit="@CreateClick" id="createForm" class="clinic-form">
                 <DataAnnotationsValidator />
+                @if (!string.IsNullOrWhiteSpace(SaveError))
+                {
+                    <div class="alert alert-danger" role="alert">@SaveError</div>
+                }
                 <section class="form-card" aria-labelledby="visit-details-title">
                     <div class="form-card-heading">
                         <h2 id="visit-details-title">Visit details</h2>

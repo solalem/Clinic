@@ -19,6 +19,8 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
         [SupplyParameterFromQuery]
         public Guid? RoutedPatientId { get; set; }
         public PatientList PatientOptions { get; set; } = PatientList.Empty();
+        private string? SaveError;
+
         private async Task LoadPatientOptions(PaginationInfo paginationInfo)
         {
             if (paginationInfo.IsSearch && string.IsNullOrEmpty(paginationInfo.SearchString))
@@ -53,16 +55,15 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
 
         private async Task CreateClick()
         {
-            try
+            SaveError = null;
+            var result = await AppointmentsServices.VisitService.CreateAsync(Item);
+            if (result == null || !result.Succeed || result.Data == null)
             {
-                var result = await AppointmentsServices.VisitService.CreateAsync(Item);
+                SaveError = result?.Error ?? "The visit could not be saved.";
+                return;
+            }
 
-                NavigationManager.NavigateTo($"Appointments/Visits/Index?HighlightId={result.Data.Id}");
-            }
-            catch (System.Exception)
-            {
-                throw;
-            }
+            NavigationManager.NavigateTo($"Appointments/Visits/Index?HighlightId={result.Data.Id}");
         }
     }
 }
