@@ -11,7 +11,7 @@
 
 @if (Item != null)
 {
-    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="updateForm" class="clinic-form procedure-form">
+    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="procedureForm" class="clinic-form procedure-form">
         <DataAnnotationsValidator />
 
         <div class="form-card-body">
@@ -28,7 +28,7 @@
             </Field>
 
             <div class="procedure-form-actions">
-                <Button Color="Color.Primary" Type="ButtonType.Submit" form="updateForm">Save procedure</Button>
+                <Button Color="Color.Primary" Type="ButtonType.Submit" form="procedureForm">Save procedure</Button>
             </div>
         </div>
 
