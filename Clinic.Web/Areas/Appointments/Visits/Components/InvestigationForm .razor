@@ -1,0 +1,51 @@
+@using Clinic.ViewModels.Appointments.Visits;
+@using Clinic.Web.Areas.Appointments.Visits
+@using Clinic.ViewModels
+@using Clinic.ViewModels.Appointments
+@using Clinic.ViewModels.Appointments.Patients;
+
+@namespace Clinic.Web.Areas.Appointments.Visits.Components
+@inject ILogger<VisitInfo> Logger
+@inject IJSRuntime JSRuntime
+@inherits Clinic.Web.Models.BlazorComponent
+
+@if (Item != null)
+{
+    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="investigationForm" class="clinic-form procedure-form">
+        <DataAnnotationsValidator />
+
+        <div class="form-card-body">
+            <Field>
+                <FieldLabel>Investigation name</FieldLabel>
+                <TextEdit @bind-Text="@Item.Name" />
+                <ValidationMessage For="(() => Item.Name)" />
+            </Field>
+
+            <Field>
+                <FieldLabel>Description</FieldLabel>
+                <MemoEdit @bind-Text="@Item.Description" />
+                <ValidationMessage For="(() => Item.Description)" />
+            </Field>
+
+            <div class="procedure-form-actions">
+                <Button Color="Color.Primary" Type="ButtonType.Submit" form="investigationForm">Save investigation</Button>
+            </div>
+        </div>
+
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public InvestigationSummary Item { get; set; }
+    [Parameter]
+    public VisitDetail Visit { get; set; }
+
+    [Parameter]
+    public EventCallback<InvestigationSummary> OnInvestigationEdited { get; set; }
+
+    private async Task UpdateClick()
+    {
+        await OnInvestigationEdited.InvokeAsync(Item);
+    }
+}

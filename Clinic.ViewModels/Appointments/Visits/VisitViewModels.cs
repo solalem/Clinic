@@ -9,6 +9,7 @@ namespace Clinic.ViewModels.Appointments.Visits
     public class VisitSummary : CachableEntity
     {
         private List<ProcedureSummary>? _procedureList;
+        private List<InvestigationSummary>? _investigationList;
 
         // TODO: Trim unnecessary properties that you dont want end users see
         public DateTimeOffset Date { get; set; }
@@ -33,12 +34,30 @@ namespace Clinic.ViewModels.Appointments.Visits
         
         public string? Procedures { get; set; }
 
+        public List<InvestigationSummary> InvestigationList
+        {
+            get => _investigationList ??= JsonSerializer.Deserialize<List<InvestigationSummary>>(Investigations ?? "[]") ?? new List<InvestigationSummary>();
+            set
+            {
+                _investigationList = value ?? new List<InvestigationSummary>();
+                Investigations = JsonSerializer.Serialize(_investigationList);
+            }
+        }
+        public string? Investigations { get; set; }
+
         public string DisplayName => PatientName;
         public string DisplayDescription => Physician;
         public string More => Date.ToString("MMM dd, yy");
     }
 
     public class ProcedureSummary
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class InvestigationSummary
     {
         public int Id { get; set; }
         public string Name { get; set; }

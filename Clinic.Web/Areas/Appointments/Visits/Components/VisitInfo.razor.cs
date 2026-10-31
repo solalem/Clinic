@@ -30,6 +30,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Components
                 Physician = Item.Physician,
                 PresentIllness = Item.PresentIllness,
                 Procedures = Item.ProcedureList,
+                Investigations = Item.InvestigationList,
             });
         }
 

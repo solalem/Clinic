@@ -24,5 +24,12 @@ namespace Clinic.ViewModels.Appointments.Visits
     public record RemoveProcedureRequest (Guid Id, Guid VisitId);
     public class RemoveProcedureResponse : ApiResponse<VisitDetail> { }
 
+    public record AddInvestigationRequest (string Name);
+    public class AddInvestigationResponse : ApiResponse<VisitDetail> { }
+    public record UpdateInvestigationRequest (Guid Id, string Name);
+    public class UpdateInvestigationResponse : ApiResponse<VisitDetail> { }
+    public record RemoveInvestigationRequest (Guid Id, Guid VisitId);
+    public class RemoveInvestigationResponse : ApiResponse<VisitDetail> { }
+
     
 }

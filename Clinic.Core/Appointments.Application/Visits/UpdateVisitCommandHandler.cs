@@ -30,12 +30,18 @@ namespace Clinic.Core.Appointments.Application.Visits
             model.SetPatientId(command.Request.PatientId);
 			model.SetPhysician(command.Request.Physician);
 			model.SetPresentIllness(command.Request.PresentIllness);
-            model.AddProcedures(command.Request.Procedures.Select(procedure => new Procedure
+            model.AddProcedures([.. command.Request.Procedures.Select(procedure => new Procedure
             {
                 Id = procedure.Id,
                 Description = procedure.Description,
                 Name = procedure.Name,
-            }).ToArray());
+            })]);
+            model.AddInvestigations([.. command.Request.Investigations.Select(investigation => new Investigation
+            {
+                Id = investigation.Id,
+                Description = investigation.Description,
+                Name = investigation.Name,
+            })]);
             _visitRepository.Update(model);
 
             try

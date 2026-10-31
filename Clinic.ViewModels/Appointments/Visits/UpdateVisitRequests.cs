@@ -13,6 +13,8 @@ namespace Clinic.ViewModels.Appointments.Visits
         public String Physician { get; set; }
         public String PresentIllness { get; set; }
         public List<ProcedureSummary> Procedures { get; set; } = new List<ProcedureSummary>();
+        public List<InvestigationSummary> Investigations { get; set; } = new List<InvestigationSummary>();
+
     }
 
     public class UpdateVisitResponse : ApiResponse<VisitDetail>

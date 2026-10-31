@@ -44,6 +44,12 @@ namespace Clinic.Core.Appointments.Persistence.Visits
                     v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
                     v => JsonSerializer.Deserialize<IReadOnlyCollection<Procedure>>(v, new JsonSerializerOptions()))
                 .IsRequired();
+            config.Property(o => o.Investigations)
+                .HasColumnName("Investigations")
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+                    v => JsonSerializer.Deserialize<IReadOnlyCollection<Investigation>>(v, new JsonSerializerOptions()))
+                .IsRequired();
         }
     }
 }

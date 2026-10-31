@@ -48,9 +48,16 @@ namespace Clinic.Core.Appointments.Domain.Visits
         /// </summary>
         public IReadOnlyCollection<Procedure> Procedures => _procedures;
 
+        private readonly List<Investigation> _iInvestigation;
+        /// <summary>
+        /// 
+        /// </summary>
+        public IReadOnlyCollection<Investigation> Investigations => _iInvestigation;
+
         protected Visit() : base(Guid.NewGuid())
         {
             _procedures = new List<Procedure>();
+            _iInvestigation = new List<Investigation>();
         }
 
         public Visit(Guid patientId, String physician, String presentIllness) : this()
@@ -110,6 +117,52 @@ namespace Clinic.Core.Appointments.Domain.Visits
         public void RemoveAllProcedures()
         {
             _procedures.Clear();
+        }
+
+        public void AddInvestigation(Investigation newItem)
+        {
+            _iInvestigation.Add(newItem);
+            // TODO: Add domain logic, e.g change discount rate if item counts exceed some value
+        }
+
+        public Investigation UpdateInvestigation(int id, Investigation item) 
+        {
+            var existing = _iInvestigation.Where(o => o.Id == id).SingleOrDefault();
+            if (existing != null)
+            {
+                //TODO: update values
+                existing.Name = item.Name;
+				existing.Description = item.Description;
+				
+                // ...
+            }
+            return existing;
+        }
+
+        public void RemoveInvestigation(int id)
+        {
+            var existing = _iInvestigation.Where(o => o.Id == id).SingleOrDefault();
+            if (existing != null)
+            {
+                _iInvestigation.Remove(existing);
+            }
+        }
+
+        /// <summary>
+        /// Add Investigations
+        /// </summary>
+        public void AddInvestigations(Investigation[] items)
+        {
+            _iInvestigation.Clear();
+            _iInvestigation.AddRange(items);
+        }
+
+        /// <summary>
+        /// Remove Investigations
+        /// </summary>
+        public void RemoveAllInvestigations()
+        {
+            _iInvestigation.Clear();
         }
 
 

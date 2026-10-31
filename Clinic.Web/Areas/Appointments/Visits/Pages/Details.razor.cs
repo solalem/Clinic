@@ -85,6 +85,32 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
                 await procedureModal.Hide();
         }
 
+        private string? InvestigationSaveError;
+        private async Task SaveInvestigationAsync(InvestigationSummary investigation)
+        {
+            InvestigationSaveError = null;
+            var investigations = Item.InvestigationList
+                .Select(CopyInvestigation)
+                .ToList();
+
+            if (IsAddingInvestigation)
+            {
+                investigations.Add(CopyInvestigation(investigation));
+            }
+            else if (SelectedInvestigationIndex >= 0 && SelectedInvestigationIndex < investigations.Count)
+            {
+                investigations[SelectedInvestigationIndex] = CopyInvestigation(investigation);
+            }
+            else
+            {
+                InvestigationSaveError = "The selected investigation could not be found.";
+                return;
+            }
+
+            if (await SaveInvestigationsAsync(investigations))
+                await investigationModal.Hide();
+        }
+
         protected override async Task OnParametersSetAsync()
         {
             await Open(Id);
@@ -187,6 +213,85 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
                 Id = procedure.Id,
                 Name = procedure.Name,
                 Description = procedure.Description
+            };
+        }
+
+        #endregion
+
+        #region Investigations
+        private Modal investigationModal;
+        private InvestigationForm investigationForm;
+        private InvestigationSummary selectedInvestigation;
+        private int SelectedInvestigationIndex = -1;
+        private bool IsAddingInvestigation;
+
+        private async Task AddInvestigation()
+        {
+            IsAddingInvestigation = true;
+            SelectedInvestigationIndex = -1;
+            InvestigationSaveError = null;
+            selectedInvestigation = new InvestigationSummary
+            {
+                Id = Item.InvestigationList.Count == 0 ? 1 : Item.InvestigationList.Max(investigation => investigation.Id) + 1
+            };
+            await investigationModal.Show();
+        }
+
+        private async Task EditInvestigation(int index)
+        {
+            if (index < 0 || index >= Item.InvestigationList.Count)
+                return;
+
+            IsAddingInvestigation = false;
+            SelectedInvestigationIndex = index;
+            InvestigationSaveError = null;
+            selectedInvestigation = CopyInvestigation(Item.InvestigationList[index]);
+            await investigationModal.Show();
+        }
+
+        private async Task RemoveInvestigation(int index)
+        {
+            if (index < 0 || index >= Item.InvestigationList.Count)
+                return;
+
+            InvestigationSaveError = null;
+            var investigations = Item.InvestigationList
+                .Select(CopyInvestigation)
+                .ToList();
+            investigations.RemoveAt(index);
+            await SaveInvestigationsAsync(investigations);
+        }
+
+        private async Task<bool> SaveInvestigationsAsync(List<InvestigationSummary> investigations)
+        {
+            var response = await AppointmentsServices.VisitService.UpdateAsync(new UpdateVisitRequest
+            {
+                Id = Item.Id,
+                Date = Item.Date,
+                Physician = Item.Physician,
+                PresentIllness = Item.PresentIllness,
+                PatientId = Item.PatientId,
+                Investigations = investigations
+            });
+
+            if (response == null || !response.Succeed || response.Data == null)
+            {
+                InvestigationSaveError = response?.Error ?? "The investigation changes could not be saved.";
+                return false;
+            }
+
+            Item.InvestigationList = response.Data.InvestigationList;
+            StateHasChanged();
+            return true;
+        }
+
+        private static InvestigationSummary CopyInvestigation(InvestigationSummary investigation)
+        {
+            return new InvestigationSummary
+            {
+                Id = investigation.Id,
+                Name = investigation.Name,
+                Description = investigation.Description
             };
         }
 

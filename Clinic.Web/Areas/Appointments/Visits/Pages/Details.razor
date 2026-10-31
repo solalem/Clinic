@@ -84,3 +84,68 @@
         </ModalBody>
     </ModalContent>
 </Modal>
+
+<section class="form-card procedure-card">
+    <div class="form-card-heading procedure-card-heading">
+        <div>
+            <h2>Investigations</h2>
+            <p>Add or review investigations associated with this visit.</p>
+        </div>
+        <Button Color="Color.Primary" Clicked="() => AddInvestigation()">
+            <Icon Name="IconName.Add" />
+            Add investigation
+        </Button>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(InvestigationSaveError))
+    {
+        <div class="alert alert-danger" role="alert">@InvestigationSaveError</div>
+    }
+    <div class="records-table-wrap">
+        @if (Item.InvestigationList.Count == 0)
+        {
+            <div class="records-empty">
+                <strong>No investigations recorded</strong>
+                <p>Add a investigation to include it in this visit record.</p>
+            </div>
+        }
+        else
+        {
+            <table class="table records-table">
+                <thead>
+                    <tr>
+                        <th>Investigation</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var index = 0; index < Item.InvestigationList.Count; index++)
+                    {
+                        var investigationIndex = index;
+                        var item = Item.InvestigationList[index];
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td class="procedure-row-actions">
+                                <Button Color="Color.Light" Clicked="@(() => EditInvestigation(investigationIndex))">Edit</Button>
+                                <Button Color="Color.Danger" Clicked="@(() => RemoveInvestigation(investigationIndex))">Remove</Button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</section>
+
+<Modal @ref="investigationModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>@(IsAddingInvestigation ? "Add investigation" : "Edit investigation")</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <InvestigationForm Item="selectedInvestigation" Visit="Item" @ref="investigationForm" OnInvestigationEdited="SaveInvestigationAsync" />
+        </ModalBody>
+    </ModalContent>
+</Modal>

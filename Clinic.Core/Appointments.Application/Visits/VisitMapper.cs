@@ -21,7 +21,8 @@ namespace Clinic.Core.Appointments.Application.Visits
                 PatientName = model.Patient?.FullName ?? string.Empty,
                 Physician = model.Physician,
                 PresentIllness = model.PresentIllness,
-                Procedures = JsonSerializer.Serialize(model.Procedures)
+                Procedures = JsonSerializer.Serialize(model.Procedures),
+                Investigations = JsonSerializer.Serialize(model.Investigations)
             };
         }
 
