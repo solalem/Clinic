@@ -46,6 +46,7 @@ namespace Clinic.Core.Appointments.Persistence.Visits
                 .IsRequired();
             config.Property(o => o.Investigations)
                 .HasColumnName("Investigations")
+                .HasField("_iInvestigation")
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
                     v => JsonSerializer.Deserialize<IReadOnlyCollection<Investigation>>(v, new JsonSerializerOptions()))

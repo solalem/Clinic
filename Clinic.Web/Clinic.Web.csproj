@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Clinic.ViewModels\Clinic.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\MedicalCertificate.txt" />
+  </ItemGroup>
+
 </Project>

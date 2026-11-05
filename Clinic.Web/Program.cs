@@ -6,6 +6,8 @@ using Clinic.Core.Appointments.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Clinic.Web.Models;
 using Clinic.Shared;
+using Clinic.Web.Security;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
@@ -19,30 +21,36 @@ builder.Services
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "Clinic.Auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.LoginPath = "/Login";
+        options.AccessDeniedPath = "/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
+    });
+builder.Services.AddAuthorization();
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Clinic.Core.Appointments.Application.Patients.CreatePatientCommand>());
 
 builder.Services.AddSingleton<PageHistoryState>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IClinicAccountService, ClinicAccountService>();
 
 AppointmentsModule.Load(builder);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    using (var scope = app.Services.CreateScope())
-    {
-        var context = scope.ServiceProvider.GetService<AppointmentsDbContext>();
-        context.Database.Migrate();
-    }
-}
-else
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    var context = scope.ServiceProvider.GetService<AppointmentsDbContext>();
+    context.Database.Migrate();
 }
 
 app.UseHttpsRedirection();
@@ -50,8 +58,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.MapRazorPages();
+app.MapBlazorHub().RequireAuthorization();
+app.MapFallbackToPage("/_Host").RequireAuthorization();
 
 app.Run();

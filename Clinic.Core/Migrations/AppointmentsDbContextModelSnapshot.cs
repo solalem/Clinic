@@ -15,7 +15,72 @@ namespace Clinic.Core.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.22");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
+
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.ClinicAccounts.ClinicAccount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedUsername")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedUsername")
+                        .IsUnique();
+
+                    b.ToTable("clinic_accounts", (string)null);
+                });
+
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Patients.MedicalCertificate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CertificateText")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("IssueDate")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Recipient")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("medical_certificates", "Appointments");
+                });
 
             modelBuilder.Entity("Clinic.Core.Appointments.Domain.Patients.Patient", b =>
                 {
@@ -69,6 +134,377 @@ namespace Clinic.Core.Migrations
                     b.ToTable("patients", "Appointments");
                 });
 
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.InvestigationCatalogItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("investigation_catalog", "Appointments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "IOPA"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "OPG"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "CBCT"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "CT scan"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "MRI"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "CBC"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "OFT"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "FBS"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Hga1c"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "INR"
+                        });
+                });
+
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.ProcedureCatalogItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("procedure_catalog", "Appointments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "CD 1",
+                            Name = "Card",
+                            Price = 400m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "SP1",
+                            Name = "Scaling and polishing",
+                            Price = 2500m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "SP2",
+                            Name = "Hard scaling and polishing",
+                            Price = 3000m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "BWP1",
+                            Name = "Bleaching with polishing",
+                            Price = 10000m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "MTE 1",
+                            Name = "Milk tooth extraction",
+                            Price = 700m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "STE1",
+                            Name = "Simple tooth extraction",
+                            Price = 800m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "CF1",
+                            Name = "Composite filling",
+                            Price = 4000m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Code = "APC1",
+                            Name = "Apicectomy",
+                            Price = 8000m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Code = "RCT 1",
+                            Name = "Root canal treatment",
+                            Price = 7000m
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Code = "DXR1",
+                            Name = "Digital X ray",
+                            Price = 500m
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Code = "HTE1",
+                            Name = "Hard tooth extraction",
+                            Price = 1800m
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Code = "FR1",
+                            Name = "Fixed retainer per arch",
+                            Price = 3000m
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Code = "OTS1",
+                            Name = "Orthodontic treatment simple",
+                            Price = 50000m
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Code = "OTC 1",
+                            Name = "Orthodontic treatment complex",
+                            Price = 70000m
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Code = "OTM1",
+                            Name = "Orthodontic treatment moderate",
+                            Price = 60000m
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Code = "OTSH1",
+                            Name = "Orthodontic treatment simple half",
+                            Price = 25000m
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Code = "OTCH1",
+                            Name = "Orthodontic treatment complex half",
+                            Price = 35000m
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Code = "OTMH",
+                            Name = "Orthodontic treatment moderate half",
+                            Price = 30000m
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Code = "PV1",
+                            Name = "Porcelain veneer",
+                            Price = 30000m
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Code = "CC1",
+                            Name = "Ceramic crown",
+                            Price = 11000m
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Code = "ZC1",
+                            Name = "Zirconium crown",
+                            Price = 22000m
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Code = "EMC1",
+                            Name = "E max crown",
+                            Price = 24000m
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Code = "ZV1",
+                            Name = "Zirconium veneer",
+                            Price = 28000m
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Code = "IM1",
+                            Name = "Implant per tooth",
+                            Price = 100000m
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Code = "RT1",
+                            Name = "Retainer transparent",
+                            Price = 3000m
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Code = "RDA1",
+                            Name = "Removable denture (acrylic per tooth)",
+                            Price = 2500m
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Code = "RDF1",
+                            Name = "Removable denture (flexible per tooth)",
+                            Price = 7500m
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Code = "SWC1",
+                            Name = "Splinting per tooth with composite",
+                            Price = 1500m
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Code = "ABS 1",
+                            Name = "Arch bar splinting",
+                            Price = 4000m
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Code = "IMF1",
+                            Name = "Intermaxillary fixation",
+                            Price = 15000m
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Code = "TF1",
+                            Name = "Temporary filling",
+                            Price = 500m
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Code = "GI1",
+                            Name = "GI filling for pedi",
+                            Price = 1000m
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Code = "PPC1",
+                            Name = "Pulpectomy",
+                            Price = 2000m
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Code = "CV1",
+                            Name = "Composite veneer per tooth",
+                            Price = 3000m
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Code = "PTE1",
+                            Name = "Posterior tooth extraction",
+                            Price = 2700m
+                        },
+                        new
+                        {
+                            Id = 36,
+                            Code = "FRC1",
+                            Name = "Flap raising and closure",
+                            Price = 7000m
+                        },
+                        new
+                        {
+                            Id = 37,
+                            Code = "RCTP1",
+                            Name = "Root canal treatment posterior",
+                            Price = 9000m
+                        },
+                        new
+                        {
+                            Id = 38,
+                            Code = "S1",
+                            Name = "Suturing",
+                            Price = 1200m
+                        },
+                        new
+                        {
+                            Id = 39,
+                            Code = "BI1",
+                            Name = "Biopsy",
+                            Price = 6000m
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Code = "GNG1",
+                            Name = "Gingivectomy",
+                            Price = 2000m
+                        });
+                });
+
             modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Visit", b =>
                 {
                     b.Property<Guid>("Id")
@@ -78,6 +514,11 @@ namespace Clinic.Core.Migrations
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("TEXT")
                         .HasColumnName("Date");
+
+                    b.Property<string>("Investigations")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Investigations");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("TEXT")
@@ -105,13 +546,26 @@ namespace Clinic.Core.Migrations
                     b.ToTable("visits", "Appointments");
                 });
 
-            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Visit", b =>
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Patients.MedicalCertificate", b =>
                 {
-                    b.HasOne("Clinic.Core.Appointments.Domain.Patients.Patient", null)
+                    b.HasOne("Clinic.Core.Appointments.Domain.Patients.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("Clinic.Core.Appointments.Domain.Visits.Visit", b =>
+                {
+                    b.HasOne("Clinic.Core.Appointments.Domain.Patients.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 #pragma warning restore 612, 618
         }

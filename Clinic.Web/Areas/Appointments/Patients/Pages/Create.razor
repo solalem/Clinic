@@ -1,4 +1,5 @@
 @page "/Appointments/Patients/new"
+@attribute [Authorize(Roles = Clinic.Web.Security.ClinicRoles.PatientRecords)]
 @using Clinic.ViewModels;
 @inject ILogger<Create> Logger
 @inject IJSRuntime JSRuntime

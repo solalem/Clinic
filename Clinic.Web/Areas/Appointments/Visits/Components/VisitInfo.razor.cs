@@ -5,6 +5,7 @@ using Clinic.Web.Areas.Appointments;
 using Clinic.Web.Models;
 using Clinic.Web.Shared.Components;
 using Microsoft.AspNetCore.Components;
+using Clinic.Web.Security;
 
 namespace Clinic.Web.Areas.Appointments.Visits.Components
 {
@@ -16,9 +17,12 @@ namespace Clinic.Web.Areas.Appointments.Visits.Components
         public NavigationManager NavigationManager { get; set; }
         [Inject]
         public IAppointmentsServices AppointmentsServices { get; set; }
+        [Inject]
+        public IClinicAccountService ClinicAccountService { get; set; }
 
         [Parameter]
         public VisitSummary Item { get; set; } = new VisitSummary();
+        private IReadOnlyList<string> PhysicianOptions = Array.Empty<string>();
 
         private async Task UpdateClick()
         {
@@ -39,6 +43,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Components
             if (item == null) return;
 
             Item = item;
+            PhysicianOptions = await ClinicAccountService.GetPhysicianNamesAsync();
             await LoadPatientOptions(new PaginationInfo());
 
             StateHasChanged();

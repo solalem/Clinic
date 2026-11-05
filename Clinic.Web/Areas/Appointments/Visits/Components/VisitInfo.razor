@@ -47,8 +47,14 @@
                         <Field>
                             <FieldLabel>Clinician</FieldLabel>
                             <Select @bind-SelectedValue="@Item.Physician">
-                                <SelectItem Value="@("Dr. Eshetu")">Dr. Eshetu</SelectItem>
-                                <SelectItem Value="@("Dr. Feven")">Dr. Feven</SelectItem>
+                                @if (!PhysicianOptions.Contains(Item.Physician))
+                                {
+                                    <SelectItem Value="@Item.Physician">@Item.Physician (existing record)</SelectItem>
+                                }
+                                @foreach (var physician in PhysicianOptions)
+                                {
+                                    <SelectItem Value="@physician">@physician</SelectItem>
+                                }
                             </Select>
                             <ValidationMessage For="(() => Item.Physician)" />
                         </Field>

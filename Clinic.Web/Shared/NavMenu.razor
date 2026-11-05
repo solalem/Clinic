@@ -1,4 +1,5 @@
 @namespace Clinic.Web.Shared
+@using Clinic.Web.Security
 
 <div class="clinic-brand">
     <div class="brand-mark" aria-hidden="true"><Icon Name="IconName.Circle" /></div>
@@ -9,35 +10,58 @@
 </div>
 
 <nav class="clinic-navigation" aria-label="Main navigation">
-    <div class="nav-section-label">WORKSPACE</div>
-    <NavLink class="clinic-nav-link" href="/" Match="NavLinkMatch.All">
-        <Icon Name="IconName.Home" />
-        <span>Overview</span>
-    </NavLink>
-    <NavLink class="clinic-nav-link" href="/Appointments/Patients/index">
-        <Icon Name="IconName.Users" />
-        <span>Patients</span>
-    </NavLink>
-    <NavLink class="clinic-nav-link" href="/Appointments/Visits/index">
-        <Icon Name="IconName.CalendarCheck" />
-        <span>Visits</span>
-    </NavLink>
+    <AuthorizeView>
+        <Authorized Context="authorizedUser">
+            <div class="nav-section-label">WORKSPACE</div>
+            <NavLink class="clinic-nav-link" href="/" Match="NavLinkMatch.All">
+                <Icon Name="IconName.Home" />
+                <span>Overview</span>
+            </NavLink>
+            <NavLink class="clinic-nav-link" href="/Appointments/Patients/index">
+                <Icon Name="IconName.Users" />
+                <span>Patients</span>
+            </NavLink>
+            <AuthorizeView Roles="@ClinicRoles.Physician">
+                <NavLink class="clinic-nav-link" href="/Appointments/Visits/index">
+                    <Icon Name="IconName.CalendarCheck" />
+                    <span>Visits</span>
+                </NavLink>
+            </AuthorizeView>
 
-    <div class="nav-section-label nav-section-spaced">QUICK ACTIONS</div>
-    <NavLink class="clinic-nav-link" href="/Appointments/Patients/new">
-        <Icon Name="IconName.UserPlus" />
-        <span>New patient</span>
-    </NavLink>
-    <NavLink class="clinic-nav-link" href="/Appointments/Visits/new">
-        <Icon Name="IconName.PlusCircle" />
-        <span>Record a visit</span>
-    </NavLink>
+            <div class="nav-section-label nav-section-spaced">QUICK ACTIONS</div>
+            <NavLink class="clinic-nav-link" href="/Appointments/Patients/new">
+                <Icon Name="IconName.UserPlus" />
+                <span>New patient</span>
+            </NavLink>
+            <NavLink class="clinic-nav-link" href="/Appointments/Visits/new">
+                <Icon Name="IconName.PlusCircle" />
+                <span>Record a visit</span>
+            </NavLink>
+            <AuthorizeView Roles="@ClinicRoles.Physician">
+                <a class="clinic-nav-link" href="/Staff">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <span>Manage staff accounts</span>
+                </a>
+            </AuthorizeView>
+            <a class="clinic-nav-link" href="/SignOut">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Sign out</span>
+            </a>
+        </Authorized>
+        <NotAuthorized>
+            <a class="clinic-nav-link" href="/Login">Sign in</a>
+        </NotAuthorized>
+    </AuthorizeView>
 </nav>
 
-<div class="sidebar-note">
-    <div class="sidebar-note-icon"><Icon Name="IconName.Lock" /></div>
-    <div>
-        <strong>Private workspace</strong>
-        <span>Remember to lock the screen when away.</span>
-    </div>
-</div>
+<AuthorizeView>
+    <Authorized Context="authorizedUser">
+        <div class="sidebar-note">
+            <div class="sidebar-note-icon"><Icon Name="IconName.Lock" /></div>
+            <div>
+                <strong>Private workspace</strong>
+                <span>Remember to lock the screen when away.</span>
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>

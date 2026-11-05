@@ -1,0 +1,79 @@
+@using Clinic.ViewModels.Appointments.Visits
+@using InvestigationSummary = Clinic.ViewModels.Appointments.Visits.InvestigationSummary
+@using Clinic.Core.Appointments.Domain.Visits
+@using Clinic.Core.Appointments.Persistence
+@using Microsoft.EntityFrameworkCore
+
+@namespace Clinic.Web.Areas.Appointments.Visits.Components
+@inject AppointmentsDbContext DbContext
+
+@if (Item != null)
+{
+    <EditForm Model="Item" OnValidSubmit="@UpdateClick" id="investigationForm" class="clinic-form procedure-form">
+        <DataAnnotationsValidator />
+
+        <div class="form-card-body">
+            <Field>
+                <FieldLabel>Investigation name</FieldLabel>
+                <select class="form-select" @bind="Item.Name">
+                    <option value="">Select an investigation</option>
+                    @foreach (var investigation in Investigations)
+                    {
+                        <option value="@investigation.Name">@investigation.Name</option>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Item.Name) && !Investigations.Any(investigation => investigation.Name == Item.Name))
+                    {
+                        <option value="@Item.Name">@Item.Name (existing record)</option>
+                    }
+                </select>
+                <ValidationMessage For="(() => Item.Name)" />
+            </Field>
+
+            @if (SelectedInvestigation is not null)
+            {
+                <div class="alert alert-info" role="status">
+                    Selected investigation: <strong>@SelectedInvestigation.Name</strong>.
+                    Add any visit-specific information in the details field below.
+                </div>
+            }
+
+            <Field>
+                <FieldLabel>Visit details</FieldLabel>
+                <MemoEdit @bind-Text="@Item.Description" />
+                <ValidationMessage For="(() => Item.Description)" />
+            </Field>
+
+            <div class="procedure-form-actions">
+                <Button Color="Color.Primary" Type="ButtonType.Submit" form="investigationForm">Save investigation</Button>
+            </div>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public InvestigationSummary Item { get; set; }
+
+    [Parameter]
+    public VisitSummary Visit { get; set; }
+
+    [Parameter]
+    public EventCallback<InvestigationSummary> OnInvestigationEdited { get; set; }
+
+    private List<InvestigationCatalogItem> Investigations { get; set; } = new();
+    private InvestigationCatalogItem? SelectedInvestigation =>
+        Investigations.FirstOrDefault(investigation => investigation.Name == Item?.Name);
+
+    protected override async Task OnInitializedAsync()
+    {
+        Investigations = await DbContext.InvestigationCatalog
+            .AsNoTracking()
+            .OrderBy(investigation => investigation.Name)
+            .ToListAsync();
+    }
+
+    private async Task UpdateClick()
+    {
+        await OnInvestigationEdited.InvokeAsync(Item);
+    }
+}

@@ -1,4 +1,5 @@
 @page "/Appointments/Visits/new"
+@attribute [Authorize(Roles = Clinic.Web.Security.ClinicRoles.PatientRecords)]
 @using Clinic.Web.Areas.Appointments.Visits
 @using Clinic.ViewModels;
 @inject ILogger<Create> Logger
@@ -81,8 +82,11 @@
                                 <Field>
                                     <FieldLabel>Clinician</FieldLabel>
                                     <Select @bind-SelectedValue="@Item.Physician">
-                                        <SelectItem Value="@("Dr. Eshetu")">Dr. Eshetu</SelectItem>
-                                        <SelectItem Value="@("Dr. Feven")">Dr. Feven</SelectItem>
+                                        <SelectItem Value="@string.Empty">Select a physician</SelectItem>
+                                        @foreach (var physician in PhysicianOptions)
+                                        {
+                                            <SelectItem Value="@physician">@physician</SelectItem>
+                                        }
                                     </Select>
                                     <ValidationMessage For="(() => Item.Physician)" />
                                 </Field>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Clinic.Web.Models;
 using Clinic.ViewModels.Appointments.Visits;
 using Clinic.ViewModels.Appointments.Patients;
+using Clinic.Web.Security;
 
 namespace Clinic.Web.Areas.Appointments.Visits.Pages
 {
@@ -12,8 +13,11 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
         public IAppointmentsServices AppointmentsServices { get; set; }
         [Inject]
         public NavigationManager NavigationManager { get; set; }
+        [Inject]
+        public IClinicAccountService ClinicAccountService { get; set; }
 
         private CreateVisitRequest Item = new CreateVisitRequest();
+        private IReadOnlyList<string> PhysicianOptions = Array.Empty<string>();
 
         [Parameter]
         [SupplyParameterFromQuery]
@@ -43,6 +47,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
         {
             if (firstRender)
             {
+                PhysicianOptions = await ClinicAccountService.GetPhysicianNamesAsync();
                 if(RoutedPatientId.HasValue)
                     Item.PatientId = RoutedPatientId.Value;
                 await LoadPatientOptions(PatientOptions.PaginationInfo);
@@ -63,7 +68,7 @@ namespace Clinic.Web.Areas.Appointments.Visits.Pages
                 return;
             }
 
-            NavigationManager.NavigateTo($"Appointments/Visits/Index?HighlightId={result.Data.Id}");
+            NavigationManager.NavigateTo($"Appointments/Patients/details/{Item.PatientId}");
         }
     }
 }

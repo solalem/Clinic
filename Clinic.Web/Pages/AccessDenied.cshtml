@@ -1,0 +1,16 @@
+@page
+@model Clinic.Web.Pages.AccessDeniedModel
+@{
+    ViewData["Title"] = "Access denied";
+}
+
+<header class="auth-heading">
+    <p class="eyebrow">PERMISSION REQUIRED</p>
+    <h1>Access denied</h1>
+    <p>Your account does not have permission to view that page.</p>
+</header>
+
+<div class="auth-actions">
+    <a href="/" class="btn btn-primary">Return to clinic</a>
+    <a asp-page="/Login" class="btn btn-outline-secondary">Switch account</a>
+</div>

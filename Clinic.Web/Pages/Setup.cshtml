@@ -1,0 +1,75 @@
+@page
+@model Clinic.Web.Pages.SetupModel
+@{
+    ViewData["Title"] = "Initial setup";
+}
+
+<header class="auth-heading">
+    <p class="eyebrow">FIRST RUN</p>
+    <h1>Set up local staff accounts</h1>
+    <p>Create the first physician and front-desk officer. This setup is available only until the first accounts are created.</p>
+</header>
+
+@if (Model.IsAlreadyConfigured)
+{
+    <div class="alert alert-info" role="status">
+        Clinic accounts are already set up. <a asp-page="/Login">Sign in</a>.
+    </div>
+}
+else
+{
+    <form method="post" class="auth-form auth-form-wide">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <fieldset class="auth-fieldset">
+            <legend>Physician</legend>
+            <div class="auth-grid">
+                <div class="mb-3">
+                    <label asp-for="Input.PhysicianDisplayName" class="form-label">Name</label>
+                    <input asp-for="Input.PhysicianDisplayName" class="form-control" autocomplete="name" />
+                    <span asp-validation-for="Input.PhysicianDisplayName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.PhysicianUsername" class="form-label">Username</label>
+                    <input asp-for="Input.PhysicianUsername" class="form-control" autocomplete="username" />
+                    <span asp-validation-for="Input.PhysicianUsername" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.PhysicianPassword" class="form-label">Password (at least 12 characters)</label>
+                    <input asp-for="Input.PhysicianPassword" class="form-control" autocomplete="new-password" />
+                    <span asp-validation-for="Input.PhysicianPassword" class="text-danger"></span>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="auth-fieldset">
+            <legend>Front-desk officer</legend>
+            <div class="auth-grid">
+                <div class="mb-3">
+                    <label asp-for="Input.FrontDeskDisplayName" class="form-label">Name</label>
+                    <input asp-for="Input.FrontDeskDisplayName" class="form-control" autocomplete="name" />
+                    <span asp-validation-for="Input.FrontDeskDisplayName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.FrontDeskUsername" class="form-label">Username</label>
+                    <input asp-for="Input.FrontDeskUsername" class="form-control" autocomplete="username" />
+                    <span asp-validation-for="Input.FrontDeskUsername" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.FrontDeskPassword" class="form-label">Password (at least 12 characters)</label>
+                    <input asp-for="Input.FrontDeskPassword" class="form-control" autocomplete="new-password" />
+                    <span asp-validation-for="Input.FrontDeskPassword" class="text-danger"></span>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="auth-actions">
+            <button type="submit" class="btn btn-primary">Create accounts</button>
+            <a asp-page="/Login" class="btn btn-outline-secondary">Back to sign in</a>
+        </div>
+    </form>
+}

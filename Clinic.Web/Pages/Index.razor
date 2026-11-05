@@ -1,4 +1,5 @@
 @page "/"
+@attribute [Authorize]
 @using Clinic.Web.Models
 @inherits BlazorPage
 
@@ -62,10 +63,12 @@
             <span><strong>Patient records</strong><small>Search, review, and update patient details</small></span>
             <Icon class="action-arrow" Name="IconName.ArrowRight" />
         </NavLink>
-        <NavLink class="workspace-card" href="/Appointments/Visits/index">
-            <span class="workspace-card-icon"><Icon Name="IconName.CalendarCheck" /></span>
-            <span><strong>Visit history</strong><small>Review recorded patient visits</small></span>
-            <Icon class="action-arrow" Name="IconName.ArrowRight" />
-        </NavLink>
+        <AuthorizeView Roles="@Clinic.Web.Security.ClinicRoles.Physician">
+            <NavLink class="workspace-card" href="/Appointments/Visits/index">
+                <span class="workspace-card-icon"><Icon Name="IconName.CalendarCheck" /></span>
+                <span><strong>Visit history</strong><small>Review recorded patient visits</small></span>
+                <Icon class="action-arrow" Name="IconName.ArrowRight" />
+            </NavLink>
+        </AuthorizeView>
     </div>
 </section>

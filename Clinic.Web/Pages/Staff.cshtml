@@ -1,0 +1,54 @@
+@page
+@model Clinic.Web.Pages.StaffModel
+@{
+    ViewData["Title"] = "Staff accounts";
+}
+
+<header class="auth-heading">
+    <p class="eyebrow">ADMINISTRATION</p>
+    <h1>Staff accounts</h1>
+    <p>Create a local physician or front-desk account. Passwords must be at least 12 characters.</p>
+</header>
+
+@if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+{
+    <div class="alert alert-success" role="status">@Model.SuccessMessage</div>
+}
+
+<form method="post" class="auth-form auth-form-wide">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="auth-grid">
+        <div class="mb-3">
+            <label asp-for="Input.DisplayName" class="form-label">Name</label>
+            <input asp-for="Input.DisplayName" class="form-control" autocomplete="name" />
+            <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Username" class="form-label">Username</label>
+            <input asp-for="Input.Username" class="form-control" autocomplete="username" />
+            <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Role" class="form-label">Role</label>
+            <select asp-for="Input.Role" class="form-select">
+                <option value="@ClinicRoles.Physician">Physician</option>
+                <option value="@ClinicRoles.FrontDeskOfficer">Front-desk officer</option>
+            </select>
+            <span asp-validation-for="Input.Role" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Password" class="form-label">Password</label>
+            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="auth-actions">
+        <button type="submit" class="btn btn-primary">Create account</button>
+        <a href="/" class="btn btn-outline-secondary">Back to clinic</a>
+    </div>
+</form>

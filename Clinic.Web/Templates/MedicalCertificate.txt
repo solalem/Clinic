@@ -1,0 +1,13 @@
+MEDICAL CERTIFICATE
+
+Date: {IssueDate}
+
+To: {Recipient}
+
+This is to certify that {PatientName} (Patient card number: {CardNumber}) was examined at our clinic on {IssueDate}.
+
+Purpose: {Purpose}
+
+This certificate is issued upon the patient's request for presentation to the stated recipient.
+
+Physician: {PhysicianName}

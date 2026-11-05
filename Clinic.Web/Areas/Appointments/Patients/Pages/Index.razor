@@ -1,4 +1,5 @@
 @page "/Appointments/Patients/index"
+@attribute [Authorize(Roles = Clinic.Web.Security.ClinicRoles.PatientRecords)]
 @inherits BlazorPage
 @inject NavigationManager navigationManager
 

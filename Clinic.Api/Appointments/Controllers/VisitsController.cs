@@ -17,6 +17,7 @@ using Clinic.Controllers;
 
 namespace Clinic.Appointments.Controllers
 {    
+    [Authorize(Roles = "Physician")]
     public class VisitsController : BaseController
     {
         private readonly IMediator _mediator;

@@ -1,0 +1,15 @@
+@page
+@model Clinic.Web.Pages.SignOutModel
+@{
+    ViewData["Title"] = "Signed out";
+}
+
+<header class="auth-heading">
+    <p class="eyebrow">SESSION ENDED</p>
+    <h1>You have been signed out</h1>
+    <p>Your clinic workspace is locked on this device. Sign in again when you are ready.</p>
+</header>
+
+<div class="auth-actions">
+    <a asp-page="/Login" class="btn btn-primary">Sign in again</a>
+</div>

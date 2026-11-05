@@ -1,4 +1,5 @@
 @page "/Appointments/Patients/details/{id:guid}"
+@attribute [Authorize(Roles = Clinic.Web.Security.ClinicRoles.PatientRecords)]
 @using Clinic.Web.Areas.Appointments.Patients.Components
 @using Clinic.ViewModels
 @using Clinic.ViewModels.Appointments
@@ -18,3 +19,6 @@
 </div>
 
 <PatientInfo @ref="info" Item="Item" />
+<AuthorizeView Roles="@Clinic.Web.Security.ClinicRoles.Physician">
+    <MedicalCertificates Patient="Item" />
+</AuthorizeView>

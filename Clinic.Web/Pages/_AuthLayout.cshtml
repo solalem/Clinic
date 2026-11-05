@@ -1,0 +1,53 @@
+@using Microsoft.AspNetCore.Components.Web
+@namespace Clinic.Web.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | Clinic</title>
+    <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/_content/Blazorise.Icons.FontAwesome/v6/css/all.min.css" />
+</head>
+<body class="auth-page">
+    <div class="auth-shell">
+        <aside class="auth-aside">
+            <a class="auth-brand" href="/">
+                <span class="auth-brand-mark"><i class="fa-solid fa-heart-pulse"></i></span>
+                <span>
+                    <span class="auth-brand-name">Clinic</span>
+                    <span class="auth-brand-caption">Front desk</span>
+                </span>
+            </a>
+
+            <div class="auth-aside-copy">
+                <p class="eyebrow">CLINIC WORKSPACE</p>
+                <h2>Calm, organised patient care.</h2>
+                <p>Patient records, visits, procedures and medical certificates in one private local workspace.</p>
+            </div>
+
+            <p class="auth-aside-footer"><i class="fa-solid fa-lock"></i> Private local workspace</p>
+        </aside>
+
+        <main class="auth-main">
+            <a class="auth-mobile-brand" href="/">
+                <span class="auth-brand-mark"><i class="fa-solid fa-heart-pulse"></i></span>
+                <span>
+                    <span class="auth-brand-name">Clinic</span>
+                    <span class="auth-brand-caption">Front desk</span>
+                </span>
+            </a>
+
+            <section class="auth-card">
+                @RenderBody()
+            </section>
+            <p class="auth-footer">Clinic records workspace</p>
+        </main>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,43 @@
+@page
+@model Clinic.Web.Pages.LoginModel
+@{
+    ViewData["Title"] = "Sign in";
+}
+
+<header class="auth-heading">
+    <p class="eyebrow">STAFF ACCESS</p>
+    <h1>Sign in to Clinic</h1>
+    <p>Use your local clinic account.</p>
+</header>
+
+<form method="post" class="auth-form">
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Username" class="form-label">Username</label>
+        <input asp-for="Input.Username" class="form-control" autocomplete="username" autofocus />
+        <span asp-validation-for="Input.Username" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Password" class="form-label">Password</label>
+        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-4">
+        <input asp-for="Input.RememberMe" class="form-check-input" />
+        <label asp-for="Input.RememberMe" class="form-check-label">Keep me signed in on this device</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Sign in</button>
+</form>
+
+@if (Model.NeedsSetup)
+{
+    <div class="auth-note">
+        <strong>First time using this clinic?</strong>
+        <a asp-page="/Setup">Set up the initial accounts</a>.
+    </div>
+}

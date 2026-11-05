@@ -3,10 +3,14 @@
 @using Clinic.ViewModels
 @using Clinic.ViewModels.Appointments
 @using Clinic.ViewModels.Appointments.Patients;
+@using Clinic.Core.Appointments.Domain.Visits;
+@using Clinic.Core.Appointments.Persistence;
+@using Microsoft.EntityFrameworkCore;
 
 @namespace Clinic.Web.Areas.Appointments.Visits.Components
 @inject ILogger<VisitInfo> Logger
 @inject IJSRuntime JSRuntime
+@inject AppointmentsDbContext DbContext
 @inherits Clinic.Web.Models.BlazorComponent
 
 @if (Item != null)
@@ -17,12 +21,30 @@
         <div class="form-card-body">
             <Field>
                 <FieldLabel>Procedure name</FieldLabel>
-                <TextEdit @bind-Text="@Item.Name" />
+                <select class="form-select" @bind="Item.Name">
+                    <option value="">Select a procedure</option>
+                    @foreach (var procedure in Procedures)
+                    {
+                        <option value="@procedure.Name">@procedure.Name</option>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Item.Name) && !Procedures.Any(procedure => procedure.Name == Item.Name))
+                    {
+                        <option value="@Item.Name">@Item.Name (existing record)</option>
+                    }
+                </select>
                 <ValidationMessage For="(() => Item.Name)" />
             </Field>
 
+            @if (SelectedProcedure is not null)
+            {
+                <div class="alert alert-info" role="status">
+                    <strong>@SelectedProcedure.Code</strong>
+                    <span> · Price: @SelectedProcedure.Price.ToString("N2")</span>
+                </div>
+            }
+
             <Field>
-                <FieldLabel>Description</FieldLabel>
+                <FieldLabel>Visit details</FieldLabel>
                 <MemoEdit @bind-Text="@Item.Description" />
                 <ValidationMessage For="(() => Item.Description)" />
             </Field>
@@ -43,6 +65,18 @@
 
     [Parameter]
     public EventCallback<ProcedureSummary> OnProcedureEdited { get; set; }
+
+    private List<ProcedureCatalogItem> Procedures { get; set; } = new();
+    private ProcedureCatalogItem? SelectedProcedure =>
+        Procedures.FirstOrDefault(procedure => procedure.Name == Item?.Name);
+
+    protected override async Task OnInitializedAsync()
+    {
+        Procedures = await DbContext.ProcedureCatalog
+            .AsNoTracking()
+            .OrderBy(procedure => procedure.Name)
+            .ToListAsync();
+    }
 
     private async Task UpdateClick()
     {

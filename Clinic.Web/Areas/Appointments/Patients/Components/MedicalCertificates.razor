@@ -1,0 +1,154 @@
+@using Clinic.Core.Appointments.Domain.Patients
+@using Clinic.Core.Appointments.Persistence
+@using Clinic.ViewModels.Appointments.Patients
+@using Clinic.Web.Security
+@using Microsoft.EntityFrameworkCore
+@inject AppointmentsDbContext DbContext
+@inject IClinicAccountService ClinicAccountService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<section class="form-card medical-certificates">
+    <div class="form-card-heading">
+        <div>
+            <h2>Medical certificates</h2>
+            <p>Prepare and retain certificates issued to this patient.</p>
+        </div>
+    </div>
+
+    <div class="form-card-body">
+        <div class="form-section">
+            <h3>Issue a certificate</h3>
+            <div class="form-grid form-grid-two">
+                <Field>
+                    <FieldLabel>Issue date</FieldLabel>
+                    <input class="form-control" type="date" @bind="IssueDate" />
+                </Field>
+                <Field>
+                    <FieldLabel>Recipient</FieldLabel>
+                    <input class="form-control" @bind="Recipient" />
+                </Field>
+                <Field>
+                    <FieldLabel>Purpose</FieldLabel>
+                    <input class="form-control" @bind="Purpose" />
+                </Field>
+                <Field>
+                    <FieldLabel>Physician</FieldLabel>
+                    <Select @bind-SelectedValue="PhysicianName">
+                        @foreach (var physician in PhysicianOptions)
+                        {
+                            <SelectItem Value="@physician">@physician</SelectItem>
+                        }
+                    </Select>
+                </Field>
+            </div>
+
+            <Field>
+                <FieldLabel>Certificate preview</FieldLabel>
+                <textarea class="form-control" rows="10" readonly>@CertificatePreview</textarea>
+            </Field>
+            @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+            {
+                <p class="text-danger" role="alert">@ErrorMessage</p>
+            }
+            <Button Color="Color.Primary" Clicked="SaveCertificateAsync">Save certificate</Button>
+        </div>
+
+        <div class="form-section">
+            <h3>Previously issued</h3>
+            @if (Certificates.Count == 0)
+            {
+                <p>No certificates have been issued for this patient.</p>
+            }
+            else
+            {
+                @foreach (var certificate in Certificates)
+                {
+                    <details class="medical-certificate-record">
+                        <summary>@certificate.IssueDate.ToLocalTime().ToString("d") · @certificate.Recipient · @certificate.Purpose</summary>
+                        <pre>@certificate.CertificateText</pre>
+                    </details>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public PatientDetail Patient { get; set; } = new();
+
+    private List<MedicalCertificate> Certificates { get; set; } = new();
+    private DateTime IssueDate { get; set; } = DateTime.Today;
+    private string Recipient { get; set; } = string.Empty;
+    private string Purpose { get; set; } = string.Empty;
+    private string PhysicianName { get; set; } = string.Empty;
+    private IReadOnlyList<string> PhysicianOptions { get; set; } = Array.Empty<string>();
+    private string? ErrorMessage { get; set; }
+
+    private string CertificatePreview => RenderTemplate();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        PhysicianOptions = await ClinicAccountService.GetPhysicianNamesAsync();
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var signedInPhysician = authenticationState.User.Identity?.Name;
+        if (PhysicianOptions.Contains(signedInPhysician ?? string.Empty))
+        {
+            PhysicianName = signedInPhysician!;
+        }
+        else if (!PhysicianOptions.Contains(PhysicianName))
+        {
+            PhysicianName = PhysicianOptions.FirstOrDefault() ?? string.Empty;
+        }
+
+        Certificates = await DbContext.MedicalCertificates
+            .AsNoTracking()
+            .Where(certificate => certificate.PatientId == Patient.Id)
+            .OrderByDescending(certificate => certificate.IssueDate)
+            .ToListAsync();
+    }
+
+    private async Task SaveCertificateAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Recipient) ||
+            string.IsNullOrWhiteSpace(Purpose) ||
+            string.IsNullOrWhiteSpace(PhysicianName))
+        {
+            ErrorMessage = "Recipient, purpose, and physician are required.";
+            return;
+        }
+
+        var certificate = new MedicalCertificate
+        {
+            Id = Guid.NewGuid(),
+            PatientId = Patient.Id,
+            IssueDate = new DateTimeOffset(IssueDate),
+            Recipient = Recipient.Trim(),
+            Purpose = Purpose.Trim(),
+            CertificateText = RenderTemplate()
+        };
+
+        DbContext.MedicalCertificates.Add(certificate);
+        await DbContext.SaveChangesAsync();
+        Certificates.Insert(0, certificate);
+
+        Recipient = string.Empty;
+        Purpose = string.Empty;
+        ErrorMessage = null;
+    }
+
+    private string RenderTemplate()
+    {
+        using var templateStream = typeof(MedicalCertificates).Assembly
+            .GetManifestResourceStream("Clinic.Web.Templates.MedicalCertificate.txt")
+            ?? throw new InvalidOperationException("The medical certificate template resource was not found.");
+        using var reader = new StreamReader(templateStream);
+        return reader.ReadToEnd()
+            .Replace("{PatientName}", Patient.FullName, StringComparison.Ordinal)
+            .Replace("{CardNumber}", Patient.CardNumber, StringComparison.Ordinal)
+            .Replace("{IssueDate}", IssueDate.ToString("yyyy-MM-dd"), StringComparison.Ordinal)
+            .Replace("{Recipient}", Recipient, StringComparison.Ordinal)
+            .Replace("{Purpose}", Purpose, StringComparison.Ordinal)
+            .Replace("{PhysicianName}", PhysicianName, StringComparison.Ordinal);
+    }
+}

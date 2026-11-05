@@ -8,6 +8,7 @@ using Clinic.Shared.Model;
 using Clinic.Core.Appointments.Domain.Visits;
 using Clinic.ViewModels.Appointments.Patients;
 using Clinic.Core.Appointments.Persistence.Visits;
+using Clinic.Core.Appointments.Domain.ClinicAccounts;
 
 namespace Clinic.Core.Appointments.Persistence
 {
@@ -18,6 +19,10 @@ namespace Clinic.Core.Appointments.Persistence
         //public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Visit> Visits { get; set; }
+        public DbSet<ProcedureCatalogItem> ProcedureCatalog { get; set; }
+        public DbSet<InvestigationCatalogItem> InvestigationCatalog { get; set; }
+        public DbSet<MedicalCertificate> MedicalCertificates { get; set; }
+        public DbSet<ClinicAccount> Accounts => Set<ClinicAccount>();
 
         private IDbContextTransaction _currentTransaction;
         public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
@@ -34,6 +39,21 @@ namespace Clinic.Core.Appointments.Persistence
             //modelBuilder.ApplyConfiguration(new AppointmentEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new VisitEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProcedureCatalogEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new InvestigationCatalogEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicalCertificateEntityTypeConfiguration());
+
+            modelBuilder.Entity<ClinicAccount>(entity =>
+            {
+                entity.ToTable("clinic_accounts");
+                entity.HasKey(account => account.Id);
+                entity.Property(account => account.Username).IsRequired();
+                entity.Property(account => account.NormalizedUsername).IsRequired();
+                entity.Property(account => account.DisplayName).IsRequired();
+                entity.Property(account => account.Role).IsRequired();
+                entity.Property(account => account.PasswordHash).IsRequired();
+                entity.HasIndex(account => account.NormalizedUsername).IsUnique();
+            });
         }
 
         public async Task<int> SaveEntitiesAsync(string userId = null, CancellationToken cancellationToken = default(CancellationToken))
